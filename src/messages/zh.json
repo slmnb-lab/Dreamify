@@ -1,0 +1,181 @@
+{
+  "site": {
+    "title": "Dreamify - 免费的文生图网站",
+    "description": "使用 AI 技术，几秒钟内生成令人惊叹的图像"
+  },
+  "home": {
+    "hero": {
+      "titlePrefix": "解锁你的",
+      "titleHighlight": "创意超能力，只需10秒！",
+      "subtitle": {
+        "prefix": "使用先进的 HiDream-I1 模型，",
+        "highlight": "完全免费",
+        "suffix": "将你的想象力转化为惊艳的艺术作品"
+      },
+      "subtitle2": "由全国50台家用电脑的4090显卡分布式算力提供支持",
+      "startButton": "立即开始",
+      "faqButton": "常见问题",
+      "imageCaption": "AI艺术"
+    },
+    "generate": {
+      "title": "AI 图像生成",
+      "description": "使用先进的 HiDream-I1 模型，将您的创意转化为精美的图像",
+      "form": {
+        "prompt": {
+          "label": "提示词",
+          "placeholder": "描述您想要生成的图像(推荐使用英语)..."
+        },
+        "randomPrompt": "随机提示词",
+        "seed": {
+          "label": "种子值（可选）",
+          "placeholder": "输入种子值以确保可重复性"
+        },
+        "width": {
+          "label": "宽度",
+          "hint": "图片宽度（64-1920，8的倍数）"
+        },
+        "height": {
+          "label": "高度",
+          "hint": "图片高度（64-1080，8的倍数）"
+        },
+        "steps": {
+          "label": "步数",
+          "hint": "范围：15-45，数值越高细节越丰富，但生成速度越慢"
+        },
+        "batch_size": {
+          "label": "生成数量",
+          "hint": "每次生成的图片数量（1-4）"
+        },
+        "advanced": {
+          "expand": "展开高级选项",
+          "collapse": "收起高级选项"
+        },
+        "generateButton": {
+          "default": "生成图片",
+          "loading": "生成中..."
+        },
+        "generating": "正在生成...",
+        "finalizing": "正在完成..."
+      },
+      "preview": {
+        "title": "预览",
+        "placeholder": "生成的图像将显示在这里",
+        "download": "下载图片",
+        "generating": "生成中...",
+        "completed": "生成完成",
+        "error": "生成失败",
+        "retrying": "正在重试",
+        "hint": "图片生成可能耗时较长，偶尔一张图片出错是正常情况，请耐心等待。",
+        "status": {
+          "generating": "张图片正在生成",
+          "success": "张已成功",
+          "failed": "张失败"
+        }
+      },
+      "error": {
+        "general": "生成图像时出错，请重试",
+        "invalidSize": "图像尺寸必须在 64x64 到 1920x1080 之间",
+        "invalidSteps": "步数必须在 1 到 100 之间"
+      }
+    },
+    "features": {
+      "title": "为什么选择我们？",
+      "speed": {
+        "title": "快速生成",
+        "description": "只需10秒，即可将您的创意转化为精美的图像"
+      },
+      "customization": {
+        "title": "高度定制",
+        "description": "完全控制图像的大小、风格和细节"
+      },
+      "security": {
+        "title": "安全可靠",
+        "description": "您的数据和创意受到完全保护"
+      },
+      "noLogin": {
+        "title": "无需登录",
+        "description": "立即体验 AI 图像生成，无需注册和登录"
+      }
+    },
+    "cta": {
+      "title": "准备好开始创作了吗？",
+      "subtitle": "加入我们的社区，探索无限创意可能",
+      "button": "查看社区"
+    },
+    "faq": {
+      "title": "常见问题",
+      "questions": [
+        {
+          "q": "什么是Dreamify？",
+          "a": "Dreamify是一个完全免费、基于HiDream-I1模型的在线文生图（text to image）服务网站，请在此自由地发挥你的创意！"
+        },
+        {
+          "q": "Dreamify是完全免费的吗？",
+          "a": "没错，我们提供完全免费的生图服务。"
+        },
+        {
+          "q": "Dreamify能创作什么样的图像？",
+          "a": "各种各样的风格，贴近现实的场景，艺术性的插画，动漫风格的画像等等。"
+        },
+        {
+          "q": "Dreamify生成的图像用于商业用途吗？",
+          "a": "当然，你拥有对生成图形的使用权，不论个人还是商业目的都完全没问题。"
+        },
+        {
+          "q": "什么是HiDream-I1模型？",
+          "a": "HiDream-I1是目前文生图领域最为出色且先进的模型之一，由北京智象未来科技有限公司开发。"
+        },
+        {
+          "q": "我需要创建一个帐户并登录才能使用 Dreamify 吗？",
+          "a": "不，你可以直接使用我们的生图功能。"
+        }
+      ]
+    },
+    "community": {
+      "title": "社区",
+      "subtitle": "探索其他用户创作的精彩作品，并从中获取灵感",
+      "generateSame": "画同款"
+    },
+    "suanleme": {
+      "title": "本项目由以下平台提供庞大算力支持",
+      "gongji": "共绩算力",
+      "suanleme": "算了么",
+      "advantages": {
+        "title": "共享算力优势",
+        "items": [
+          "闲置算力利用，让硬件创造价值",
+          "贡献社区，帮助更多人使用 AI",
+          "获得奖励，享受优先级和其他特权"
+        ],
+        "button": "了解如何共享算力"
+      }
+    },
+    "gongji": {
+      "title": "共绩算力支持",
+      "description": "本项目由共绩算力提供强大的分布式计算支持，让模型推理更高效、更经济。",
+      "advantages": {
+        "title": "共绩算力优势",
+        "items": [
+          "分布式算力网络，整合闲置计算资源",
+          "高性价比，降低 AI 应用部署成本",
+          "绿色环保，提高资源利用效率"
+        ]
+      },
+      "stats": {
+        "nodes": "提供本项目节点",
+        "devices": "分布式算力设备",
+        "availability": "服务可用性"
+      },
+      "button": "部署你的服务"
+    }
+  },
+  "nav": {
+    "language": "语言",
+    "home": "首页",
+    "faq": "常见问题",
+    "community": "社区"
+  },
+  "footer": {
+    "copyright": "Dreamify 版权所有。"
+  }
+}

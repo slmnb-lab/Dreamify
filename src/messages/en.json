@@ -1,0 +1,181 @@
+{
+  "site": {
+    "title": "Dreamify - Free Text to Image Website",
+    "description": "Generate stunning images in seconds using AI technology"
+  },
+  "home": {
+    "hero": {
+      "titlePrefix": "Unlock Your",
+      "titleHighlight": "Creative Superpower in Just 10 Seconds!",
+      "subtitle": {
+        "prefix": "Using the advanced HiDream-I1 model, ",
+        "highlight": "completely free",
+        "suffix": "to transform your imagination into stunning artwork"
+      },
+      "subtitle2": "Powered by distributed computing from 50 home computers with 4090 GPUs across the country",
+      "startButton": "Get Started",
+      "faqButton": "FAQ",
+      "imageCaption": "AI Art"
+    },
+    "generate": {
+      "title": "AI Image Generation",
+      "description": "Transform your ideas into beautiful images using our advanced HiDream-I1 model",
+      "form": {
+        "prompt": {
+          "label": "Prompt",
+          "placeholder": "Describe the image you want to generate (English recommended)..."
+        },
+        "randomPrompt": "Random Prompt",
+        "seed": {
+          "label": "Seed (optional)",
+          "placeholder": "Enter a seed value for reproducibility"
+        },
+        "width": {
+          "label": "Width",
+          "hint": "Image width (64-1920, multiples of 8)"
+        },
+        "height": {
+          "label": "Height",
+          "hint": "Image height (64-1080, multiples of 8)"
+        },
+        "steps": {
+          "label": "Steps",
+          "hint": "Range: 15-45, higher values mean more details but slower generation"
+        },
+        "batch_size": {
+          "label": "Batch Size",
+          "hint": "Number of images to generate (1-4)"
+        },
+        "advanced": {
+          "expand": "Show Advanced Options",
+          "collapse": "Hide Advanced Options"
+        },
+        "generateButton": {
+          "default": "Generate Image",
+          "loading": "Generating..."
+        },
+        "generating": "Generating...",
+        "finalizing": "Finalizing..."
+      },
+      "preview": {
+        "title": "Preview",
+        "placeholder": "Enter your prompt and click generate to start creating",
+        "download": "Download Image",
+        "generating": "Generating...",
+        "completed": "Completed",
+        "error": "Generation failed",
+        "retrying": "Retrying",
+        "hint": "Image generation may take some time, and occasional errors are normal. Please be patient.",
+        "status": {
+          "generating": "images generating",
+          "success": "successful",
+          "failed": "failed"
+        }
+      },
+      "error": {
+        "general": "Error generating image, please try again",
+        "invalidSize": "Image size must be between 64x64 and 1920x1080",
+        "invalidSteps": "Steps must be between 1 and 100"
+      }
+    },
+    "features": {
+      "title": "Why Choose Us?",
+      "speed": {
+        "title": "Fast Generation",
+        "description": "Transform your ideas into beautiful images in just 10 seconds"
+      },
+      "customization": {
+        "title": "Highly Customizable",
+        "description": "Full control over image size, style, and details"
+      },
+      "security": {
+        "title": "Secure & Reliable",
+        "description": "Your data and creativity are fully protected"
+      },
+      "noLogin": {
+        "title": "No Login Required",
+        "description": "Start experiencing AI image generation without registration"
+      }
+    },
+    "cta": {
+      "title": "Ready to Start Creating?",
+      "subtitle": "Join our community and explore endless creative possibilities",
+      "button": "View Community"
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "questions": [
+        {
+          "q": "What is Dreamify?",
+          "a": "Dreamify is a completely free, online text-to-image service based on the HiDream-I1 model. Feel free to unleash your creativity here!"
+        },
+        {
+          "q": "Is Dreamify completely free?",
+          "a": "Yes, we provide completely free image generation services."
+        },
+        {
+          "q": "What kind of images can Dreamify create?",
+          "a": "Various styles, realistic scenes, artistic illustrations, anime-style portraits, and more."
+        },
+        {
+          "q": "Can I use Dreamify-generated images for commercial purposes?",
+          "a": "Yes, you have full rights to use the generated images for both personal and commercial purposes."
+        },
+        {
+          "q": "What is the HiDream-I1 model?",
+          "a": "HiDream-I1 is one of the most outstanding and advanced models in the text-to-image field, developed by Beijing Zhixiang Future Technology Co., Ltd."
+        },
+        {
+          "q": "Do I need to create an account and log in to use Dreamify?",
+          "a": "No, you can directly use our image generation features."
+        }
+      ]
+    },
+    "community": {
+      "title": "Community",
+      "subtitle": "Explore amazing works created by other users and get inspired",
+      "generateSame": "Generate Same Style"
+    },
+    "suanleme": {
+      "title": "This project is powered by the following platforms",
+      "gongji": "Gongji Computing",
+      "suanleme": "Suanleme",
+      "advantages": {
+        "title": "Shared Computing Advantages",
+        "items": [
+          "Utilize idle computing power to create value",
+          "Contribute to the community and help more people use AI",
+          "Earn rewards and enjoy priority access and other privileges"
+        ],
+        "button": "Learn how to share computing power"
+      }
+    },
+    "gongji": {
+      "title": "Powered by Gongji Computing",
+      "description": "This project is supported by Gongji Computing's powerful distributed computing network, making model inference more efficient and economical.",
+      "advantages": {
+        "title": "Gongji Computing Advantages",
+        "items": [
+          "Distributed computing network that integrates idle computing resources",
+          "Cost-effective, reducing AI application deployment costs",
+          "Environmentally friendly, improving resource utilization efficiency"
+        ]
+      },
+      "stats": {
+        "nodes": "Project Nodes",
+        "devices": "Distributed Computing Devices",
+        "availability": "Service Availability"
+      },
+      "button": "Deploy Your Service"
+    }
+  },
+  "nav": {
+    "language": "Language",
+    "home": "Home",
+    "faq": "FAQ",
+    "community": "Community"
+  },
+  "footer": {
+    "copyright": "Dreamify. All rights reserved."
+  }
+} 

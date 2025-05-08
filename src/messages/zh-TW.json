@@ -1,0 +1,181 @@
+{
+  "site": {
+    "title": "FluxEz - 免費的文生圖網站",
+    "description": "使用 AI 技術，幾秒鐘內生成令人驚嘆的圖像"
+  },
+  "home": {
+    "hero": {
+      "titlePrefix": "解鎖你的",
+      "titleHighlight": "創意超能力，只需10秒！",
+      "subtitle": {
+        "prefix": "使用先進的 Flux.1-dev 模型，",
+        "highlight": "完全免費",
+        "suffix": "將你的想像力轉化為驚艷的藝術作品"
+      },
+      "subtitle2": "由全國50台家用電腦的4090顯卡分佈式算力提供支持",
+      "startButton": "立即開始",
+      "faqButton": "常見問題",
+      "imageCaption": "AI藝術"
+    },
+    "generate": {
+      "title": "AI 圖像生成",
+      "description": "使用先進的 Flux.1-dev模型，將您的創意轉化為精美的圖像",
+      "form": {
+        "prompt": {
+          "label": "提示詞",
+          "placeholder": "描述您想要生成的圖像(推薦使用英語)..."
+        },
+        "randomPrompt": "隨機提示詞",
+        "seed": {
+          "label": "種子值（可選）",
+          "placeholder": "輸入種子值以確保可重複性"
+        },
+        "width": {
+          "label": "寬度",
+          "hint": "圖片寬度（64-1920，8的倍數）"
+        },
+        "height": {
+          "label": "高度",
+          "hint": "圖片高度（64-1080，8的倍數）"
+        },
+        "steps": {
+          "label": "步數",
+          "hint": "範圍：15-45，數值越高細節越豐富，但生成速度越慢"
+        },
+        "batch_size": {
+          "label": "生成數量",
+          "hint": "每次生成的圖片數量（1-4）"
+        },
+        "advanced": {
+          "expand": "展開進階選項",
+          "collapse": "收起進階選項"
+        },
+        "generateButton": {
+          "default": "生成圖片",
+          "loading": "生成中..."
+        },
+        "generating": "正在生成...",
+        "finalizing": "正在完成..."
+      },
+      "preview": {
+        "title": "預覽",
+        "placeholder": "生成的圖像將顯示在這裡",
+        "download": "下載圖片",
+        "generating": "生成中...",
+        "completed": "生成完成",
+        "error": "生成失敗",
+        "retrying": "正在重試",
+        "hint": "圖片生成可能耗時較長，偶爾一張圖片出錯是正常情況，請耐心等待。",
+        "status": {
+          "generating": "張圖片正在生成",
+          "success": "張已成功",
+          "failed": "張失敗"
+        }
+      },
+      "error": {
+        "general": "生成圖像時出錯，請重試",
+        "invalidSize": "圖像尺寸必須在 64x64 到 1920x1080 之間",
+        "invalidSteps": "步數必須在 1 到 100 之間"
+      }
+    },
+    "features": {
+      "title": "為什麼選擇我們？",
+      "speed": {
+        "title": "快速生成",
+        "description": "只需10秒，即可將您的創意轉化為精美的圖像"
+      },
+      "customization": {
+        "title": "高度定制",
+        "description": "完全控制圖像的大小、風格和細節"
+      },
+      "security": {
+        "title": "安全可靠",
+        "description": "您的數據和創意受到完全保護"
+      },
+      "noLogin": {
+        "title": "無需登入",
+        "description": "立即體驗 AI 圖像生成，無需註冊和登入"
+      }
+    },
+    "cta": {
+      "title": "準備好開始創作了嗎？",
+      "subtitle": "加入我們的社群，探索無限創意可能",
+      "button": "查看社群"
+    },
+    "faq": {
+      "title": "常見問題",
+      "questions": [
+        {
+          "q": "什麼是FluxEz？",
+          "a": "FluxEz是一個完全免費、基於Flux.1[dev]模型的線上文生圖（text to image）服務網站，請在此自由地發揮你的創意！"
+        },
+        {
+          "q": "FluxEz是完全免費的嗎？",
+          "a": "沒錯，我們提供完全免費的生圖服務。"
+        },
+        {
+          "q": "FluxEz能創作什麼樣的圖像？",
+          "a": "各種各樣的風格，貼近現實的場景，藝術性的插畫，動漫風格的畫像等等。"
+        },
+        {
+          "q": "FluxEz生成的圖像用於商業用途嗎？",
+          "a": "當然，你擁有對生成圖形的使用權，不論個人還是商業目的都完全沒問題。"
+        },
+        {
+          "q": "什麼是Flux.1[dev]模型？",
+          "a": "Flux.1[dev]是目前文生圖領域最為出色且先進的模型之一，由黑森林實驗室（Black Forest Lab）開源。"
+        },
+        {
+          "q": "我需要建立一個帳戶並登入才能使用 FluxEz 嗎？",
+          "a": "不，你可以直接使用我們的生圖功能。"
+        }
+      ]
+    },
+    "community": {
+      "title": "社群",
+      "subtitle": "探索其他用戶創作的精彩作品，並從中獲取靈感",
+      "generateSame": "畫同款"
+    },
+    "suanleme": {
+      "title": "本專案由以下平台提供龐大算力支援",
+      "gongji": "共績算力",
+      "suanleme": "算了麼",
+      "advantages": {
+        "title": "共享算力優勢",
+        "items": [
+          "閒置算力利用，讓硬體創造價值",
+          "貢獻社群，幫助更多人使用 AI",
+          "獲得獎勵，享受優先級和其他特權"
+        ],
+        "button": "了解如何共享算力"
+      }
+    },
+    "gongji": {
+      "title": "共績算力支援",
+      "description": "本專案由共績算力提供強大的分散式計算支援，讓模型推理更高效、更經濟。",
+      "advantages": {
+        "title": "共績算力優勢",
+        "items": [
+          "分散式算力網絡，整合閒置計算資源",
+          "高性價比，降低 AI 應用部署成本",
+          "綠色環保，提高資源利用效率"
+        ]
+      },
+      "stats": {
+        "nodes": "提供本專案節點",
+        "devices": "分散式算力設備",
+        "availability": "服務可用性"
+      },
+      "button": "部署你的服務"
+    }
+  },
+  "nav": {
+    "language": "語言",
+    "home": "首頁",
+    "faq": "常見問題",
+    "community": "社群"
+  },
+  "footer": {
+    "copyright": "FluxEz 版權所有。"
+  }
+} 
