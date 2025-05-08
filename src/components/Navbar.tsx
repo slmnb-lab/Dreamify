@@ -13,7 +13,7 @@ export default function Navbar() {
   const { locale } = useParams()
 
   return (
-    <nav className="bg-gradient-to-r from-slate-100 to-slate-50 shadow-md">
+    <nav className="bg-gradient-to-r from-slate-800 to-slate-700 shadow-lg border-b border-cyan-400/20">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-8">
@@ -26,9 +26,9 @@ export default function Navbar() {
                 alt="HiDreamNow Logo"
                 width={48}
                 height={48}
-                className="rounded-full"
+                className="rounded-full border border-cyan-400/30"
               />
-              <span className="text-3xl font-bold bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent hover:from-cyan-400 hover:via-blue-400 hover:to-indigo-400 transition-colors duration-300">
+              <span className="text-3xl font-bold bg-gradient-to-br from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent hover:from-cyan-300 hover:via-blue-300 hover:to-indigo-300 transition-colors duration-300">
                 Dreamify
               </span>
             </Link>
@@ -43,7 +43,7 @@ export default function Navbar() {
                     })
                   }, 500)
                 }}
-                className="text-gray-600 hover:text-cyan-500 transition-colors"
+                className="text-cyan-100 hover:text-cyan-300 transition-colors"
               >
                 {t('faq')}
               </button>
@@ -57,7 +57,7 @@ export default function Navbar() {
                     })
                   }, 500)
                 }}
-                className="text-gray-600 hover:text-cyan-500 transition-colors"
+                className="text-cyan-100 hover:text-cyan-300 transition-colors"
               >
                 {t('community')}
               </button>

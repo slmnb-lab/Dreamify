@@ -185,7 +185,7 @@ export default function HomeClient() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800">
 
       {/* 图片放大模态框 */}
       {zoomedImage && (
@@ -195,7 +195,7 @@ export default function HomeClient() {
         >
           <div className="w-full max-w-4xl flex flex-col items-center">
             <button
-              className="mb-4 text-white hover:text-gray-300 transition-colors"
+              className="mb-4 text-cyan-300 hover:text-cyan-100 transition-colors"
               onClick={(e) => {
                 e.stopPropagation();
                 setZoomedImage(null);
@@ -208,7 +208,7 @@ export default function HomeClient() {
             <img
               src={zoomedImage}
               alt="Zoomed preview"
-              className="w-full h-auto rounded-2xl shadow-2xl"
+              className="w-full h-auto rounded-2xl shadow-2xl border border-cyan-500/20"
             />
           </div>
         </div>
@@ -216,7 +216,8 @@ export default function HomeClient() {
 
       {/* Hero Section */}
       <section className="relative py-16 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
         <div className="container mx-auto px-4 relative">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <div className="flex items-center justify-center space-x-6 mb-16 transform hover:scale-105 transition-transform duration-500">
@@ -225,29 +226,29 @@ export default function HomeClient() {
                 alt="Dreamify Logo"
                 width={72}
                 height={72}
-                className="rounded-2xl shadow-xl"
+                className="rounded-2xl shadow-xl border border-cyan-500/20"
               />
-              <span className="text-7xl font-bold bg-gradient-to-br from-cyan-500 via-blue-500 to-indigo-500 bg-clip-text text-transparent">
+              <span className="text-7xl font-bold bg-gradient-to-br from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
                 Dreamify
               </span>
             </div>
             <div className="max-w-7xl mx-auto text-center">
               <h1 className="mb-8 flex items-center justify-center gap-4">
-                <span className="text-4xl sm:text-5xl lg:text-6xl font-medium text-gray-700 break-words whitespace-nowrap">
+                <span className="text-4xl sm:text-5xl lg:text-6xl font-medium text-cyan-100 break-words whitespace-nowrap">
                   {t('hero.titlePrefix')}
                 </span>
-                <span className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent break-words whitespace-nowrap">
+                <span className="text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent break-words whitespace-nowrap">
                   {t('hero.titleHighlight')}
                 </span>
               </h1>
-              <p className="text-2xl text-gray-600 mb-10">
+              <p className="text-2xl text-cyan-100 mb-10">
                 {t('hero.subtitle.prefix')}
-                <span className="text-3xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent px-2">
+                <span className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent px-2">
                   {t('hero.subtitle.highlight')}
                 </span>
                 {t('hero.subtitle.suffix')}
               </p>
-              <p className="text-2xl text-gray-600 mb-12">
+              <p className="text-2xl text-cyan-100 mb-12">
                 {t('hero.subtitle2')}
               </p>
             </div>
@@ -264,7 +265,7 @@ export default function HomeClient() {
                 onClick={() => {
                   document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                 }}
-                className="px-10 py-4 border-2 border-cyan-500/50 text-cyan-600 rounded-2xl hover:bg-cyan-50/50 transition-all duration-300 text-lg font-medium"
+                className="px-10 py-4 border-2 border-cyan-500/50 text-cyan-300 rounded-2xl hover:bg-cyan-500/10 transition-all duration-300 text-lg font-medium"
               >
                 {t('hero.faqButton')}
               </button>
@@ -273,7 +274,7 @@ export default function HomeClient() {
 
           {/* Image Showcase with Carousel */}
           <div className="relative max-w-7xl mx-auto">
-            <div className="aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl bg-gray-100">
+            <div className="aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl bg-slate-700/50 border border-cyan-400/30">
               {images.map((src, index) => (
                 <div
                   key={src}
@@ -298,11 +299,11 @@ export default function HomeClient() {
             {/* Carousel Controls */}
             <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
               {/* 大屏幕显示完整控件 */}
-              <div className="hidden md:flex items-center gap-6 bg-white/80 backdrop-blur-xl px-6 py-4 rounded-2xl shadow-xl">
-                <p className="text-base font-medium text-gray-700 whitespace-nowrap">
+              <div className="hidden md:flex items-center gap-6 bg-slate-700/80 backdrop-blur-xl px-6 py-4 rounded-2xl shadow-xl border border-cyan-400/30">
+                <p className="text-base font-medium text-cyan-100 whitespace-nowrap">
                   {t('hero.imageCaption')}
                 </p>
-                <div className="h-8 w-[1px] bg-gray-300"></div>
+                <div className="h-8 w-[1px] bg-cyan-500/20"></div>
                 <div className="flex gap-4">
                   {images.map((_, index) => (
                     <button
@@ -311,7 +312,7 @@ export default function HomeClient() {
                       className={`w-4 h-4 rounded-full transition-all duration-300 ${
                         currentImageIndex === index
                           ? 'bg-cyan-500 scale-125'
-                          : 'bg-gray-300 hover:bg-gray-400'
+                          : 'bg-cyan-500/20 hover:bg-cyan-500/40'
                       }`}
                       aria-label={`切换到图片 ${index + 1}`}
                     />
@@ -320,7 +321,7 @@ export default function HomeClient() {
               </div>
 
               {/* 小屏幕只显示指示器 */}
-              <div className="md:hidden flex gap-4 bg-white/80 backdrop-blur-xl px-8 py-3 rounded-2xl shadow-xl">
+              <div className="md:hidden flex gap-4 bg-slate-700/80 backdrop-blur-xl px-8 py-3 rounded-2xl shadow-xl border border-cyan-400/30">
                 {images.map((_, index) => (
                   <button
                     key={index}
@@ -328,7 +329,7 @@ export default function HomeClient() {
                     className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       currentImageIndex === index
                         ? 'bg-cyan-500 scale-125'
-                        : 'bg-gray-300 hover:bg-gray-400'
+                        : 'bg-cyan-500/20 hover:bg-cyan-500/40'
                     }`}
                     aria-label={`切换到图片 ${index + 1}`}
                   />
@@ -342,7 +343,7 @@ export default function HomeClient() {
       {/* Generate Section */}
       <section id="generate-section" ref={generateSectionRef} className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-4xl font-bold text-center mb-12">{t('generate.title')}</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-cyan-100">{t('generate.title')}</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-7 gap-10">
             <div className="md:col-span-3">
@@ -368,9 +369,9 @@ export default function HomeClient() {
                 isGenerating={isGenerating}
               />
             </div>
-            <div className="md:col-span-4 bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-white/20">
+            <div className="md:col-span-4 bg-slate-700/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30">
               <div className="flex justify-between items-center mb-8">
-                <h2 className="text-3xl font-semibold text-gray-800">{t('generate.preview.title')}</h2>
+                <h2 className="text-3xl font-semibold text-cyan-100">{t('generate.preview.title')}</h2>
                 {generatedImages && generatedImages.length > 0 && (
                   <button
                     onClick={() => {
@@ -391,7 +392,7 @@ export default function HomeClient() {
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 {Array.from({ length: batch_size }).map((_, index) => (
-                  <div key={index} className="aspect-square relative rounded-2xl overflow-hidden bg-gray-100/50 backdrop-blur-sm border border-white/20">
+                  <div key={index} className="aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30">
                     {generatedImages[index] && (
                       <img
                         src={generatedImages[index]}
@@ -402,45 +403,51 @@ export default function HomeClient() {
                     )}
                     <div className={`absolute bottom-0 left-0 right-0 p-3 text-center text-sm backdrop-blur-sm ${
                       imageStatuses[index]?.status === 'error'
-                        ? 'bg-red-100/80 text-red-700'
+                        ? 'bg-red-500/10 text-red-400'
                         : imageStatuses[index]?.status === 'success'
-                          ? 'bg-green-100/80 text-green-700'
-                          : 'bg-blue-100/80 text-blue-700'
+                          ? 'bg-green-500/10 text-green-400'
+                          : 'bg-blue-500/10 text-blue-400'
                       }`}>
                       {imageStatuses[index]?.message}
                     </div>
                     {isGenerating && !imageStatuses[index]?.status && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
                         <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-500 border-t-transparent"></div>
                       </div>
                     )}
                     {!isGenerating && !imageStatuses[index]?.status && !generatedImages[index] && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm">
+                      <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
                         <div className="text-center">
-                          <div className="text-gray-400">{t('generate.preview.placeholder')}</div>
+                          <div className="text-cyan-300/50">{t('generate.preview.placeholder')}</div>
                         </div>
                       </div>
                     )}
                   </div>
                 ))}
               </div>
-              <div className="mt-6 text-center text-sm text-gray-500">
+              <div className="mt-6 text-center text-sm text-cyan-300/70">
                 {t('generate.preview.hint')}
               </div>
               {imageStatuses.length > 0 && (
                 <div className="mt-4 text-center text-sm">
-                  <span className="text-blue-600">
+                  <span className="text-blue-300 font-medium">
                     {imageStatuses.filter(status => status.status === 'pending').length}
                   </span>
-                  {t('generate.preview.status.generating')}
-                  <span className="text-green-600 mx-2">
+                  <span className="text-cyan-50">
+                    {t('generate.preview.status.generating')}
+                  </span>
+                  <span className="text-green-300 font-medium mx-2">
                     {imageStatuses.filter(status => status.status === 'success').length}
                   </span>
-                  {t('generate.preview.status.success')}
-                  <span className="text-red-600 mx-2">
+                  <span className="text-cyan-50">
+                    {t('generate.preview.status.success')}
+                  </span>
+                  <span className="text-red-300 font-medium mx-2">
                     {imageStatuses.filter(status => status.status === 'error').length}
                   </span>
-                  {t('generate.preview.status.failed')}
+                  <span className="text-cyan-50">
+                    {t('generate.preview.status.failed')}
+                  </span>
                 </div>
               )}
             </div>
@@ -448,59 +455,59 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section className="py-24 bg-white/80 backdrop-blur-xl">
+      <section className="py-24 bg-slate-700/80 backdrop-blur-xl">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-800 mb-16">
+          <h2 className="text-4xl font-bold text-center text-cyan-100 mb-16">
             {t('features.title')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-            <div className="card text-center p-8 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-cyan-500 mb-6">
+            <div className="card text-center p-8 rounded-3xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <div className="text-cyan-400 mb-6">
                 <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold mb-4">{t('features.speed.title')}</h3>
-              <p className="text-gray-600">{t('features.speed.description')}</p>
+              <h3 className="text-2xl font-semibold mb-4 text-cyan-100">{t('features.speed.title')}</h3>
+              <p className="text-cyan-300/70">{t('features.speed.description')}</p>
             </div>
-            <div className="card text-center p-8 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-cyan-500 mb-6">
+            <div className="card text-center p-8 rounded-3xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <div className="text-cyan-400 mb-6">
                 <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold mb-4">{t('features.customization.title')}</h3>
-              <p className="text-gray-600">{t('features.customization.description')}</p>
+              <h3 className="text-2xl font-semibold mb-4 text-cyan-100">{t('features.customization.title')}</h3>
+              <p className="text-cyan-300/70">{t('features.customization.description')}</p>
             </div>
-            <div className="card text-center p-8 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-cyan-500 mb-6">
+            <div className="card text-center p-8 rounded-3xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <div className="text-cyan-400 mb-6">
                 <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold mb-4">{t('features.security.title')}</h3>
-              <p className="text-gray-600">{t('features.security.description')}</p>
+              <h3 className="text-2xl font-semibold mb-4 text-cyan-100">{t('features.security.title')}</h3>
+              <p className="text-cyan-300/70">{t('features.security.description')}</p>
             </div>
-            <div className="card text-center p-8 rounded-3xl bg-white/50 backdrop-blur-sm border border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
-              <div className="text-cyan-500 mb-6">
+            <div className="card text-center p-8 rounded-3xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1">
+              <div className="text-cyan-400 mb-6">
                 <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-semibold mb-4">{t('features.noLogin.title')}</h3>
-              <p className="text-gray-600">{t('features.noLogin.description')}</p>
+              <h3 className="text-2xl font-semibold mb-4 text-cyan-100">{t('features.noLogin.title')}</h3>
+              <p className="text-cyan-300/70">{t('features.noLogin.description')}</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-gradient-to-br from-cyan-50/80 via-blue-50/80 to-indigo-50/80 backdrop-blur-xl">
+      <section className="py-24 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="text-4xl font-bold text-gray-800 mb-8">
+          <h2 className="text-4xl font-bold text-cyan-100 mb-8">
             {t('cta.title')}
           </h2>
-          <p className="text-2xl text-gray-600 mb-12 max-w-2xl mx-auto">
+          <p className="text-2xl text-cyan-300/70 mb-12 max-w-2xl mx-auto">
             {t('cta.subtitle')}
           </p>
           <button
@@ -518,19 +525,19 @@ export default function HomeClient() {
       </section>
 
       {/* FAQ Section */}
-      <section id="faq-section" className="py-24 bg-white/80 backdrop-blur-xl">
+      <section id="faq-section" className="py-24 bg-slate-700/80 backdrop-blur-xl">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center text-gray-800 mb-16">
+          <h2 className="text-4xl font-bold text-center text-cyan-100 mb-16">
             {t('faq.title')}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {t.raw('faq.questions').map((qa: FAQItem, index: number) => (
               <div
                 key={index}
-                className="bg-white/50 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-white/20"
+                className="bg-slate-600/50 backdrop-blur-sm p-8 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-cyan-400/30"
               >
-                <h3 className="text-2xl font-semibold mb-6">Q{index + 1}: {qa.q}</h3>
-                <p className="text-gray-600 pl-6 border-l-2 border-cyan-500">{qa.a}</p>
+                <h3 className="text-2xl font-semibold mb-6 text-cyan-100">Q{index + 1}: {qa.q}</h3>
+                <p className="text-cyan-300/70 pl-6 border-l-2 border-cyan-500">{qa.a}</p>
               </div>
             ))}
           </div>
@@ -538,17 +545,17 @@ export default function HomeClient() {
       </section>
 
       {/* Community Showcase Section */}
-      <section id="community-showcase" className="py-20 bg-white/90 backdrop-blur-xl">
+      <section id="community-showcase" className="py-20 bg-slate-800/90 backdrop-blur-xl">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-6">{t('community.title')}</h2>
-            <p className="text-2xl text-gray-600">{t('community.subtitle')}</p>
+            <h2 className="text-4xl font-bold mb-6 text-cyan-100">{t('community.title')}</h2>
+            <p className="text-2xl text-cyan-300/70">{t('community.subtitle')}</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {communityWorks.map((work) => (
               <div key={work.id} className="relative group">
-                <div className="aspect-square rounded-3xl overflow-hidden shadow-xl">
+                <div className="aspect-square rounded-3xl overflow-hidden shadow-xl border border-cyan-400/30">
                   <Image
                     src={work.image}
                     alt={`Community work ${work.id}`}
@@ -557,12 +564,12 @@ export default function HomeClient() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 </div>
-                <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
+                <div className="absolute inset-0 bg-slate-800/90 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
                   <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <p className="text-white text-base mb-6 line-clamp-3">{work.prompt}</p>
+                    <p className="text-cyan-100 text-base mb-6 line-clamp-3">{work.prompt}</p>
                     <button
                       onClick={() => handleGenerateSame(work.prompt)}
-                      className="w-full py-3 px-6 bg-white text-gray-900 rounded-xl font-medium hover:bg-gray-100 transition-all duration-300 hover:-translate-y-0.5"
+                      className="w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-medium hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 hover:-translate-y-0.5"
                     >
                       {t('community.generateSame')}
                     </button>
@@ -574,10 +581,10 @@ export default function HomeClient() {
         </div>
       </section>
 
-      <section id="suanleme-section" className="py-20 bg-gradient-to-br from-violet-50/80 via-cyan-50/80 to-amber-50/80 backdrop-blur-xl">
+      <section id="suanleme-section" className="py-20 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-8">
           <div className="text-center mb-20">
-            <p className="text-gray-600 text-base mb-6">
+            <p className="text-cyan-300/70 text-base mb-6">
               {t('suanleme.title')}
             </p>
             <div className="flex justify-center items-center gap-12">
@@ -610,12 +617,12 @@ export default function HomeClient() {
 
           <div className="w-full flex flex-col md:flex-row items-center justify-center gap-20">
             <div className="w-full md:w-2/5 max-w-xl">
-              <div className="bg-white/80 backdrop-blur-xl border border-amber-200/50 rounded-3xl p-12 shadow-2xl">
-                <h3 className="text-3xl font-semibold mb-8 text-gray-800">{t('suanleme.advantages.title')}</h3>
-                <ul className="space-y-6 text-gray-600">
+              <div className="bg-slate-600/50 backdrop-blur-xl border border-cyan-400/30 rounded-3xl p-12 shadow-2xl">
+                <h3 className="text-3xl font-semibold mb-8 text-cyan-100">{t('suanleme.advantages.title')}</h3>
+                <ul className="space-y-6 text-cyan-300/70">
                   {t.raw('suanleme.advantages.items').map((item: string, index: number) => (
                     <li key={index} className="flex items-center gap-4">
-                      <span className="text-amber-500 text-xl">•</span>
+                      <span className="text-cyan-400 text-xl">•</span>
                       {item}
                     </li>
                   ))}
@@ -623,7 +630,7 @@ export default function HomeClient() {
                 <a
                   href="https://suanleme.cn"
                   target="_blank"
-                  className="mt-12 w-full inline-block px-10 py-5 bg-gradient-to-r from-amber-500 to-orange-500 rounded-xl text-white text-center hover:translate-y-[-2px] transition-all duration-300 shadow-xl shadow-amber-900/20 hover:shadow-2xl hover:shadow-amber-900/30 font-medium text-lg"
+                  className="mt-12 w-full inline-block px-10 py-5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-xl text-white text-center hover:translate-y-[-2px] transition-all duration-300 shadow-xl shadow-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/30 font-medium text-lg"
                 >
                   {t('suanleme.advantages.button')}
                 </a>
@@ -633,7 +640,7 @@ export default function HomeClient() {
               <img
                 src="https://suanleme.cn/cover.png"
                 alt={t('suanleme.suanleme')}
-                className="w-full rounded-3xl shadow-2xl border border-amber-200/50"
+                className="w-full rounded-3xl shadow-2xl border border-cyan-500/20"
               />
             </div>
           </div>

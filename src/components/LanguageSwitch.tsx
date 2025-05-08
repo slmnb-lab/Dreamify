@@ -29,7 +29,7 @@ export default function LanguageSwitch() {
 
   return (
     <div className="relative group z-50">
-      <button className="flex items-center space-x-1 px-3 py-2 text-gray-700 hover:text-primary-500 transition-colors">
+      <button className="flex items-center space-x-1 px-3 py-2 text-cyan-100 hover:text-cyan-300 transition-colors">
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none"
           xmlns="http://www.w3.org/2000/svg">
           <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="currentColor" strokeWidth="2" />
@@ -53,14 +53,14 @@ export default function LanguageSwitch() {
         </svg>
       </button>
 
-      <div className="absolute right-0 mt-1 w-40 bg-white rounded-lg shadow-xl border border-gray-100 invisible group-hover:visible transition-all duration-200 hover:visible">
+      <div className="absolute right-0 mt-1 w-40 bg-slate-700 rounded-lg shadow-xl border border-cyan-400/20 invisible group-hover:visible transition-all duration-200 hover:visible">
         <div className="py-1">
           {locales.map((locale) => (
             <button
               key={locale}
               onClick={() => switchLanguage(locale)}
-              className={`block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 ${
-                currentLocale === locale ? 'text-primary-500 font-medium' : 'text-gray-700'
+              className={`block w-full text-left px-4 py-2 text-sm hover:bg-slate-600 ${
+                currentLocale === locale ? 'text-cyan-300 font-medium' : 'text-cyan-100'
               }`}
             >
               {getLanguageName(locale)}
