@@ -12,6 +12,7 @@
     "@heroicons/react": "^2.1.1",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
+    "http2-wrapper": "^2.2.1",
     "next": "15.2.4",
     "next-intl": "^4.0.2",
     "next-umami": "^1.0.0",

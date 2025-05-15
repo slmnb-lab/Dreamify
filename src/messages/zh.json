@@ -5,15 +5,15 @@
   },
   "home": {
     "hero": {
-      "titlePrefix": "解锁你的",
-      "titleHighlight": "创意超能力，只需10秒！",
+      "titlePrefix": "释放你的",
+      "titleHighlight": "无限想象力，只需一键！",
       "subtitle": {
-        "prefix": "使用先进的 HiDream-I1 模型，",
-        "highlight": "完全免费",
-        "suffix": "将你的想象力转化为惊艳的艺术作品"
+        "prefix": "HiDream-I1满血版 驱动，",
+        "highlight": "免费无限制",
+        "suffix": "生成高清画作。"
       },
-      "subtitle2": "由全国50台家用电脑的4090显卡分布式算力提供支持",
-      "startButton": "立即开始",
+      "subtitle2": "由全国30台家用电脑的闲置4090显卡，提供分布式算力支持",
+      "startButton": "开始创作",
       "faqButton": "常见问题",
       "imageCaption": "AI艺术"
     },
@@ -36,11 +36,11 @@
         },
         "height": {
           "label": "高度",
-          "hint": "图片高度（64-1080，8的倍数）"
+          "hint": "图片高度（64-1920，8的倍数）"
         },
         "steps": {
           "label": "步数",
-          "hint": "范围：15-45，数值越高细节越丰富，但生成速度越慢"
+          "hint": "范围：25-65，数值越高细节越丰富，但生成速度越慢"
         },
         "batch_size": {
           "label": "生成数量",
@@ -53,6 +53,16 @@
         "generateButton": {
           "default": "生成图片",
           "loading": "生成中..."
+        },
+        "progress": {
+          "title": "生成进度",
+          "estimatedTime": "预计耗时",
+          "seconds": "秒",
+          "status": {
+            "initializing": "正在初始化...",
+            "processing": "正在处理...",
+            "finalizing": "正在完成..."
+          }
         },
         "generating": "正在生成...",
         "finalizing": "正在完成..."

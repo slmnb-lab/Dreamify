@@ -6,9 +6,9 @@ export default function Footer() {
   const t = useTranslations('footer')
 
   return (
-    <footer className="bg-white/80 backdrop-blur-sm border-t border-gray-200">
-      <div className="container mx-auto px-4 py-6">
-        <div className="text-center text-gray-600">
+    <footer className="bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl border-t border-cyan-400/20">
+      <div className="container mx-auto px-8 py-6">
+        <div className="text-center text-cyan-200/80">
           <p>{t('copyright')}</p>
         </div>
       </div>

@@ -5,15 +5,15 @@
   },
   "home": {
     "hero": {
-      "titlePrefix": "Unlock Your",
-      "titleHighlight": "Creative Superpower in Just 10 Seconds!",
+      "titlePrefix": "Unleash Your",
+      "titleHighlight": "Infinite Imagination, Just One Click!",
       "subtitle": {
-        "prefix": "Using the advanced HiDream-I1 model, ",
-        "highlight": "completely free",
-        "suffix": "to transform your imagination into stunning artwork"
+        "prefix": "Powered by HiDream-I1 full version, ",
+        "highlight": "unlimited free",
+        "suffix": "generation of high-definition artwork."
       },
-      "subtitle2": "Powered by distributed computing from 50 home computers with 4090 GPUs across the country",
-      "startButton": "Get Started",
+      "subtitle2": "Powered by 30 distributed RTX 4090 GPUs from home computers across the country",
+      "startButton": "Start Creating",
       "faqButton": "FAQ",
       "imageCaption": "AI Art"
     },
@@ -36,11 +36,11 @@
         },
         "height": {
           "label": "Height",
-          "hint": "Image height (64-1080, multiples of 8)"
+          "hint": "Image height (64-1920, multiples of 8)"
         },
         "steps": {
           "label": "Steps",
-          "hint": "Range: 15-45, higher values mean more details but slower generation"
+          "hint": "Range: 25-65, higher values mean more detail but slower generation"
         },
         "batch_size": {
           "label": "Batch Size",
@@ -53,6 +53,16 @@
         "generateButton": {
           "default": "Generate Image",
           "loading": "Generating..."
+        },
+        "progress": {
+          "title": "Generation Progress",
+          "estimatedTime": "Estimated Time",
+          "seconds": "seconds",
+          "status": {
+            "initializing": "Initializing...",
+            "processing": "Processing...",
+            "finalizing": "Finalizing..."
+          }
         },
         "generating": "Generating...",
         "finalizing": "Finalizing..."
