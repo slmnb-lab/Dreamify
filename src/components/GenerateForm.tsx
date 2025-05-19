@@ -43,7 +43,6 @@ export default function GenerateForm({
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
   const [estimatedTime, setEstimatedTime] = useState(0)
-  const [error, setError] = useState('')
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -63,8 +62,7 @@ export default function GenerateForm({
       
       // 进度条动画
       let currentProgress = 0;
-      let startTime = Date.now();
-      let lastUpdateTime = startTime;
+      const startTime = Date.now();
       
       timer = setInterval(() => {
         const currentTime = Date.now();
@@ -77,15 +75,14 @@ export default function GenerateForm({
           // 前20%时间快速进展到40%
           targetProgress = timeRatio * 2 * 40;
         } else if (timeRatio < 0.8) {
-          // 20%-80%时间进展到90%
-          targetProgress = 40 + (timeRatio - 0.2) * (50 / 0.6);
+          // 20%-80%时间进展到80%
+          targetProgress = 40 + (timeRatio - 0.2) * (40 / 0.6);
         } else {
           // 最后20%时间进展到95%
-          targetProgress = 90 + (timeRatio - 0.8) * (5 / 0.2);
+          targetProgress = 80 + (timeRatio - 0.8) * (15 / 0.2);
         }
         
         // 平滑过渡到目标进度
-        const timeDiff = (currentTime - lastUpdateTime) / 1000;
         const maxStep = 0.5; // 每帧最大进度变化
         const step = Math.min(maxStep, Math.abs(targetProgress - currentProgress));
         
@@ -96,7 +93,6 @@ export default function GenerateForm({
         }
         
         setProgress(currentProgress);
-        lastUpdateTime = currentTime;
       }, 50); // 更频繁的更新以获得更平滑的动画
     } else {
       setProgress(0);
@@ -114,13 +110,8 @@ export default function GenerateForm({
     e.preventDefault()
     if (isGenerating) return
     
-    setError('')
     setProgress(0)
-    try {
-      onGenerate()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : t('form.error.general'))
-    }
+    onGenerate()
   }
 
   const handleRandomPrompt = () => {

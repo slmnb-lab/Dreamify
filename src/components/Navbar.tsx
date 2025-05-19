@@ -2,14 +2,11 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
 import LanguageSwitch from './LanguageSwitch'
-import { useParams, useRouter } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { transferUrl } from '@/utils/locale'
 
 export default function Navbar() {
-  const t = useTranslations('nav')
-  const router = useRouter()
   const { locale } = useParams()
 
   return (

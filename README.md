@@ -1,8 +1,8 @@
-# FluxEz - Free AI Image Generation Tool
+# FluxEz - An AI Image Generation Site
 
 ![FluxEz Interface](./public/images/Flux-demo.png)
 
-A Next.js-based website for Flux.1-dev model image generation, powered by [ComfyUI API](https://github.com/SaladTechnologies/comfyui-api) backend.
+A Next.js-based website for AI model image generation, powered by [ComfyUI API](https://github.com/SaladTechnologies/comfyui-api) backend.
 
 ## ✨ Key Features
 
@@ -20,8 +20,8 @@ A Next.js-based website for Flux.1-dev model image generation, powered by [Comfy
 
 ## 🖼️ Gallery
 
-![](./public/images/demo-1.jpg)
-![](./public/images/demo-2.jpg)
+![](./public/images/demo-1.png)
+![](./public/images/demo-2.png)
 
 ## 🛠️ Development
 
@@ -38,16 +38,16 @@ fluxez/
 ### Local Setup
 
 ```bash
-git clone https://github.com/your-repo/fluxez.git
+git clone https://github.com/slmnb-lab/Dreamify
 cd fluxez
 npm install
 npm run dev
 Access http://localhost:3000 after starting
 
-Backend Configuration
-The ComfyUI API endpoint is in .env file:
+# Backend Configuration
+# The ComfyUI API endpoint is in .env file:
 
-// set env varible
+# set env varible
 COMFYUI_API_URL = "https://your-comfyui-api-url" 
 ```
 
