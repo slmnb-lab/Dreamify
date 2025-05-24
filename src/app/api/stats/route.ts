@@ -3,7 +3,7 @@ import { db } from '@/db';
 import { siteStats } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export const SITE_START_DATE = '2025-05-20T00:10:17Z'; // 网站启动时间
+const SITE_START_DATE = '2025-05-20T00:10:17Z'; // 网站启动时间
 
 export async function GET() {
   try {

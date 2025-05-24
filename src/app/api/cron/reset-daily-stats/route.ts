@@ -3,7 +3,7 @@ import { db } from '@/db';
 import { siteStats } from '@/db/schema';
 import { eq } from 'drizzle-orm';
 
-export async function GET(req: Request) {
+export async function GET() {
   try {
     await db.update(siteStats)
       .set({
