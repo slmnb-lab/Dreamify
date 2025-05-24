@@ -26,10 +26,6 @@
           "placeholder": "描述您想要生成的图像(推荐使用英语)..."
         },
         "randomPrompt": "随机提示词",
-        "seed": {
-          "label": "种子值（可选）",
-          "placeholder": "输入种子值以确保可重复性"
-        },
         "width": {
           "label": "宽度",
           "hint": "图片宽度（64-1920，8的倍数）"
@@ -177,6 +173,12 @@
         "availability": "服务可用性"
       },
       "button": "部署你的服务"
+    },
+    "stats": {
+      "title": "网站统计",
+      "uptime": "运行时间",
+      "totalGenerations": "总生成数量",
+      "dailyGenerations": "今日生成数量"
     }
   },
   "nav": {

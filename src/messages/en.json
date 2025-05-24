@@ -8,9 +8,9 @@
       "titlePrefix": "Unleash Your",
       "titleHighlight": "Infinite Imagination, Just One Click!",
       "subtitle": {
-        "prefix": "Powered by HiDream-I1 full version, ",
-        "highlight": "unlimited free",
-        "suffix": "generation of high-definition artwork."
+        "prefix": "Powered by HiDream-I1 Full Version,",
+        "highlight": "Free Unlimited",
+        "suffix": "HD Image Generation."
       },
       "subtitle2": "Powered by 30 distributed RTX 4090 GPUs from home computers across the country",
       "startButton": "Start Creating",
@@ -26,10 +26,6 @@
           "placeholder": "Describe the image you want to generate (English recommended)..."
         },
         "randomPrompt": "Random Prompt",
-        "seed": {
-          "label": "Seed (optional)",
-          "placeholder": "Enter a seed value for reproducibility"
-        },
         "width": {
           "label": "Width",
           "hint": "Image width (64-1920, multiples of 8)"
@@ -107,11 +103,6 @@
         "description": "Start experiencing AI image generation without registration"
       }
     },
-    "cta": {
-      "title": "Ready to Start Creating?",
-      "subtitle": "Join our community and explore endless creative possibilities",
-      "button": "View Community"
-    },
     "faq": {
       "title": "Frequently Asked Questions",
       "questions": [
@@ -177,6 +168,12 @@
         "availability": "Service Availability"
       },
       "button": "Deploy Your Service"
+    },
+    "stats": {
+      "title": "Site Statistics",
+      "uptime": "Uptime",
+      "totalGenerations": "Total Generations",
+      "dailyGenerations": "Today's Generations"
     }
   },
   "nav": {

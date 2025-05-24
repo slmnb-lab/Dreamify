@@ -168,6 +168,12 @@
         "availability": "服務可用性"
       },
       "button": "部署你的服務"
+    },
+    "stats": {
+      "title": "網站統計",
+      "uptime": "運行時間",
+      "totalGenerations": "總生成數量",
+      "dailyGenerations": "今日生成數量"
     }
   },
   "nav": {

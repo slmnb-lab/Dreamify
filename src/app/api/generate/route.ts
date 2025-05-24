@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server'
 import { generateImage } from '@/utils/comfyApi'
+import { db } from '@/db'
+import { siteStats } from '@/db/schema'
+import { eq, sql } from 'drizzle-orm'
 
 export async function POST(request: Request) {
   try {
@@ -23,6 +26,15 @@ export async function POST(request: Request) {
       seed: seed ? parseInt(seed) : undefined,
       batch_size
     }, process.env.COMFYUI_API_URL || '')
+
+    // 更新统计数据
+    await db.update(siteStats)
+      .set({
+        totalGenerations: sql`${siteStats.totalGenerations} + 1`,
+        dailyGenerations: sql`${siteStats.dailyGenerations} + 1`,
+        updatedAt: new Date(),
+      })
+      .where(eq(siteStats.id, 1))
 
     return NextResponse.json({ imageUrl })
   } catch (error) {

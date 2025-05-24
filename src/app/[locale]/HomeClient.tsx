@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import GenerateForm from '@/components/GenerateForm'
 import community from './communityWorks'
+import SiteStats from '@/components/SiteStats'
 
 interface FAQItem {
   q: string;
@@ -18,7 +19,7 @@ export default function HomeClient() {
   const [prompt, setPrompt] = useState('');
   const [width, setWidth] = useState(1024);
   const [height, setHeight] = useState(1024);
-  const [steps, setSteps] = useState(50);
+  const [steps, setSteps] = useState(30);
   const [batch_size, setBatchSize] = useState(4);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [imageStatuses, setImageStatuses] = useState<Array<{
@@ -633,6 +634,14 @@ export default function HomeClient() {
                 </a>
               </div>
             </div>
+          </div>
+        </section>
+
+        {/* Stats Section */}
+        <section className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
+          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
+          <div className="container mx-auto px-8 relative">
+            <SiteStats />
           </div>
         </section>
       </div>
