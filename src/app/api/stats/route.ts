@@ -17,6 +17,33 @@ export async function GET() {
       });
     }
 
+    // 检查上次重置时间是否为今天
+    const lastResetDate = stats[0].lastResetDate ? new Date(stats[0].lastResetDate) : new Date();
+    const today = new Date();
+    const isSameDay = lastResetDate.getDate() === today.getDate() &&
+                     lastResetDate.getMonth() === today.getMonth() &&
+                     lastResetDate.getFullYear() === today.getFullYear();
+
+    // 如果不是今天，重置每日统计数据
+    if (!isSameDay) {
+      await db.update(siteStats)
+        .set({
+          dailyGenerations: 0,
+          lastResetDate: new Date(),
+          updatedAt: new Date(),
+        })
+        .where(eq(siteStats.id, 1));
+
+      // 重新获取更新后的统计数据
+      const updatedStats = await db.select().from(siteStats).where(eq(siteStats.id, 1)).limit(1);
+      
+      return NextResponse.json({
+        totalGenerations: updatedStats[0].totalGenerations,
+        dailyGenerations: updatedStats[0].dailyGenerations,
+        uptime: calculateUptime(),
+      });
+    }
+
     return NextResponse.json({
       totalGenerations: stats[0].totalGenerations,
       dailyGenerations: stats[0].dailyGenerations,
