@@ -1,12 +1,12 @@
 {
   "site": {
-    "title": "Dreamify - Free Text to Image Website",
-    "description": "Generate stunning images in seconds using AI technology"
+    "title": "Dreamify - Free AI Art Website",
+    "description": "Generate fantasy images quickly with advanced AI models"
   },
   "home": {
     "hero": {
-      "titlePrefix": "Unleash Your",
-      "titleHighlight": "Infinite Imagination, Just One Click!",
+      "titlePrefix": "Unleash Your Imagination Through AI",
+      "titleHighlight": "Infinite Possibilities, Just One Click!",
       "subtitle": {
         "prefix": "Powered by HiDream-I1 Full Version,",
         "highlight": "Free Unlimited",

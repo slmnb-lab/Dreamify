@@ -1,11 +1,11 @@
 {
   "site": {
-    "title": "Dreamify - 免费的文生图网站",
-    "description": "使用 AI 技术，几秒钟内生成令人惊叹的图像"
+    "title": "Dreamify - 免费的AI绘画网站",
+    "description": "使用先进的AI模型，快速生成幻想中的图片"
   },
   "home": {
     "hero": {
-      "titlePrefix": "释放你的",
+      "titlePrefix": "通过AI释放你的",
       "titleHighlight": "无限想象力，只需一键！",
       "subtitle": {
         "prefix": "HiDream-I1满血版 驱动，",

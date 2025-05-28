@@ -134,7 +134,7 @@ export default function GenerateForm({
               id="prompt"
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              className="w-full h-64 px-5 py-4 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700"
+              className="w-full h-64 px-5 py-4 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
               placeholder={t('form.prompt.placeholder')}
               disabled={status === 'loading'}
               ref={promptRef}
@@ -165,19 +165,19 @@ export default function GenerateForm({
                     <label htmlFor="width" className="block text-sm font-medium text-cyan-50 mb-3">
                       {t('form.width.label')}
                     </label>
-                    <div className="relative">
+                    <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
                       <input
                         type="number"
                         id="width"
                         value={width}
                         onChange={(e) => setWidth(Number(e.target.value))}
-                        className="w-full px-5 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 text-center shadow-inner transition-all duration-300 text-cyan-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         min="64"
                         max="1920"
                         step="8"
                         disabled={status === 'loading'}
                       />
-                      <div className="absolute right-0 top-0 bottom-0 flex items-center">
+                      <div className="flex items-center border-l border-cyan-400/30">
                         <button
                           type="button"
                           onClick={() => setWidth(Math.max(64, width - 8))}
@@ -207,19 +207,19 @@ export default function GenerateForm({
                     <label htmlFor="height" className="block text-sm font-medium text-cyan-50 mb-3">
                       {t('form.height.label')}
                     </label>
-                    <div className="relative">
+                    <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
                       <input
                         type="number"
                         id="height"
                         value={height}
                         onChange={(e) => setHeight(Number(e.target.value))}
-                        className="w-full px-5 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 text-center shadow-inner transition-all duration-300 text-cyan-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         min="64"
                         max="1920"
                         step="8"
                         disabled={status === 'loading'}
                       />
-                      <div className="absolute right-0 top-0 bottom-0 flex items-center">
+                      <div className="flex items-center border-l border-cyan-400/30">
                         <button
                           type="button"
                           onClick={() => setHeight(Math.max(64, height - 8))}
@@ -250,18 +250,18 @@ export default function GenerateForm({
                   <label htmlFor="steps" className="block text-sm font-medium text-cyan-50 mb-3">
                     {t('form.steps.label')}
                   </label>
-                  <div className="relative">
+                  <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
                     <input
                       type="number"
                       id="steps"
                       value={steps}
                       onChange={(e) => setSteps(Number(e.target.value))}
-                      className="w-full px-5 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 text-center shadow-inner transition-all duration-300 text-cyan-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       min="25"
                       max="65"
                       disabled={status === 'loading'}
                     />
-                    <div className="absolute right-0 top-0 bottom-0 flex items-center">
+                    <div className="flex items-center border-l border-cyan-400/30">
                       <button
                         type="button"
                         onClick={() => setSteps(Math.max(15, steps - 1))}
@@ -291,18 +291,18 @@ export default function GenerateForm({
                   <label htmlFor="batch_size" className="block text-sm font-medium text-cyan-50 mb-3">
                     {t('form.batch_size.label')}
                   </label>
-                  <div className="relative">
+                  <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
                     <input
                       type="number"
                       id="batch_size"
                       value={batch_size}
                       onChange={(e) => setBatchSize(Number(e.target.value))}
-                      className="w-full px-5 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 text-center shadow-inner transition-all duration-300 text-cyan-50 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                       min="1"
                       max="4"
                       disabled={status === 'loading'}
                     />
-                    <div className="absolute right-0 top-0 bottom-0 flex items-center">
+                    <div className="flex items-center border-l border-cyan-400/30">
                       <button
                         type="button"
                         onClick={() => setBatchSize(Math.max(1, batch_size - 1))}
