@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 
 interface GenerateFormProps {
@@ -12,6 +12,8 @@ interface GenerateFormProps {
   setSteps: (value: number) => void;
   batch_size: number;
   setBatchSize: (value: number) => void;
+  model: string;
+  setModel: (value: string) => void;
   status: 'loading' | 'authenticated' | 'unauthenticated';
   onGenerate: () => void;
   isAdvancedOpen: boolean;
@@ -32,6 +34,8 @@ export default function GenerateForm({
   setSteps,
   batch_size,
   setBatchSize,
+  model,
+  setModel,
   status,
   onGenerate,
   isAdvancedOpen,
@@ -43,15 +47,17 @@ export default function GenerateForm({
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
   const [estimatedTime, setEstimatedTime] = useState(0)
+  const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false)
+  const modelDropdownRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isGenerating) {
       // 计算预期时间：基于像素数和步数
-      // 基准：1024*1024像素，50步 = 90秒
+      // 基准：1024*1024像素，50步 = 100秒
       const basePixels = 1024 * 1024;
       const baseSteps = 50;
-      const baseTime = 90;
+      const baseTime = 100;
       
       const currentPixels = width * height;
       const pixelFactor = currentPixels / basePixels;
@@ -72,8 +78,8 @@ export default function GenerateForm({
         // 计算目标进度
         let targetProgress;
         if (timeRatio < 0.2) {
-          // 前20%时间快速进展到40%
-          targetProgress = timeRatio * 2 * 40;
+          // 前20%时间快速进展到30%
+          targetProgress = timeRatio * 2 * 30;
         } else if (timeRatio < 0.8) {
           // 20%-80%时间进展到80%
           targetProgress = 40 + (timeRatio - 0.2) * (40 / 0.6);
@@ -106,6 +112,17 @@ export default function GenerateForm({
     };
   }, [isGenerating, steps, width, height]);
 
+  // Add click outside handler for dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (modelDropdownRef.current && !modelDropdownRef.current.contains(event.target as Node)) {
+        setIsModelDropdownOpen(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (isGenerating) return
@@ -120,6 +137,24 @@ export default function GenerateForm({
     setPrompt(communityWorks[randomIndex].prompt);
   };
 
+  const models = [
+    {
+      id: "HiDream-full-fp16",
+      name: "HiDream-full-fp16",
+      image: "/models/HiDream-full.jpg"
+    },
+    {
+      id: "HiDream-full-fp8",
+      name: "HiDream-full-fp8",
+      image: "/models/HiDream-full.jpg"
+    },
+    {
+      id: "Flux-Dev",
+      name: "Flux-Dev",
+      image: "/models/Flux-Dev.jpg"
+    }
+  ]
+
   return (
     <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-3xl"></div>
@@ -127,7 +162,8 @@ export default function GenerateForm({
       <form onSubmit={handleSubmit} className="space-y-8 relative flex-grow flex flex-col">
         <div className="space-y-8 flex-grow">
           <div className="flex-grow">
-            <label htmlFor="prompt" className="block text-sm font-medium text-cyan-50 mb-3">
+            <label htmlFor="prompt" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+              <img src="/form/prompt.svg" alt="Prompt" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
               {t('form.prompt.label')}
             </label>
             <textarea
@@ -162,7 +198,8 @@ export default function GenerateForm({
               <div className="mt-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="width" className="block text-sm font-medium text-cyan-50 mb-3">
+                    <label htmlFor="width" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                      <img src="/form/width.svg" alt="Width" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
                       {t('form.width.label')}
                     </label>
                     <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
@@ -204,7 +241,8 @@ export default function GenerateForm({
                   </div>
 
                   <div>
-                    <label htmlFor="height" className="block text-sm font-medium text-cyan-50 mb-3">
+                    <label htmlFor="height" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                      <img src="/form/height.svg" alt="Height" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
                       {t('form.height.label')}
                     </label>
                     <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
@@ -247,85 +285,156 @@ export default function GenerateForm({
                 </div>
 
                 <div>
-                  <label htmlFor="steps" className="block text-sm font-medium text-cyan-50 mb-3">
-                    {t('form.steps.label')}
+                  <label htmlFor="model" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                    <img src="/form/models.svg" alt="Model" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+                    {t('form.model.label')}
                   </label>
-                  <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
-                    <input
-                      type="number"
-                      id="steps"
-                      value={steps}
-                      onChange={(e) => setSteps(Number(e.target.value))}
-                      className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      min="25"
-                      max="65"
+                  <div className="relative" ref={modelDropdownRef}>
+                    <button
+                      type="button"
+                      onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+                      className="w-full bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl px-4 py-3 text-left text-cyan-50 focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 shadow-inner transition-all duration-300 flex items-center justify-between"
                       disabled={status === 'loading'}
-                    />
-                    <div className="flex items-center border-l border-cyan-400/30">
-                      <button
-                        type="button"
-                        onClick={() => setSteps(Math.max(15, steps - 1))}
-                        className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
-                        disabled={status === 'loading' || steps <= 15}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <div className="w-12 h-6 rounded overflow-hidden flex-shrink-0">
+                          <img 
+                            src={models.find(m => m.id === model)?.image} 
+                            alt={model} 
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <span>{model}</span>
+                      </div>
+                      <svg
+                        className={`w-4 h-4 text-cyan-200 transform transition-transform duration-300 ${isModelDropdownOpen ? 'rotate-180' : ''}`}
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                       >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setSteps(Math.min(30, steps + 1))}
-                        className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
-                        disabled={status === 'loading' || steps >= 30}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                    </div>
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    
+                    {isModelDropdownOpen && (
+                      <div className="absolute z-10 w-full mt-2 bg-slate-800/95 backdrop-blur-xl rounded-xl border border-cyan-400/30 shadow-xl overflow-hidden">
+                        {models.map((modelOption) => (
+                          <button
+                            key={modelOption.id}
+                            type="button"
+                            onClick={() => {
+                              setModel(modelOption.id)
+                              setIsModelDropdownOpen(false)
+                            }}
+                            className={`w-full px-4 py-3 text-left transition-colors duration-200 flex items-start space-x-3 hover:bg-slate-700/50 ${
+                              model === modelOption.id ? 'bg-slate-700/50' : ''
+                            }`}
+                          >
+                            <div className="w-24 h-12 rounded overflow-hidden flex-shrink-0">
+                              <img 
+                                src={modelOption.image} 
+                                alt={modelOption.name} 
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="text-cyan-50 font-medium">{modelOption.name}</div>
+                              <div className="text-sm text-cyan-200/80 mt-1 line-clamp-2">
+                                {t(`form.model.descriptions.${modelOption.id}`)}
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
-                  <p className="mt-2 text-sm text-cyan-200/80">{t('form.steps.hint')}</p>
+                  <p className="mt-2 text-sm text-cyan-200/80">{t('form.model.hint')}</p>
                 </div>
 
-                <div>
-                  <label htmlFor="batch_size" className="block text-sm font-medium text-cyan-50 mb-3">
-                    {t('form.batch_size.label')}
-                  </label>
-                  <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
-                    <input
-                      type="number"
-                      id="batch_size"
-                      value={batch_size}
-                      onChange={(e) => setBatchSize(Number(e.target.value))}
-                      className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                      min="1"
-                      max="4"
-                      disabled={status === 'loading'}
-                    />
-                    <div className="flex items-center border-l border-cyan-400/30">
-                      <button
-                        type="button"
-                        onClick={() => setBatchSize(Math.max(1, batch_size - 1))}
-                        className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
-                        disabled={status === 'loading' || batch_size <= 1}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setBatchSize(Math.min(4, batch_size + 1))}
-                        className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
-                        disabled={status === 'loading' || batch_size >= 4}
-                      >
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label htmlFor="steps" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                      <img src="/form/steps.svg" alt="Steps" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+                      {t('form.steps.label')}
+                    </label>
+                    <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
+                      <input
+                        type="number"
+                        id="steps"
+                        value={steps}
+                        onChange={(e) => setSteps(Number(e.target.value))}
+                        className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        min="25"
+                        max="65"
+                        disabled={status === 'loading'}
+                      />
+                      <div className="flex items-center border-l border-cyan-400/30">
+                        <button
+                          type="button"
+                          onClick={() => setSteps(Math.max(15, steps - 1))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || steps <= 15}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSteps(Math.min(30, steps + 1))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || steps >= 30}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
                     </div>
+                    <p className="mt-2 text-sm text-cyan-200/80">{t('form.steps.hint')}</p>
                   </div>
-                  <p className="mt-2 text-sm text-cyan-200/80">{t('form.batch_size.hint')}</p>
+
+                  <div>
+                    <label htmlFor="batch_size" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                      <img src="/form/generation-number.svg" alt="Batch Size" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+                      {t('form.batch_size.label')}
+                    </label>
+                    <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
+                      <input
+                        type="number"
+                        id="batch_size"
+                        value={batch_size}
+                        onChange={(e) => setBatchSize(Number(e.target.value))}
+                        className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        min="1"
+                        max="4"
+                        disabled={status === 'loading'}
+                      />
+                      <div className="flex items-center border-l border-cyan-400/30">
+                        <button
+                          type="button"
+                          onClick={() => setBatchSize(Math.max(1, batch_size - 1))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || batch_size <= 1}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBatchSize(Math.min(4, batch_size + 1))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || batch_size >= 4}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-sm text-cyan-200/80">数值越高细节越丰富（25-65）</p>
+                  </div>
                 </div>
               </div>
             )}

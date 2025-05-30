@@ -8,14 +8,20 @@
       "titlePrefix": "通過AI釋放你的",
       "titleHighlight": "無限想像力，只需一鍵！",
       "subtitle": {
-        "prefix": "HiDream-I1滿血版 驅動，",
+        "prefix": "由全國30台家用電腦的閒置4090顯卡，",
         "highlight": "免費無限制",
-        "suffix": "生成高清畫作。"
+        "suffix": "提供分散式算力支援。"
       },
-      "subtitle2": "由全國30台家用電腦的閒置4090顯卡，提供分散式算力支援",
       "startButton": "開始創作",
       "faqButton": "常見問題",
-      "imageCaption": "AI藝術"
+      "imageCaption": "AI藝術",
+      "tags": {
+        "fastGeneration": "快速生成",
+        "multipleModels": "多種模型",
+        "noLogin": "無需登入",
+        "highCustomization": "高度定制",
+        "chineseSupport": "支援中文"
+      }
     },
     "generate": {
       "title": "AI 圖像生成",
@@ -34,9 +40,18 @@
           "label": "高度",
           "hint": "圖片高度（64-1920，8的倍數）"
         },
+        "model": {
+          "label": "模型",
+          "hint": "選擇要使用的AI模型",
+          "descriptions": {
+            "HiDream-full-fp16": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",
+            "HiDream-full-fp8": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",
+            "Flux-Dev": "FLUX.1-Dev模型是由Black Forest Labs開發的開源AI繪畫模型，具備強大的視覺創作能力和優秀的文本理解表現。"
+          }
+        },
         "steps": {
           "label": "步數",
-          "hint": "範圍：25-65，數值越高細節越豐富，但生成速度越慢"
+          "hint": "數值越高細節越豐富（25-65）"
         },
         "batch_size": {
           "label": "生成數量",
@@ -108,7 +123,7 @@
       "questions": [
         {
           "q": "什麼是Dreamify？",
-          "a": "Dreamify是一個完全免費、基於HiDream-I1模型的線上文生圖（text to image）服務網站，請在此自由地發揮你的創意！"
+          "a": "Dreamify是一個完全免費、基於多種AI繪畫模型的線上文生圖（text to image）服務網站，請在此自由地發揮你的創意！"
         },
         {
           "q": "Dreamify是完全免費的嗎？",
@@ -123,8 +138,8 @@
           "a": "當然，你擁有對生成圖形的使用權，不論個人還是商業目的都完全沒問題。"
         },
         {
-          "q": "什麼是HiDream-I1模型？",
-          "a": "HiDream-I1是目前文生圖領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。"
+          "q": "Dreamify提供哪些模型？",
+          "a": "HiDream-I1滿血版、Flux.1-Dev以及未來更多開源模型。"
         },
         {
           "q": "我需要建立一個帳戶並登入才能使用 Dreamify 嗎？",
@@ -173,14 +188,38 @@
       "title": "網站統計",
       "uptime": "運行時間",
       "totalGenerations": "總生成數量",
-      "dailyGenerations": "今日生成數量"
+      "dailyGenerations": "今日生成數量",
+      "intro": {
+        "prefix": "自",
+        "suffix": "上線以來",
+        "continuous": "我們已經連續",
+        "days": "天",
+        "accompany": "陪伴著大家",
+        "created": "一起創造了",
+        "pieces": "張",
+        "works": "精彩作品",
+        "today": "而今天，又有",
+        "newWorks": "新作品誕生"
+      },
+      "message": {
+        "behind": "每一張圖像的背後，",
+        "unique": "都是你獨一無二的",
+        "inspiration": "靈感與想像",
+        "thanks": "感謝你，",
+        "together": "和我們一起，",
+        "explore": "探索創意，",
+        "possibilities": "無限可能！"
+      }
     }
   },
   "nav": {
     "language": "語言",
     "home": "首頁",
     "faq": "常見問題",
-    "community": "社群"
+    "community": "社群",
+    "quickGenerate": "快速生成",
+    "siteName": "Dreamify",
+    "switchLanguage": "切換語言"
   },
   "footer": {
     "copyright": "Dreamify 版權所有。"

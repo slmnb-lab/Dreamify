@@ -21,6 +21,7 @@ export default function HomeClient() {
   const [height, setHeight] = useState(1024);
   const [steps, setSteps] = useState(30);
   const [batch_size, setBatchSize] = useState(4);
+  const [model, setModel] = useState('HiDream-full-fp8');
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [imageStatuses, setImageStatuses] = useState<Array<{
     status: 'pending' | 'success' | 'error';
@@ -117,6 +118,7 @@ export default function HomeClient() {
               steps,
               seed: Math.floor(Math.random() * 100000000),
               batch_size,
+              model,
             }),
           });
 
@@ -150,7 +152,7 @@ export default function HomeClient() {
           await imageLoadPromise;
         } catch (err) {
           console.error(`生成图片失败 (尝试 ${retryCount + 1}/${maxRetries + 1}):`, err);
-          
+
           if (retryCount < maxRetries) {
             retryCount++;
             setImageStatuses(prev => {
@@ -188,7 +190,7 @@ export default function HomeClient() {
     <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800">
       {/* 图片放大模态框 */}
       {zoomedImage && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeIn"
           onClick={() => setZoomedImage(null)}
         >
@@ -220,7 +222,7 @@ export default function HomeClient() {
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
-          
+
           <div className="container mx-auto px-8 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               {/* 左侧文字内容 */}
@@ -248,6 +250,23 @@ export default function HomeClient() {
                     {t('hero.titleHighlight')}
                   </span>
                 </h1>
+                <div className="flex flex-wrap gap-4 mb-8 animate-fadeInUp animation-delay-300">
+                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
+                    {t('hero.tags.fastGeneration')}
+                  </span>
+                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg">
+                    {t('hero.tags.multipleModels')}
+                  </span>
+                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-400 to-emerald-400 text-white shadow-lg">
+                    {t('hero.tags.noLogin')}
+                  </span>
+                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-lg">
+                    {t('hero.tags.highCustomization')}
+                  </span>
+                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-yellow-400 to-amber-400 text-white shadow-lg">
+                    {t('hero.tags.chineseSupport')}
+                  </span>
+                </div>
                 <p className="text-2xl text-cyan-100 mb-8 animate-fadeInUp animation-delay-400">
                   {t('hero.subtitle.prefix')}
                   <span className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent px-2">
@@ -255,10 +274,7 @@ export default function HomeClient() {
                   </span>
                   {t('hero.subtitle.suffix')}
                 </p>
-                <p className="text-2xl text-cyan-100 mb-12 animate-fadeInUp animation-delay-600">
-                  {t('hero.subtitle2')}
-                </p>
-                <div className="flex gap-6 animate-fadeInUp animation-delay-800">
+                <div className="flex gap-4 animate-fadeInUp animation-delay-600">
                   <button
                     onClick={() => {
                       document.getElementById('generate-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -286,11 +302,10 @@ export default function HomeClient() {
                   {images.map((src, index) => (
                     <div
                       key={src}
-                      className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${
-                        currentImageIndex === index 
-                          ? 'opacity-100 scale-100' 
+                      className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${currentImageIndex === index
+                          ? 'opacity-100 scale-100'
                           : 'opacity-0 scale-105'
-                      }`}
+                        }`}
                     >
                       <Image
                         src={src}
@@ -309,11 +324,10 @@ export default function HomeClient() {
                       <button
                         key={index}
                         onClick={() => handleImageChange(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${
-                          currentImageIndex === index
+                        className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${currentImageIndex === index
                             ? 'bg-cyan-400 scale-125'
                             : 'bg-cyan-400/20 hover:bg-cyan-400/40'
-                        }`}
+                          }`}
                         aria-label={`切换到图片 ${index + 1}`}
                       />
                     ))}
@@ -324,16 +338,52 @@ export default function HomeClient() {
           </div>
         </section>
 
+        {/* Stats Section */}
+        <section className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
+          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
+          <div className="container mx-auto px-8 relative">
+            <SiteStats />
+          </div>
+        </section>
+
         {/* Generate Section - 新的设计 */}
         <section id="generate-section" ref={generateSectionRef} className="py-20 px-8 relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="max-w-[90rem] mx-auto relative">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
-              {/* 左侧预览区域 */}
-              <div className="order-2 lg:order-1 lg:col-span-3 animate-fadeInUp">
+              {/* 左侧表单区域 */}
+              <div className="order-2 lg:order-1 lg:col-span-2 animate-fadeInUp">
+                <GenerateForm
+                  prompt={prompt}
+                  setPrompt={setPrompt}
+                  width={width}
+                  setWidth={setWidth}
+                  height={height}
+                  setHeight={setHeight}
+                  steps={steps}
+                  setSteps={setSteps}
+                  batch_size={batch_size}
+                  setBatchSize={setBatchSize}
+                  model={model}
+                  setModel={setModel}
+                  status="authenticated"
+                  onGenerate={handleGenerate}
+                  isAdvancedOpen={isAdvancedOpen}
+                  setIsAdvancedOpen={setIsAdvancedOpen}
+                  promptRef={promptRef}
+                  communityWorks={communityWorks}
+                  isGenerating={isGenerating}
+                />
+              </div>
+
+              {/* 右侧预览区域 */}
+              <div className="order-1 lg:order-2 lg:col-span-3 animate-fadeInUp animation-delay-200">
                 <div className="bg-slate-700/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">
                   <div className="flex justify-between items-center mb-8">
-                    <h2 className="text-3xl font-semibold text-cyan-100">{t('generate.preview.title')}</h2>
+                    <div className="flex items-center gap-4">
+                      <img src="/common/preview.svg" alt="Preview" className="w-8 h-8" />
+                      <h2 className="text-3xl font-semibold text-cyan-100">{t('generate.preview.title')}</h2>
+                    </div>
                     {generatedImages && generatedImages.length > 0 && (
                       <button
                         onClick={() => {
@@ -364,13 +414,12 @@ export default function HomeClient() {
                             onClick={() => setZoomedImage(generatedImages[index])}
                           />
                         )}
-                        <div className={`absolute bottom-0 left-0 right-0 p-4 text-center text-sm backdrop-blur-md ${
-                          imageStatuses[index]?.status === 'error'
+                        <div className={`absolute bottom-0 left-0 right-0 p-4 text-center text-sm backdrop-blur-md ${imageStatuses[index]?.status === 'error'
                             ? 'bg-red-500/20 text-red-300'
                             : imageStatuses[index]?.status === 'success'
                               ? 'bg-green-500/20 text-green-300'
                               : 'bg-blue-500/20 text-blue-300'
-                        }`}>
+                          }`}>
                           <div className="flex items-center justify-center gap-2">
                             {imageStatuses[index]?.status === 'pending' && (
                               <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
@@ -422,97 +471,6 @@ export default function HomeClient() {
                   )}
                 </div>
               </div>
-
-              {/* 右侧表单区域 */}
-              <div className="order-1 lg:order-2 lg:col-span-2 animate-fadeInUp animation-delay-200">
-                <GenerateForm
-                  prompt={prompt}
-                  setPrompt={setPrompt}
-                  width={width}
-                  setWidth={setWidth}
-                  height={height}
-                  setHeight={setHeight}
-                  steps={steps}
-                  setSteps={setSteps}
-                  batch_size={batch_size}
-                  setBatchSize={setBatchSize}
-                  status="authenticated"
-                  onGenerate={handleGenerate}
-                  isAdvancedOpen={isAdvancedOpen}
-                  setIsAdvancedOpen={setIsAdvancedOpen}
-                  promptRef={promptRef}
-                  communityWorks={communityWorks}
-                  isGenerating={isGenerating}
-                />
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section - 新的设计 */}
-        <section className="py-24 bg-slate-700/80 backdrop-blur-xl relative">
-          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="container mx-auto px-8 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* 左侧文字内容 */}
-              <div>
-                <h2 className="text-4xl font-bold text-cyan-100 mb-8 animate-fadeInUp">
-                  {t('features.title')}
-                </h2>
-                <div className="space-y-8">
-                  {[
-                    {
-                      icon: "M13 10V3L4 14h7v7l9-11h-7z",
-                      title: t('features.speed.title'),
-                      description: t('features.speed.description')
-                    },
-                    {
-                      icon: "M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z",
-                      title: t('features.customization.title'),
-                      description: t('features.customization.description')
-                    },
-                    {
-                      icon: "M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z",
-                      title: t('features.security.title'),
-                      description: t('features.security.description')
-                    },
-                    {
-                      icon: "M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z",
-                      title: t('features.noLogin.title'),
-                      description: t('features.noLogin.description')
-                    }
-                  ].map((feature, index) => (
-                    <div 
-                      key={index}
-                      className="flex items-start gap-6 animate-fadeInUp"
-                      style={{ animationDelay: `${index * 200}ms` }}
-                    >
-                      <div className="flex-shrink-0 w-12 h-12 rounded-2xl bg-slate-600/50 flex items-center justify-center text-cyan-400 transform hover:scale-110 transition-transform duration-300">
-                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={feature.icon} />
-                        </svg>
-                      </div>
-                      <div>
-                        <h3 className="text-xl font-semibold mb-2 text-cyan-100">{feature.title}</h3>
-                        <p className="text-cyan-200/80">{feature.description}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* 右侧图片展示 */}
-              <div className="relative">
-                <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
-                  <Image
-                    src="/images/demo-6.png"
-                    alt="Feature showcase"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="absolute -bottom-8 -right-8 w-64 h-64 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-3xl opacity-20 blur-3xl"></div>
-              </div>
             </div>
           </div>
         </section>
@@ -522,7 +480,10 @@ export default function HomeClient() {
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="container mx-auto px-8 relative">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold mb-6 text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
+              <div className="flex items-center justify-center gap-4 mb-6">
+                <img src="/common/comunity.svg" alt="Community" className="w-12 h-12" />
+                <h2 className="text-4xl font-bold text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
+              </div>
               <p className="text-2xl text-cyan-200/80 animate-fadeInUp animation-delay-200">{t('community.subtitle')}</p>
             </div>
 
@@ -579,9 +540,12 @@ export default function HomeClient() {
 
               {/* 右侧FAQ内容 */}
               <div className="flex flex-col justify-center lg:col-span-2">
-                <h2 className="text-4xl font-bold text-cyan-100 mb-12 animate-fadeInUp">
-                  {t('faq.title')}
-                </h2>
+                <div className="flex items-center gap-4 mb-12">
+                  <img src="/common/faq.svg" alt="FAQ" className="w-12 h-12" />
+                  <h2 className="text-4xl font-bold text-cyan-100 animate-fadeInUp">
+                    {t('faq.title')}
+                  </h2>
+                </div>
                 <div className="space-y-6">
                   {t.raw('faq.questions').map((qa: FAQItem, index: number) => (
                     <div
@@ -637,13 +601,6 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
-          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="container mx-auto px-8 relative">
-            <SiteStats />
-          </div>
-        </section>
       </div>
     </div>
   )

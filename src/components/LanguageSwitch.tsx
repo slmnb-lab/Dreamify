@@ -42,7 +42,7 @@ export default function LanguageSwitch() {
         </div>
       </button>
 
-      <div className="absolute left-0 bottom-full mb-2 w-48 bg-slate-700/90 backdrop-blur-xl rounded-2xl shadow-xl border border-cyan-400/20 invisible group-hover:visible transition-all duration-200 hover:visible">
+      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 bg-slate-800/90 backdrop-blur-xl rounded-xl shadow-xl border border-cyan-400/20 min-w-[120px]">
         <div className="py-2">
           {locales.map((locale) => (
             <button

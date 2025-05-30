@@ -8,14 +8,20 @@
       "titlePrefix": "Unleash Your Imagination Through AI",
       "titleHighlight": "Infinite Possibilities, Just One Click!",
       "subtitle": {
-        "prefix": "Powered by HiDream-I1 Full Version,",
+        "prefix": "Powered by 30 distributed RTX 4090 GPUs from home computers,",
         "highlight": "Free Unlimited",
-        "suffix": "HD Image Generation."
+        "suffix": "providing distributed computing support."
       },
-      "subtitle2": "Powered by 30 distributed RTX 4090 GPUs from home computers across the country",
       "startButton": "Start Creating",
       "faqButton": "FAQ",
-      "imageCaption": "AI Art"
+      "imageCaption": "AI Art",
+      "tags": {
+        "fastGeneration": "Fast Generation",
+        "multipleModels": "Multiple Models",
+        "noLogin": "No Login Required",
+        "highCustomization": "High Customization",
+        "chineseSupport": "Chinese Support"
+      }
     },
     "generate": {
       "title": "AI Image Generation",
@@ -34,9 +40,18 @@
           "label": "Height",
           "hint": "Image height (64-1920, multiples of 8)"
         },
+        "model": {
+          "label": "Model",
+          "hint": "Select the AI model to use",
+          "descriptions": {
+            "HiDream-full-fp16": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
+            "HiDream-full-fp8": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
+            "Flux-Dev": "FLUX.1-Dev is an open-source AI art model developed by Black Forest Labs, featuring powerful visual creation capabilities and excellent text understanding performance."
+          }
+        },
         "steps": {
           "label": "Steps",
-          "hint": "Range: 25-65, higher values mean more detail but slower generation"
+          "hint": "Higher values mean more detail (25-65)"
         },
         "batch_size": {
           "label": "Batch Size",
@@ -108,7 +123,7 @@
       "questions": [
         {
           "q": "What is Dreamify?",
-          "a": "Dreamify is a completely free, online text-to-image service based on the HiDream-I1 model. Feel free to unleash your creativity here!"
+          "a": "Dreamify is a completely free, online text-to-image service based on multiple AI painting models. Feel free to unleash your creativity here!"
         },
         {
           "q": "Is Dreamify completely free?",
@@ -123,8 +138,8 @@
           "a": "Yes, you have full rights to use the generated images for both personal and commercial purposes."
         },
         {
-          "q": "What is the HiDream-I1 model?",
-          "a": "HiDream-I1 is one of the most outstanding and advanced models in the text-to-image field, developed by Beijing Zhixiang Future Technology Co., Ltd."
+          "q": "What models does Dreamify provide?",
+          "a": "HiDream-I1 Full Version, Flux.1-Dev, and more open-source models in the future."
         },
         {
           "q": "Do I need to create an account and log in to use Dreamify?",
@@ -173,14 +188,38 @@
       "title": "Site Statistics",
       "uptime": "Uptime",
       "totalGenerations": "Total Generations",
-      "dailyGenerations": "Today's Generations"
+      "dailyGenerations": "Today's Generations",
+      "intro": {
+        "prefix": "Since",
+        "suffix": "launch",
+        "continuous": "We have continuously",
+        "days": "days",
+        "accompany": "accompanying everyone",
+        "created": "created over",
+        "pieces": "pieces of",
+        "works": "wonderful works",
+        "today": "And today, there are",
+        "newWorks": "new works born"
+      },
+      "message": {
+        "behind": "Behind each image,",
+        "unique": "lies your unique",
+        "inspiration": "inspiration and imagination",
+        "thanks": "Thank you,",
+        "together": "for joining us,",
+        "explore": "to explore creativity,",
+        "possibilities": "and infinite possibilities!"
+      }
     }
   },
   "nav": {
     "language": "Language",
     "home": "Home",
     "faq": "FAQ",
-    "community": "Community"
+    "community": "Community",
+    "quickGenerate": "Quick Generate",
+    "siteName": "Dreamify",
+    "switchLanguage": "Switch Language"
   },
   "footer": {
     "copyright": "Dreamify. All rights reserved."
