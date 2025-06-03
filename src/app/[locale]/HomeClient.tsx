@@ -191,12 +191,13 @@ export default function HomeClient() {
 
   // 计算内容区域的动态样式
   const getContentStyle = () => {
-    // 在移动端隐藏导航栏，使用固定padding
+    // 在移动端使用顶部导航栏，添加顶部padding
     if (typeof window !== 'undefined' && window.innerWidth < 1024) {
       return {
         marginLeft: '0',
         paddingLeft: '1rem',
         paddingRight: '1rem',
+        paddingTop: '4rem', // 为顶部导航栏留出空间
         width: '100%',
       };
     }
@@ -392,7 +393,7 @@ export default function HomeClient() {
           <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
               {/* 左侧表单区域 */}
-              <div className="order-2 lg:order-1 lg:col-span-2 animate-fadeInUp">
+              <div className="order-1 lg:order-1 lg:col-span-2 animate-fadeInUp">
                 <GenerateForm
                   prompt={prompt}
                   setPrompt={setPrompt}
@@ -417,7 +418,7 @@ export default function HomeClient() {
               </div>
 
               {/* 右侧预览区域 - 改进移动端网格布局 */}
-              <div className="order-1 lg:order-2 lg:col-span-3 animate-fadeInUp animation-delay-200">
+              <div className="order-2 lg:order-2 lg:col-span-3 animate-fadeInUp animation-delay-200">
                 <div className="bg-slate-700/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-4 sm:p-8 border border-cyan-400/30 h-full flex flex-col">
                   <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
