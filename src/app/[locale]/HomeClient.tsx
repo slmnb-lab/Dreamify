@@ -339,7 +339,7 @@ export default function HomeClient() {
         </section>
 
         {/* Stats Section */}
-        <section className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
+        <section id="site-stats" className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="container mx-auto px-8 relative">
             <SiteStats />
@@ -513,6 +513,26 @@ export default function HomeClient() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* 添加优雅的描述文本 */}
+            <div className="mt-12 text-center">
+              <a 
+                href="/#site-stats" 
+                className="inline-block text-cyan-200/60 hover:text-cyan-200/90 text-lg transition-colors duration-300 cursor-pointer group"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('site-stats')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              >
+                <span className="relative">
+                  想分享你的绘画作品和创意提示词？
+                  <span className="block text-cyan-200/50 group-hover:text-cyan-200/70 text-base mt-1">
+                    欢迎通过QQ联系我们，让更多人看到你的灵感！
+                  </span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400/30 group-hover:w-full transition-all duration-300"></span>
+                </span>
+              </a>
             </div>
           </div>
         </section>
