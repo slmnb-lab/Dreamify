@@ -1,11 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import GenerateForm from '@/components/GenerateForm'
 import community from './communityWorks'
 import SiteStats from '@/components/SiteStats'
+import { useNavWidth } from '@/hooks/useNavWidth'
 
 interface FAQItem {
   q: string;
@@ -34,6 +36,7 @@ export default function HomeClient() {
   const generateSectionRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
+  const navWidth = useNavWidth();
 
   // 示例图片数组
   const images = [
@@ -186,48 +189,85 @@ export default function HomeClient() {
     setIsGenerating(false)
   }
 
+  // 计算内容区域的动态样式
+  const getContentStyle = () => {
+    // 在移动端隐藏导航栏，使用固定padding
+    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
+      return {
+        marginLeft: '0',
+        paddingLeft: '1rem',
+        paddingRight: '1rem',
+        width: '100%',
+      };
+    }
+    // 在桌面端使用导航栏宽度作为margin，并计算合适的宽度
+    return {
+      marginLeft: `${navWidth}px`,
+      paddingLeft: '1.5rem',
+      paddingRight: '1.5rem',
+      width: `calc(100% - ${navWidth}px)`,
+    };
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800">
-      {/* 图片放大模态框 */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden">
+      {/* 图片放大模态框 - 改进响应式设计 */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeIn"
           onClick={() => setZoomedImage(null)}
         >
-          <div className="w-full max-w-4xl flex flex-col items-center">
+          {/* 顶部控制栏 */}
+          <div className="w-full max-w-[1400px] flex justify-end mb-4">
             <button
-              className="mb-4 text-cyan-300 hover:text-cyan-100 transition-colors hover:scale-110 transform duration-300"
+              className="p-2 text-cyan-300 hover:text-cyan-100 transition-colors hover:scale-110 transform duration-300 bg-slate-800/50 rounded-full hover:bg-slate-700/50"
               onClick={(e) => {
                 e.stopPropagation();
                 setZoomedImage(null);
               }}
+              aria-label="Close preview"
             >
-              <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
-            <img
-              src={zoomedImage}
-              alt="Zoomed preview"
-              className="w-full h-auto rounded-2xl shadow-2xl border border-cyan-400/30 animate-scaleIn"
-            />
+          </div>
+
+          {/* 图片容器 */}
+          <div className="relative w-full h-full flex items-center justify-center">
+            <div className="relative w-full max-w-[1400px] max-h-[calc(100vh-8rem)] flex items-center justify-center">
+              <img
+                src={zoomedImage}
+                alt="Zoomed preview"
+                className="max-w-full max-h-[calc(100vh-8rem)] w-auto h-auto object-contain rounded-lg shadow-2xl border border-cyan-400/30 animate-scaleIn"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+          </div>
+
+          {/* 底部提示 */}
+          <div className="w-full max-w-[1400px] mt-4 text-center text-sm text-cyan-200/60">
+            <p>点击图片外部区域或关闭按钮退出预览</p>
           </div>
         </div>
       )}
 
-      {/* 主要内容区域 */}
-      <div className="ml-24">
-        {/* Hero Section - 新的设计 */}
-        <section className="relative min-h-screen flex items-center justify-center py-20 overflow-hidden">
+      {/* 主要内容区域 - 使用动态margin和padding */}
+      <main 
+        className="transition-all duration-300"
+        style={getContentStyle()}
+      >
+        {/* Hero Section - 改进响应式设计 */}
+        <section className="relative min-h-screen flex items-center justify-center py-12 sm:py-20 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
 
-          <div className="container mx-auto px-8 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              {/* 左侧文字内容 */}
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+              {/* 左侧文字内容 - 改进移动端间距 */}
               <div className="text-left">
-                <div className="flex items-center gap-4 mb-12 animate-fadeInUp">
+                <div className="flex items-center gap-4 mb-8 sm:mb-12 animate-fadeInUp">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
                     <Image
@@ -242,15 +282,15 @@ export default function HomeClient() {
                     Dreamify
                   </h2>
                 </div>
-                <h1 className="mb-8">
-                  <span className="block text-4xl sm:text-5xl lg:text-6xl font-medium text-cyan-100 mb-4 animate-fadeInUp">
+                <h1 className="mb-6 sm:mb-8">
+                  <span className="block text-3xl sm:text-4xl lg:text-6xl font-medium text-cyan-100 mb-3 sm:mb-4 animate-fadeInUp">
                     {t('hero.titlePrefix')}
                   </span>
-                  <span className="block text-5xl sm:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fadeInUp animation-delay-200">
+                  <span className="block text-4xl sm:text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fadeInUp animation-delay-200">
                     {t('hero.titleHighlight')}
                   </span>
                 </h1>
-                <div className="flex flex-wrap gap-4 mb-8 animate-fadeInUp animation-delay-300">
+                <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-8 animate-fadeInUp animation-delay-300">
                   <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
                     {t('hero.tags.fastGeneration')}
                   </span>
@@ -267,14 +307,14 @@ export default function HomeClient() {
                     {t('hero.tags.chineseSupport')}
                   </span>
                 </div>
-                <p className="text-2xl text-cyan-100 mb-8 animate-fadeInUp animation-delay-400">
+                <p className="text-xl sm:text-2xl text-cyan-100 mb-6 sm:mb-8 animate-fadeInUp animation-delay-400">
                   {t('hero.subtitle.prefix')}
                   <span className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent px-2">
                     {t('hero.subtitle.highlight')}
                   </span>
                   {t('hero.subtitle.suffix')}
                 </p>
-                <div className="flex gap-4 animate-fadeInUp animation-delay-600">
+                <div className="flex flex-col sm:flex-row gap-4 animate-fadeInUp animation-delay-600">
                   <button
                     onClick={() => {
                       document.getElementById('generate-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
@@ -296,9 +336,9 @@ export default function HomeClient() {
                 </div>
               </div>
 
-              {/* 右侧图片展示 */}
+              {/* 右侧图片展示 - 改进移动端显示 */}
               <div className="relative">
-                <div className="aspect-square rounded-3xl overflow-hidden shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
+                <div className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
                   {images.map((src, index) => (
                     <div
                       key={src}
@@ -338,19 +378,19 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Stats Section */}
-        <section id="site-stats" className="py-12 bg-slate-700/80 backdrop-blur-xl relative">
+        {/* Stats Section - 改进响应式设计 */}
+        <section id="site-stats" className="py-8 sm:py-12 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="container mx-auto px-8 relative">
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
             <SiteStats />
           </div>
         </section>
 
-        {/* Generate Section - 新的设计 */}
-        <section id="generate-section" ref={generateSectionRef} className="py-20 px-8 relative">
+        {/* Generate Section - 改进响应式设计 */}
+        <section id="generate-section" ref={generateSectionRef} className="py-12 sm:py-20 relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="max-w-[90rem] mx-auto relative">
-            <div className="grid grid-cols-1 lg:grid-cols-5 gap-16">
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
               {/* 左侧表单区域 */}
               <div className="order-2 lg:order-1 lg:col-span-2 animate-fadeInUp">
                 <GenerateForm
@@ -376,9 +416,9 @@ export default function HomeClient() {
                 />
               </div>
 
-              {/* 右侧预览区域 */}
+              {/* 右侧预览区域 - 改进移动端网格布局 */}
               <div className="order-1 lg:order-2 lg:col-span-3 animate-fadeInUp animation-delay-200">
-                <div className="bg-slate-700/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">
+                <div className="bg-slate-700/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-4 sm:p-8 border border-cyan-400/30 h-full flex flex-col">
                   <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center gap-4">
                       <img src="/common/preview.svg" alt="Preview" className="w-8 h-8" />
@@ -403,7 +443,7 @@ export default function HomeClient() {
                       </button>
                     )}
                   </div>
-                  <div className="grid grid-cols-2 gap-8 flex-grow">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 flex-grow">
                     {Array.from({ length: batch_size }).map((_, index) => (
                       <div key={index} className="aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
                         {generatedImages[index] && (
@@ -475,11 +515,11 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Community Showcase Section - 新的设计 */}
-        <section id="community-showcase" className="py-20 bg-slate-800/90 backdrop-blur-xl relative">
+        {/* Community Showcase Section - 改进响应式设计 */}
+        <section id="community-showcase" className="py-12 sm:py-20 bg-slate-800/90 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="container mx-auto px-8 relative">
-            <div className="text-center mb-16">
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+            <div className="text-center mb-12 sm:mb-16">
               <div className="flex items-center justify-center gap-4 mb-6">
                 <img src="/common/comunity.svg" alt="Community" className="w-12 h-12" />
                 <h2 className="text-4xl font-bold text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
@@ -487,7 +527,7 @@ export default function HomeClient() {
               <p className="text-2xl text-cyan-200/80 animate-fadeInUp animation-delay-200">{t('community.subtitle')}</p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               {communityWorks.map((work, index) => (
                 <div key={work.id} className="relative group animate-fadeInUp" style={{ animationDelay: `${index * 200}ms` }}>
                   <div className="aspect-square rounded-3xl overflow-hidden shadow-xl border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
@@ -517,7 +557,7 @@ export default function HomeClient() {
 
             {/* 添加优雅的描述文本 */}
             <div className="mt-12 text-center">
-              <a 
+              <Link 
                 href="/#site-stats" 
                 className="inline-block text-cyan-200/60 hover:text-cyan-200/90 text-lg transition-colors duration-300 cursor-pointer group"
                 onClick={(e) => {
@@ -532,19 +572,19 @@ export default function HomeClient() {
                   </span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400/30 group-hover:w-full transition-all duration-300"></span>
                 </span>
-              </a>
+              </Link>
             </div>
           </div>
         </section>
 
-        {/* FAQ Section - 新的设计 */}
-        <section id="faq-section" className="py-24 bg-slate-700/80 backdrop-blur-xl relative">
+        {/* FAQ Section - 改进响应式设计 */}
+        <section id="faq-section" className="py-12 sm:py-24 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="max-w-[100rem] mx-auto px-8 relative">
-            <div className="grid grid-cols-1 lg:grid-cols-5 items-center">
-              {/* 左侧图片 */}
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-5 items-center gap-8 lg:gap-0">
+              {/* 左侧图片 - 改进移动端显示 */}
               <div className="relative lg:col-span-2">
-                <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
+                <div className="aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
                   <Image
                     src="/images/demo-12.png"
                     alt="FAQ illustration"
@@ -558,7 +598,7 @@ export default function HomeClient() {
               {/* 间距列 */}
               <div className="hidden lg:block lg:col-span-1"></div>
 
-              {/* 右侧FAQ内容 */}
+              {/* 右侧FAQ内容 - 改进移动端间距 */}
               <div className="flex flex-col justify-center lg:col-span-2">
                 <div className="flex items-center gap-4 mb-12">
                   <img src="/common/faq.svg" alt="FAQ" className="w-12 h-12" />
@@ -583,16 +623,16 @@ export default function HomeClient() {
           </div>
         </section>
 
-        {/* Footer Section */}
-        <section className="py-20 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
+        {/* Footer Section - 改进响应式设计 */}
+        <section className="py-12 sm:py-20 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="container mx-auto px-8 relative">
+          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
             <div className="text-center">
               <p className="text-cyan-200/80 text-base mb-6 animate-fadeInUp">
                 {t('suanleme.title')}
               </p>
               <div className="flex justify-center items-center gap-12 animate-fadeInUp animation-delay-200">
-                <a
+                <Link
                   href="https://gongjiyun.com"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -603,8 +643,8 @@ export default function HomeClient() {
                     alt={t('suanleme.gongji')}
                     className="h-12"
                   />
-                </a>
-                <a
+                </Link>
+                <Link
                   href="https://suanleme.cn"
                   target="_blank"
                   rel="noopener noreferrer"
@@ -615,13 +655,12 @@ export default function HomeClient() {
                     alt={t('suanleme.suanleme')}
                     className="h-12"
                   />
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </section>
-
-      </div>
+      </main>
     </div>
   )
 } 

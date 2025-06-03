@@ -12,7 +12,10 @@ export default function Navbar() {
   const t = useTranslations('nav')
 
   return (
-    <div className="fixed left-0 top-0 bottom-0 w-48 bg-slate-800/80 backdrop-blur-xl border-r border-cyan-400/20 z-40">
+    <div 
+      id="main-nav"
+      className="fixed left-0 top-0 bottom-0 w-48 bg-slate-800/80 backdrop-blur-xl border-r border-cyan-400/20 z-40 transition-all duration-300"
+    >
       <div className="flex flex-col items-center h-full py-8">
         <div className="flex flex-col items-center mb-12">
           <Link 
