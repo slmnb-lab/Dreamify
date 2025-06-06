@@ -4,12 +4,10 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
-import GenerateForm from '@/components/GenerateForm'
-import GeneratePreview from '@/components/GeneratePreview'
 import community from './communityWorks'
 import SiteStats from '@/components/SiteStats'
 import { useNavWidth } from '@/hooks/useNavWidth'
-import GenerateSection from '@/components/GenerateSection'
+import GenerateSection, { GenerateSectionRef } from '@/components/GenerateSection'
 
 interface FAQItem {
   q: string;
@@ -20,23 +18,7 @@ export default function HomeClient() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const t = useTranslations('home')
-  const [prompt, setPrompt] = useState('');
-  const [width, setWidth] = useState(1024);
-  const [height, setHeight] = useState(1024);
-  const [steps, setSteps] = useState(30);
-  const [batch_size, setBatchSize] = useState(4);
-  const [model, setModel] = useState('HiDream-full-fp8');
-  const [generatedImages, setGeneratedImages] = useState<string[]>([]);
-  const [imageStatuses, setImageStatuses] = useState<Array<{
-    status: 'pending' | 'success' | 'error';
-    message: string;
-    startTime?: number;
-    endTime?: number;
-  }>>([]);
-  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
-  const promptRef = useRef<HTMLTextAreaElement>(null);
-  const generateSectionRef = useRef<HTMLDivElement>(null);
-  const [isGenerating, setIsGenerating] = useState(false);
+  const generateSectionRef = useRef<GenerateSectionRef>(null);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const navWidth = useNavWidth();
 
@@ -91,105 +73,10 @@ export default function HomeClient() {
   const communityWorks = community
 
   const handleGenerateSame = (promptText: string) => {
-    setPrompt(promptText);
-    if (promptRef.current) {
-      promptRef.current.focus();
-    }
     if (generateSectionRef.current) {
-      generateSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+      generateSectionRef.current.handleGenerateSame(promptText);
     }
   };
-
-  const handleGenerate = async () => {
-    setIsGenerating(true)
-    setGeneratedImages([])
-    setImageStatuses(Array(batch_size).fill({ status: 'pending', message: t('generate.preview.generating') }))
-    const images: string[] = Array(batch_size).fill('')
-
-    const requests = Array(batch_size).fill(null).map((_, index) => {
-      const startTime = Date.now();
-      let retryCount = 0;
-      const maxRetries = 2;
-
-      const makeRequest = async () => {
-        try {
-          const res = await fetch('/api/generate', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              prompt,
-              width,
-              height,
-              steps,
-              seed: Math.floor(Math.random() * 100000000),
-              batch_size,
-              model,
-            }),
-          });
-
-          if (res.status !== 200) {
-            throw new Error(`HTTP error! status: ${res.status}`);
-          }
-
-          const data = await res.json();
-          // Create a new promise to track image loading
-          const imageLoadPromise = new Promise<void>((resolve) => {
-            const img = new window.Image();
-            img.onload = () => {
-              const endTime = Date.now();
-              const duration = ((endTime - startTime) / 1000).toFixed(1);
-              images[index] = data.imageUrl;
-              setGeneratedImages([...images]);
-              setImageStatuses(prev => {
-                const newStatuses = [...prev];
-                newStatuses[index] = ({
-                  status: 'success',
-                  message: `${t('generate.preview.completed')} (${duration}s)`,
-                  startTime,
-                  endTime
-                });
-                return newStatuses;
-              });
-              resolve();
-            };
-            img.src = data.imageUrl;
-          });
-          await imageLoadPromise;
-        } catch (err) {
-          console.error(`生成图片失败 (尝试 ${retryCount + 1}/${maxRetries + 1}):`, err);
-
-          if (retryCount < maxRetries) {
-            retryCount++;
-            setImageStatuses(prev => {
-              const newStatuses = [...prev];
-              newStatuses[index] = ({
-                status: 'pending',
-                message: `${t('generate.preview.retrying')} (${retryCount}/${maxRetries})`
-              });
-              return newStatuses;
-            });
-            // Wait for 1 second before retrying
-            await new Promise(resolve => setTimeout(resolve, 1000));
-            return makeRequest();
-          } else {
-            setImageStatuses(prev => {
-              const newStatuses = [...prev];
-              newStatuses[index] = ({
-                status: 'error',
-                message: t('generate.preview.error')
-              });
-              return newStatuses;
-            });
-          }
-        }
-      };
-
-      return makeRequest();
-    });
-    // 等待所有请求完成（可选，如果你想在全部完成后执行某些操作）
-    await Promise.allSettled(requests);
-    setIsGenerating(false)
-  }
 
   // 计算内容区域的动态样式
   const getContentStyle = () => {
@@ -390,7 +277,10 @@ export default function HomeClient() {
         </section>
 
         {/* Generate Section */}
-        <GenerateSection communityWorks={communityWorks} />
+        <GenerateSection 
+          communityWorks={communityWorks} 
+          ref={generateSectionRef}
+        />
 
         {/* Community Showcase Section - 改进响应式设计 */}
         <section id="community-showcase" className="py-12 sm:py-20 bg-slate-800/90 backdrop-blur-xl relative">

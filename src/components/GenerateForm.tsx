@@ -3,8 +3,6 @@ import { useTranslations } from 'next-intl'
 import Image from 'next/image'
 
 interface GenerateFormProps {
-  prompt: string;
-  setPrompt: (value: string) => void;
   width: number;
   setWidth: (value: number) => void;
   height: number;
@@ -27,7 +25,6 @@ interface GenerateFormProps {
 }
 
 export default function GenerateForm({
-  setPrompt,
   width,
   setWidth,
   height,
@@ -42,9 +39,7 @@ export default function GenerateForm({
   onGenerate,
   isAdvancedOpen,
   setIsAdvancedOpen,
-  communityWorks,
   isGenerating,
-  uploadedImage,
   setUploadedImage
 }: GenerateFormProps) {
   const t = useTranslations('home.generate')
@@ -204,12 +199,6 @@ export default function GenerateForm({
       fileInputRef.current.value = ''
     }
   }
-
-  const handleRandomPrompt = () => {
-    if (communityWorks.length === 0) return;
-    const randomIndex = Math.floor(Math.random() * communityWorks.length);
-    setPrompt(communityWorks[randomIndex].prompt);
-  };
 
   const models = [
     {
@@ -550,14 +539,6 @@ export default function GenerateForm({
         </div>
 
         <div className="flex justify-between items-center mt-auto">
-          <button
-            type="button"
-            onClick={handleRandomPrompt}
-            className="px-8 py-3 text-lg rounded-xl border border-cyan-400/50 text-cyan-200 hover:bg-cyan-400/10 transition-all duration-300 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20"
-            disabled={status === 'loading' || isGenerating}
-          >
-            {t('form.randomPrompt')}
-          </button>
           <button
             type="submit"
             className="px-8 py-3 text-lg rounded-xl bg-gradient-to-r from-cyan-400 to-blue-400 text-white hover:from-cyan-300 hover:to-blue-300 transition-all duration-300 shadow-lg shadow-cyan-400/20 hover:shadow-xl hover:shadow-cyan-400/30 hover:-translate-y-0.5"

@@ -35,10 +35,8 @@ export async function generateImage(params: GenerateParams): Promise<string> {
   let workflow = {};
   if(params.image){
     workflow = I2IModelMap[params.model as keyof typeof I2IModelMap];
-    console.log("workflow", workflow);
   }else{
     workflow = T2IModelMap[params.model as keyof typeof T2IModelMap];
-    console.log("workflow", workflow);
   }
 
   let baseUrl = '';

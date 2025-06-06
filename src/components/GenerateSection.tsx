@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, forwardRef, useImperativeHandle } from 'react'
 import { useTranslations } from 'next-intl'
 import GenerateForm from './GenerateForm'
 import GeneratePreview from './GeneratePreview'
@@ -7,7 +7,11 @@ interface GenerateSectionProps {
   communityWorks: { prompt: string }[];
 }
 
-export default function GenerateSection({ communityWorks }: GenerateSectionProps) {
+export interface GenerateSectionRef {
+  handleGenerateSame: (promptText: string) => void;
+}
+
+const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ communityWorks }, ref) => {
   const t = useTranslations('home.generate')
   const [prompt, setPrompt] = useState('');
   const [width, setWidth] = useState(1024);
@@ -28,6 +32,19 @@ export default function GenerateSection({ communityWorks }: GenerateSectionProps
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const generateSectionRef = useRef<HTMLDivElement>(null);
+
+  // 处理画同款功能
+  const handleGenerateSame = (promptText: string) => {
+    setPrompt(promptText);
+    if (generateSectionRef.current) {
+      generateSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  // 暴露方法给父组件
+  useImperativeHandle(ref, () => ({
+    handleGenerateSame
+  }));
 
   const handleGenerate = async () => {
     setIsGenerating(true)
@@ -172,8 +189,7 @@ export default function GenerateSection({ communityWorks }: GenerateSectionProps
           {/* 左侧表单区域 */}
           <div className="order-1 lg:order-1 lg:col-span-2 animate-fadeInUp">
             <GenerateForm
-              prompt={prompt}
-              setPrompt={setPrompt}
+              
               width={width}
               setWidth={setWidth}
               height={height}
@@ -251,4 +267,8 @@ export default function GenerateSection({ communityWorks }: GenerateSectionProps
       )}
     </section>
   )
-} 
+})
+
+GenerateSection.displayName = 'GenerateSection';
+
+export default GenerateSection 
