@@ -20,6 +20,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const [batch_size, setBatchSize] = useState(4);
   const [model, setModel] = useState('HiDream-full-fp8');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [denoising_strength, setDenoisingStrength] = useState(0.7);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [imageStatuses, setImageStatuses] = useState<Array<{
     status: 'pending' | 'success' | 'error';
@@ -59,9 +60,6 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
 
       const makeRequest = async () => {
         try {
-          // 如果有上传的图片，构建完整的URL
-          const fullImageUrl = uploadedImage ? `${window.location.origin}${uploadedImage}` : undefined;
-
           const res = await fetch('/api/generate', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -73,7 +71,8 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               seed: Math.floor(Math.random() * 100000000),
               batch_size,
               model,
-              image: fullImageUrl,
+              image: uploadedImage, // 直接使用 base64 字符串
+              denoise: uploadedImage ? denoising_strength : undefined, // 只在有参考图片时发送降噪参数
             }),
           });
 
@@ -209,6 +208,8 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               isGenerating={isGenerating}
               uploadedImage={uploadedImage}
               setUploadedImage={setUploadedImage}
+              denoising_strength={denoising_strength}
+              setDenoisingStrength={setDenoisingStrength}
             />
           </div>
 

@@ -29,7 +29,10 @@
       "form": {
         "prompt": {
           "label": "提示词",
-          "placeholder": "描述您想要生成的图像(推荐使用英语)..."
+          "placeholder": "描述你想看到的内容（推荐英语，仅HiDream模型支持中文）..."
+        },
+        "upload": {
+          "label": "上传参考图片（可选）"
         },
         "randomPrompt": "随机提示词",
         "width": {
@@ -55,7 +58,11 @@
         },
         "batch_size": {
           "label": "生成数量",
-          "hint": "每次生成的图片数量（1-4）"
+          "hint": "一次生成的图片数量（1-4）"
+        },
+        "denoising_strength": {
+          "label": "降噪强度",
+          "hint": "决定参考图像的重绘程度（0-1）"
         },
         "advanced": {
           "expand": "展开高级选项",

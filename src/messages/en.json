@@ -29,7 +29,10 @@
       "form": {
         "prompt": {
           "label": "Prompt",
-          "placeholder": "Describe the image you want to generate (English recommended)..."
+          "placeholder": "Describe what you want to see (English recommended, Chinese only supported by HiDream model)..."
+        },
+        "upload": {
+          "label": "Upload Reference Image (Optional)"
         },
         "randomPrompt": "Random Prompt",
         "width": {
@@ -55,7 +58,11 @@
         },
         "batch_size": {
           "label": "Batch Size",
-          "hint": "Number of images to generate (1-4)"
+          "hint": "Number of images to generate at once (1-4)"
+        },
+        "denoising_strength": {
+          "label": "Denoising Strength",
+          "hint": "Controls how much of the reference image to preserve (0-1)"
         },
         "advanced": {
           "expand": "Show Advanced Options",

@@ -7,7 +7,7 @@ import { eq, sql } from 'drizzle-orm'
 export async function POST(request: Request) {
   try {
     const body = await request.json()
-    const { prompt, width, height, steps, seed, batch_size, model, image } = body
+    const { prompt, width, height, steps, seed, batch_size, model, image, denoise } = body
 
     // 验证输入
     if (width < 64 || width > 1920 || height < 64 || height > 1920) {
@@ -26,7 +26,8 @@ export async function POST(request: Request) {
       seed: seed ? parseInt(seed) : undefined,
       batch_size,
       model,
-      image
+      image,
+      denoise
     })
 
     // 更新统计数据

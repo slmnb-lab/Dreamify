@@ -22,6 +22,8 @@ interface GenerateFormProps {
   isGenerating: boolean;
   uploadedImage: string | null;
   setUploadedImage: (value: string | null) => void;
+  denoising_strength: number;
+  setDenoisingStrength: (value: number) => void;
 }
 
 export default function GenerateForm({
@@ -40,7 +42,9 @@ export default function GenerateForm({
   isAdvancedOpen,
   setIsAdvancedOpen,
   isGenerating,
-  setUploadedImage
+  setUploadedImage,
+  denoising_strength,
+  setDenoisingStrength
 }: GenerateFormProps) {
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
@@ -53,17 +57,25 @@ export default function GenerateForm({
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (isGenerating) {
-      // 计算预期时间：基于像素数和步数
-      // 基准：1024*1024像素，50步 = 100秒
+      // 计算预期时间：基于像素数、步数和模型
+      // 基准：1024*1024像素，30步 = 60秒 (HiDream-full-fp8)
       const basePixels = 1024 * 1024;
-      const baseSteps = 50;
-      const baseTime = 100;
+      const baseSteps = 30;
+      const baseTime = 60;
+      
+      // 模型时间系数
+      const modelTimeFactors = {
+        'HiDream-full-fp16': 2.0,    // 两倍于 fp8
+        'HiDream-full-fp8': 1.0,     // 基准
+        'Flux-Dev': 0.67            // 40s/60s
+      };
       
       const currentPixels = width * height;
       const pixelFactor = currentPixels / basePixels;
       const stepsFactor = steps / baseSteps;
+      const modelFactor = modelTimeFactors[model as keyof typeof modelTimeFactors] || 1.0;
       
-      const totalTime = baseTime * pixelFactor * stepsFactor;
+      const totalTime = baseTime * pixelFactor * stepsFactor * modelFactor;
       setEstimatedTime(totalTime);
       
       // 进度条动画
@@ -110,7 +122,7 @@ export default function GenerateForm({
         clearInterval(timer);
       }
     };
-  }, [isGenerating, steps, width, height]);
+  }, [isGenerating, steps, width, height, model]);
 
   // Add click outside handler for dropdown
   useEffect(() => {
@@ -148,47 +160,41 @@ export default function GenerateForm({
     }
 
     try {
-      // 创建 FormData 对象
-      const formData = new FormData()
-      formData.append('file', file)
+      // 读取文件为 base64
+      const reader = new FileReader()
+      reader.onload = (event) => {
+        if (event.target?.result) {
+          // 移除 base64 前缀（如 "data:image/jpeg;base64,"）
+          const base64String = event.target.result.toString().split(',')[1]
+          
+          // 创建图片对象以获取尺寸
+          const img = new window.Image()
+          img.onload = () => {
+            // 设置预览图片（使用带前缀的 base64 用于预览）
+            setPreviewImage(event.target?.result as string)
+            
+            // 计算合适的尺寸（保持8的倍数）
+            const newWidth = Math.round(img.width / 8) * 8
+            const newHeight = Math.round(img.height / 8) * 8
+            
+            // 确保尺寸在允许范围内
+            const finalWidth = Math.min(Math.max(newWidth, 64), 1920)
+            const finalHeight = Math.min(Math.max(newHeight, 64), 1920)
+            
+            // 更新宽高状态
+            setWidth(finalWidth)
+            setHeight(finalHeight)
 
-      // 调用上传 API
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
-      })
-
-      if (!response.ok) {
-        throw new Error('上传失败')
+            // 更新父组件中的图片数据（使用无前缀的 base64）
+            setUploadedImage(base64String)
+          }
+          img.src = event.target.result as string
+        }
       }
-
-      const data = await response.json()
-      
-      // 创建图片对象以获取尺寸
-      const img = new window.Image()
-      img.onload = () => {
-        // 设置预览图片
-        setPreviewImage(data.url)
-        
-        // 计算合适的尺寸（保持8的倍数）
-        const newWidth = Math.round(img.width / 8) * 8
-        const newHeight = Math.round(img.height / 8) * 8
-        
-        // 确保尺寸在允许范围内
-        const finalWidth = Math.min(Math.max(newWidth, 64), 1920)
-        const finalHeight = Math.min(Math.max(newHeight, 64), 1920)
-        
-        // 更新宽高状态
-        setWidth(finalWidth)
-        setHeight(finalHeight)
-
-        // 更新父组件中的图片数据（使用URL）
-        setUploadedImage(data.url)
-      }
-      img.src = data.url
+      reader.readAsDataURL(file)
     } catch (error) {
-      console.error('Error uploading image:', error)
-      alert('上传图片失败，请重试')
+      console.error('Error processing image:', error)
+      alert('处理图片失败，请重试')
     }
   }
 
@@ -227,7 +233,7 @@ export default function GenerateForm({
           <div className="flex-grow">
             <label className="flex items-center text-sm font-medium text-cyan-50 mb-3">
               <img src="/form/upload.svg" alt="Upload" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
-              上传参考图片
+              {t('form.upload.label')}
             </label>
             <div className="relative">
               {previewImage ? (
@@ -530,9 +536,59 @@ export default function GenerateForm({
                         </button>
                       </div>
                     </div>
-                    <p className="mt-2 text-sm text-cyan-200/80">数值越高细节越丰富（25-65）</p>
+                    <p className="mt-2 text-sm text-cyan-200/80">{t('form.batch_size.hint')}</p>
                   </div>
                 </div>
+
+                {previewImage && (
+                  <div>
+                    <label htmlFor="denoising_strength" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+                      <img src="/form/denoise.svg" alt="Denoising Strength" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+                      {t('form.denoising_strength.label')}
+                    </label>
+                    <div className="relative flex items-center bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl focus-within:ring-2 focus-within:ring-cyan-400/50 focus-within:border-cyan-400/50 shadow-inner transition-all duration-300">
+                      <input
+                        type="number"
+                        id="denoising_strength"
+                        value={denoising_strength.toFixed(2)}
+                        onChange={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (!isNaN(value)) {
+                            setDenoisingStrength(Math.min(1, Math.max(0, value)));
+                          }
+                        }}
+                        className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        disabled={status === 'loading'}
+                      />
+                      <div className="flex items-center border-l border-cyan-400/30">
+                        <button
+                          type="button"
+                          onClick={() => setDenoisingStrength(Math.max(0, Number((denoising_strength - 0.10).toFixed(2))))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || denoising_strength <= 0}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDenoisingStrength(Math.min(1, Number((denoising_strength + 0.10).toFixed(2))))}
+                          className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
+                          disabled={status === 'loading' || denoising_strength >= 1}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                    <p className="mt-2 text-sm text-cyan-200/80">{t('form.denoising_strength.hint')}</p>
+                  </div>
+                )}
               </div>
             )}
           </div>
