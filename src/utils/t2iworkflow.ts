@@ -336,11 +336,11 @@ const fluxWorkflowTemplate = {
 
 const model1 = JSON.parse(JSON.stringify(hidreamWorkflowTemplate));
 model1["69"].inputs.unet_name = "hidream_i1_full_fp8.safetensors";
-export const hidreamFp8Workflow = model1 as object;
+export const hidreamFp8T2IWorkflow = model1 as object;
 
 const model2 = JSON.parse(JSON.stringify(hidreamWorkflowTemplate));
 model2["69"].inputs.unet_name = "hidream_i1_full_fp16.safetensors";
-export const hidreamFp16Workflow = model2 as object;
+export const hidreamFp16T2IWorkflow = model2 as object;
 
 const model3 = JSON.parse(JSON.stringify(fluxWorkflowTemplate));
-export const fluxDevWorkflow = model3 as object;
+export const fluxDevT2IWorkflow = model3 as object;

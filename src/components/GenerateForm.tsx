@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
+import Image from 'next/image'
 
 interface GenerateFormProps {
   prompt: string;
@@ -21,10 +22,11 @@ interface GenerateFormProps {
   promptRef: React.RefObject<HTMLTextAreaElement | null>;
   communityWorks: { prompt: string }[];
   isGenerating: boolean;
+  uploadedImage: string | null;
+  setUploadedImage: (value: string | null) => void;
 }
 
 export default function GenerateForm({
-  prompt,
   setPrompt,
   width,
   setWidth,
@@ -40,15 +42,18 @@ export default function GenerateForm({
   onGenerate,
   isAdvancedOpen,
   setIsAdvancedOpen,
-  promptRef,
   communityWorks,
-  isGenerating
+  isGenerating,
+  uploadedImage,
+  setUploadedImage
 }: GenerateFormProps) {
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
   const [estimatedTime, setEstimatedTime] = useState(0)
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false)
   const modelDropdownRef = useRef<HTMLDivElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [previewImage, setPreviewImage] = useState<string | null>(null)
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -131,6 +136,75 @@ export default function GenerateForm({
     onGenerate()
   }
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // 验证文件类型
+    if (!file.type.startsWith('image/')) {
+      alert('请上传图片文件')
+      return
+    }
+
+    // 验证文件大小（最大 10MB）
+    if (file.size > 10 * 1024 * 1024) {
+      alert('图片大小不能超过 10MB')
+      return
+    }
+
+    try {
+      // 创建 FormData 对象
+      const formData = new FormData()
+      formData.append('file', file)
+
+      // 调用上传 API
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error('上传失败')
+      }
+
+      const data = await response.json()
+      
+      // 创建图片对象以获取尺寸
+      const img = new window.Image()
+      img.onload = () => {
+        // 设置预览图片
+        setPreviewImage(data.url)
+        
+        // 计算合适的尺寸（保持8的倍数）
+        const newWidth = Math.round(img.width / 8) * 8
+        const newHeight = Math.round(img.height / 8) * 8
+        
+        // 确保尺寸在允许范围内
+        const finalWidth = Math.min(Math.max(newWidth, 64), 1920)
+        const finalHeight = Math.min(Math.max(newHeight, 64), 1920)
+        
+        // 更新宽高状态
+        setWidth(finalWidth)
+        setHeight(finalHeight)
+
+        // 更新父组件中的图片数据（使用URL）
+        setUploadedImage(data.url)
+      }
+      img.src = data.url
+    } catch (error) {
+      console.error('Error uploading image:', error)
+      alert('上传图片失败，请重试')
+    }
+  }
+
+  const handleRemoveImage = () => {
+    setUploadedImage(null)
+    setPreviewImage(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
+  }
+
   const handleRandomPrompt = () => {
     if (communityWorks.length === 0) return;
     const randomIndex = Math.floor(Math.random() * communityWorks.length);
@@ -162,19 +236,53 @@ export default function GenerateForm({
       <form onSubmit={handleSubmit} className="space-y-8 relative flex-grow flex flex-col">
         <div className="space-y-8 flex-grow">
           <div className="flex-grow">
-            <label htmlFor="prompt" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
-              <img src="/form/prompt.svg" alt="Prompt" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
-              {t('form.prompt.label')}
+            <label className="flex items-center text-sm font-medium text-cyan-50 mb-3">
+              <img src="/form/upload.svg" alt="Upload" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+              上传参考图片
             </label>
-            <textarea
-              id="prompt"
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              className="w-full h-64 px-5 py-4 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-              placeholder={t('form.prompt.placeholder')}
-              disabled={status === 'loading'}
-              ref={promptRef}
-            />
+            <div className="relative">
+              {previewImage ? (
+                <div className="relative aspect-square rounded-2xl overflow-hidden border border-cyan-400/30 bg-slate-700/50">
+                  <Image
+                    src={previewImage}
+                    alt="Uploaded reference"
+                    fill
+                    className="object-contain"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRemoveImage}
+                    className="absolute top-2 right-2 p-2 bg-slate-800/80 rounded-full text-cyan-200 hover:text-cyan-50 transition-colors"
+                    aria-label="Remove image"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="aspect-square rounded-2xl border-2 border-dashed border-cyan-400/30 bg-slate-700/50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-600/50 transition-colors"
+                >
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                  />
+                  <svg className="w-12 h-12 text-cyan-400/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  <p className="text-cyan-200/80 text-center px-4">
+                    点击或拖拽图片到此处上传
+                    <br />
+                    <span className="text-sm text-cyan-200/60">支持 JPG、PNG 格式，最大 10MB</span>
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
 
           <div className="border-t border-cyan-400/30 pt-8">

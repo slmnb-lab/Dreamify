@@ -1,8 +1,13 @@
-import { hidreamFp8Workflow, hidreamFp16Workflow, fluxDevWorkflow } from "./workflow";
-const ModelMap = {
-  "HiDream-full-fp8": hidreamFp8Workflow,
-  "HiDream-full-fp16": hidreamFp16Workflow,
-  "Flux-Dev": fluxDevWorkflow,
+import { hidreamFp8T2IWorkflow, hidreamFp16T2IWorkflow, fluxDevT2IWorkflow } from "./t2iworkflow";
+import { fluxI2IWorkflow } from "./i2iworkflow";
+const T2IModelMap = {
+  "HiDream-full-fp8": hidreamFp8T2IWorkflow,
+  "HiDream-full-fp16": hidreamFp16T2IWorkflow,
+  "Flux-Dev": fluxDevT2IWorkflow,
+}
+
+const I2IModelMap = {
+  "Flux-Dev": fluxI2IWorkflow,
 }
 
 interface ComfyUIResponse {
@@ -17,6 +22,7 @@ interface GenerateParams {
   seed?: number;
   batch_size: number;
   model: string;
+  image?: string;
 }
 
 const urls = [
@@ -26,19 +32,30 @@ const urls = [
 
 export async function generateImage(params: GenerateParams): Promise<string> {
   // 1. 准备工作流数据
-  const workflow = ModelMap[params.model as keyof typeof ModelMap];
+  let workflow = {};
+  if(params.image){
+    workflow = I2IModelMap[params.model as keyof typeof I2IModelMap];
+    console.log("workflow", workflow);
+  }else{
+    workflow = T2IModelMap[params.model as keyof typeof T2IModelMap];
+    console.log("workflow", workflow);
+  }
 
   let baseUrl = '';
   if(params.model === 'HiDream-full-fp8') {
     // Randomly choose between IDC and DockerWeb URLs
     baseUrl = urls[Math.floor(Math.random() * urls.length)];
-    setHiDreamWorkflowParams(workflow, params);
+    setHiDreamWT2IorkflowParams(workflow, params);
   } else if(params.model === 'HiDream-full-fp16') {
     baseUrl = process.env.HiDream_Fp16_IDC_API_URL || ''
-    setHiDreamWorkflowParams(workflow, params);
+    setHiDreamWT2IorkflowParams(workflow, params);
   }else if(params.model === 'Flux-Dev') {
     baseUrl = process.env.Flux_Dev_DOCKERWEB_API_URL || ''
-    setFluxDevWorkflowParams(workflow, params);
+    if(params.image){
+      setFluxDevI2IorkflowParams(workflow, params);
+    }else{
+      setFluxDevWT2IorkflowParams(workflow, params);
+    }
   }
 
   try {
@@ -69,7 +86,7 @@ export async function generateImage(params: GenerateParams): Promise<string> {
   }
 }
 
-function setHiDreamWorkflowParams(workflow: any, params: GenerateParams) {
+function setHiDreamWT2IorkflowParams(workflow: any, params: GenerateParams) {
   // 更新工作流参数
   workflow["53"].inputs.width = params.width;
   workflow["53"].inputs.height = params.height;
@@ -79,7 +96,7 @@ function setHiDreamWorkflowParams(workflow: any, params: GenerateParams) {
     workflow["3"].inputs.seed = params.seed;
   }
 }
-function setFluxDevWorkflowParams(workflow: any, params: GenerateParams) {
+function setFluxDevWT2IorkflowParams(workflow: any, params: GenerateParams) {
   workflow["44"].inputs.width = params.width;
   workflow["44"].inputs.height = params.height;
   workflow["46"].inputs.width = params.width;
@@ -90,4 +107,14 @@ function setFluxDevWorkflowParams(workflow: any, params: GenerateParams) {
   if (params.seed) {
     workflow["45"].inputs.noise_seed = params.seed;
   }
+}
+
+function setFluxDevI2IorkflowParams(workflow: any, params: GenerateParams) {
+  workflow["50"].inputs.image = params.image;
+  workflow["52"].inputs.width = params.width;
+  workflow["52"].inputs.height = params.height;
+  workflow["46"].inputs.width = params.width;
+  workflow["46"].inputs.height = params.height;
+  workflow["17"].inputs.denoise = 0.6;
+  workflow["43"].inputs.text = params.prompt;
 }
