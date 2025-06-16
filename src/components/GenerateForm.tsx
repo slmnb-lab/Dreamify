@@ -53,6 +53,7 @@ export default function GenerateForm({
   const modelDropdownRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [isDragging, setIsDragging] = useState(false)
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -206,6 +207,57 @@ export default function GenerateForm({
     }
   }
 
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(true)
+  }
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+  }
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault()
+    setIsDragging(false)
+    
+    const file = e.dataTransfer.files?.[0]
+    if (!file) return
+
+    // 验证文件类型
+    if (!file.type.startsWith('image/')) {
+      alert('请上传图片文件')
+      return
+    }
+
+    // 验证文件大小（最大 10MB）
+    if (file.size > 10 * 1024 * 1024) {
+      alert('图片大小不能超过 10MB')
+      return
+    }
+
+    // 使用与 handleImageUpload 相同的处理逻辑
+    const reader = new FileReader()
+    reader.onload = (event) => {
+      if (event.target?.result) {
+        const base64String = event.target.result.toString().split(',')[1]
+        const img = new window.Image()
+        img.onload = () => {
+          setPreviewImage(event.target?.result as string)
+          const newWidth = Math.round(img.width / 8) * 8
+          const newHeight = Math.round(img.height / 8) * 8
+          const finalWidth = Math.min(Math.max(newWidth, 64), 1920)
+          const finalHeight = Math.min(Math.max(newHeight, 64), 1920)
+          setWidth(finalWidth)
+          setHeight(finalHeight)
+          setUploadedImage(base64String)
+        }
+        img.src = event.target.result as string
+      }
+    }
+    reader.readAsDataURL(file)
+  }
+
   const models = [
     {
       id: "HiDream-full-fp16",
@@ -237,7 +289,7 @@ export default function GenerateForm({
             </label>
             <div className="relative">
               {previewImage ? (
-                <div className="relative aspect-square rounded-2xl overflow-hidden border border-cyan-400/30 bg-slate-700/50">
+                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-cyan-400/30 bg-slate-700/50">
                   <Image
                     src={previewImage}
                     alt="Uploaded reference"
@@ -258,7 +310,12 @@ export default function GenerateForm({
               ) : (
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="aspect-square rounded-2xl border-2 border-dashed border-cyan-400/30 bg-slate-700/50 flex flex-col items-center justify-center cursor-pointer hover:bg-slate-600/50 transition-colors"
+                  onDragOver={handleDragOver}
+                  onDragLeave={handleDragLeave}
+                  onDrop={handleDrop}
+                  className={`aspect-[4/3] rounded-2xl border-2 border-dashed ${
+                    isDragging ? 'border-cyan-400 bg-slate-600/50' : 'border-cyan-400/30 bg-slate-700/50'
+                  } flex flex-col items-center justify-center cursor-pointer hover:bg-slate-600/50 transition-colors`}
                 >
                   <input
                     ref={fileInputRef}
@@ -550,11 +607,18 @@ export default function GenerateForm({
                       <input
                         type="number"
                         id="denoising_strength"
-                        value={denoising_strength.toFixed(2)}
+                        value={denoising_strength}
                         onChange={(e) => {
                           const value = parseFloat(e.target.value);
                           if (!isNaN(value)) {
-                            setDenoisingStrength(Math.min(1, Math.max(0, value)));
+                            const clampedValue = Math.min(1, Math.max(0, value));
+                            setDenoisingStrength(clampedValue);
+                          }
+                        }}
+                        onBlur={(e) => {
+                          const value = parseFloat(e.target.value);
+                          if (isNaN(value)) {
+                            setDenoisingStrength(0.5); // 如果输入无效，重置为默认值
                           }
                         }}
                         className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
