@@ -9,7 +9,7 @@ import '@/app/globals.css'
 import UmamiProvider from 'next-umami'
 
 const inter = Inter({ subsets: ['latin'] })
-const umamiWebsiteId = "3751fd4c-79ff-49d7-82d8-2c61447d7adc"
+const umamiWebsiteId = "7fd99628-3822-4bae-a794-b2d1d8926678"
 const umamiSrc = "https://umami.suanleme.cn:3000/script.js"
 
 // 可以选择性地设置缓存时间

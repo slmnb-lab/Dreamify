@@ -229,8 +229,8 @@ const hidreamFp8I2IWorkflow =
             "seed": 930077853577925,
             "steps": 30,
             "cfg": 5,
-            "sampler_name": "euler",
-            "scheduler": "simple",
+            "sampler_name": "ddim",
+            "scheduler": "ddim_uniform",
             "denoise": 0.4000000000000001,
             "model": [
                 "70",
