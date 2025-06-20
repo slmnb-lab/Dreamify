@@ -49,6 +49,7 @@ export default async function LocaleLayout({
           websiteId={umamiWebsiteId} // 替换为你的实际 ID
           src={umamiSrc}
         />
+        <meta name="google-site-verification" content="F_mzKY9JDvflHFEEsBGIiItkpIhVwc0sBPqo_UI5VtQ" />
       </head>
       <body className={inter.className}>
         <NextIntlClientProvider locale={locale} messages={messages}>
