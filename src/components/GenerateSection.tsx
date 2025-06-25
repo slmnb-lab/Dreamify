@@ -147,33 +147,33 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   };
 
   return (
-    <section id="generate-section" ref={generateSectionRef} className="py-12 sm:py-20 relative">
+    <section id="generate-section" ref={generateSectionRef} className="py-10 sm:py-16 relative">
       <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-      <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+      <div className="w-full max-w-[1260px] mx-auto relative px-3 sm:px-5">
         {/* Prompt Input Section */}
-        <div className="mb-8 animate-fadeInUp">
-          <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30">
+        <div className="mb-7 animate-fadeInUp">
+          <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-7 border border-cyan-400/30">
             <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-3xl"></div>
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
             
             <div className="relative">
-              <label htmlFor="prompt" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
-                <img src="/form/prompt.svg" alt="Prompt" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+              <label htmlFor="prompt" className="flex items-center text-xs font-medium text-cyan-50 mb-2.5">
+                <img src="/form/prompt.svg" alt="Prompt" className="w-4 h-4 mr-1.5 text-cyan-50 [&>path]:fill-current" />
                 {t('form.prompt.label')}
               </label>
-              <div className="flex gap-4">
+              <div className="flex gap-3">
                 <textarea
                   id="prompt"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
-                  className="flex-grow h-32 px-5 py-4 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                  className="flex-grow h-28 px-4 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   placeholder={t('form.prompt.placeholder')}
                   ref={promptRef}
                 />
                 <button
                   type="button"
                   onClick={handleRandomPrompt}
-                  className="px-6 py-3 h-32 text-lg rounded-xl border border-cyan-400/50 text-cyan-200 hover:bg-cyan-400/10 transition-all duration-300 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20 whitespace-nowrap"
+                  className="px-5 py-2.5 h-28 text-base rounded-xl border border-cyan-400/50 text-cyan-200 hover:bg-cyan-400/10 transition-all duration-300 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20 whitespace-nowrap"
                   disabled={isGenerating}
                 >
                   {t('form.randomPrompt')}

@@ -6,7 +6,6 @@ import { useState, useEffect, useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import community from './communityWorks'
 import SiteStats from '@/components/SiteStats'
-import { useNavWidth } from '@/hooks/useNavWidth'
 import GenerateSection, { GenerateSectionRef } from '@/components/GenerateSection'
 
 interface FAQItem {
@@ -20,7 +19,6 @@ export default function HomeClient() {
   const t = useTranslations('home')
   const generateSectionRef = useRef<GenerateSectionRef>(null);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
-  const navWidth = useNavWidth();
 
   // 示例图片数组
   const images = [
@@ -78,29 +76,8 @@ export default function HomeClient() {
     }
   };
 
-  // 计算内容区域的动态样式
-  const getContentStyle = () => {
-    // 在移动端使用顶部导航栏，添加顶部padding
-    if (typeof window !== 'undefined' && window.innerWidth < 1024) {
-      return {
-        marginLeft: '0',
-        paddingLeft: '1rem',
-        paddingRight: '1rem',
-        paddingTop: '4rem', // 为顶部导航栏留出空间
-        width: '100%',
-      };
-    }
-    // 在桌面端使用导航栏宽度作为margin，并计算合适的宽度
-    return {
-      marginLeft: `${navWidth}px`,
-      paddingLeft: '1.5rem',
-      paddingRight: '1.5rem',
-      width: `calc(100% - ${navWidth}px)`,
-    };
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden scale-90-root">
       {/* 图片放大模态框 - 改进响应式设计 */}
       {zoomedImage && (
         <div
@@ -142,64 +119,63 @@ export default function HomeClient() {
         </div>
       )}
 
-      {/* 主要内容区域 - 使用动态margin和padding */}
+      {/* 主要内容区域 - 使用 Tailwind CSS 控制布局 */}
       <main 
-        className="transition-all duration-300"
-        style={getContentStyle()}
+        className="transition-all duration-300 mx-auto pt-12 lg:pt-0 pl-20"
       >
         {/* Hero Section - 改进响应式设计 */}
-        <section className="relative min-h-screen flex items-center justify-center py-12 sm:py-20 overflow-hidden">
+        <section className="relative min-h-screen flex items-center justify-center py-14 sm:py-20 px-5 sm:px-72 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
 
-          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+          <div className="w-full max-w-[1400px] mx-auto relative px-6 sm:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* 左侧文字内容 - 改进移动端间距 */}
               <div className="text-left">
-                <div className="flex items-center gap-4 mb-8 sm:mb-12 animate-fadeInUp">
+                <div className="flex items-center gap-5 mb-8 sm:mb-12 animate-fadeInUp">
                   <div className="relative">
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 rounded-2xl blur-xl opacity-50 animate-pulse"></div>
                     <Image
                       src="/images/dreamify-logo.jpg"
                       alt="Dreamify Logo"
-                      width={64}
-                      height={64}
+                      width={58}
+                      height={58}
                       className="rounded-2xl shadow-xl border border-cyan-400/30 relative z-10"
                     />
                   </div>
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
                     Dreamify
                   </h2>
                 </div>
-                <h1 className="mb-6 sm:mb-8">
-                  <span className="block text-3xl sm:text-4xl lg:text-6xl font-medium text-cyan-100 mb-3 sm:mb-4 animate-fadeInUp">
+                <h1 className="mb-7 sm:mb-9">
+                  <span className="block text-xl sm:text-2xl lg:text-4xl font-medium text-cyan-100 mb-3 sm:mb-4 animate-fadeInUp">
                     {t('hero.titlePrefix')}
                   </span>
-                  <span className="block text-4xl sm:text-5xl lg:text-7xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fadeInUp animation-delay-200">
+                  <span className="block text-2xl sm:text-3xl lg:text-5xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent animate-fadeInUp animation-delay-200">
                     {t('hero.titleHighlight')}
                   </span>
                 </h1>
-                <div className="flex flex-wrap gap-2 sm:gap-4 mb-6 sm:mb-8 animate-fadeInUp animation-delay-300">
-                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
+                <div className="flex flex-wrap gap-2 sm:gap-4 mb-7 sm:mb-9 animate-fadeInUp animation-delay-300">
+                  <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
                     {t('hero.tags.fastGeneration')}
                   </span>
-                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg">
+                  <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg">
                     {t('hero.tags.multipleModels')}
                   </span>
-                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-green-400 to-emerald-400 text-white shadow-lg">
+                  <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-green-400 to-emerald-400 text-white shadow-lg">
                     {t('hero.tags.noLogin')}
                   </span>
-                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-lg">
+                  <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-orange-400 to-red-400 text-white shadow-lg">
                     {t('hero.tags.highCustomization')}
                   </span>
-                  <span className="px-4 py-2 rounded-full text-sm font-medium bg-gradient-to-r from-yellow-400 to-amber-400 text-white shadow-lg">
+                  <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-yellow-400 to-amber-400 text-white shadow-lg">
                     {t('hero.tags.chineseSupport')}
                   </span>
                 </div>
-                <p className="text-xl sm:text-2xl text-cyan-100 mb-6 sm:mb-8 animate-fadeInUp animation-delay-400">
+                <p className="text-base sm:text-lg text-cyan-100 mb-7 sm:mb-9 animate-fadeInUp animation-delay-400">
                   {t('hero.subtitle.prefix')}
-                  <span className="text-3xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent px-2">
+                  <span className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent px-1.5">
                     {t('hero.subtitle.highlight')}
                   </span>
                   {t('hero.subtitle.suffix')}
@@ -209,7 +185,7 @@ export default function HomeClient() {
                     onClick={() => {
                       document.getElementById('generate-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }}
-                    className="group px-10 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-2xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 shadow-xl shadow-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/30 hover:-translate-y-0.5 text-lg font-medium relative overflow-hidden"
+                    className="group px-9 py-3.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-2xl hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 shadow-xl shadow-cyan-500/20 hover:shadow-2xl hover:shadow-cyan-500/30 hover:-translate-y-0.5 text-base font-medium relative overflow-hidden"
                   >
                     <span className="relative z-10">{t('hero.startButton')}</span>
                     <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -218,7 +194,7 @@ export default function HomeClient() {
                     onClick={() => {
                       document.getElementById('faq-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
                     }}
-                    className="group px-10 py-4 border-2 border-cyan-400/50 text-cyan-300 rounded-2xl hover:bg-cyan-400/10 transition-all duration-300 text-lg font-medium relative overflow-hidden"
+                    className="group px-9 py-3.5 border-2 border-cyan-400/50 text-cyan-300 rounded-2xl hover:bg-cyan-400/10 transition-all duration-300 text-base font-medium relative overflow-hidden"
                   >
                     <span className="relative z-10">{t('hero.faqButton')}</span>
                     <div className="absolute inset-0 bg-cyan-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -228,7 +204,7 @@ export default function HomeClient() {
 
               {/* 右侧图片展示 - 改进移动端显示 */}
               <div className="relative">
-                <div className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
+                <div className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500" style={{maxWidth:'90%',maxHeight:'90%'}}>
                   {images.map((src, index) => (
                     <div
                       key={src}
@@ -249,7 +225,7 @@ export default function HomeClient() {
                   ))}
                 </div>
                 <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
-                  <div className="flex gap-4 bg-slate-700/80 backdrop-blur-xl px-8 py-3 rounded-2xl shadow-xl border border-cyan-400/30 transform hover:scale-105 transition-transform duration-300">
+                  <div className="flex gap-5 bg-slate-700/80 backdrop-blur-xl px-9 py-3 rounded-2xl shadow-xl border border-cyan-400/30 transform hover:scale-105 transition-transform duration-300">
                     {images.map((_, index) => (
                       <button
                         key={index}
@@ -269,9 +245,9 @@ export default function HomeClient() {
         </section>
 
         {/* Stats Section - 改进响应式设计 */}
-        <section id="site-stats" className="py-8 sm:py-12 bg-slate-700/80 backdrop-blur-xl relative">
+        <section id="site-stats" className="py-8 sm:py-12 px-48 sm:px-48 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+          <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <SiteStats />
           </div>
         </section>
@@ -283,35 +259,35 @@ export default function HomeClient() {
         />
 
         {/* Community Showcase Section - 改进响应式设计 */}
-        <section id="community-showcase" className="py-12 sm:py-20 bg-slate-800/90 backdrop-blur-xl relative">
+        <section id="community-showcase" className="py-14 sm:py-20 px-48 sm:px-7 bg-slate-800/90 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
-            <div className="text-center mb-12 sm:mb-16">
-              <div className="flex items-center justify-center gap-4 mb-6">
-                <img src="/common/comunity.svg" alt="Community" className="w-12 h-12" />
-                <h2 className="text-4xl font-bold text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
+          <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
+            <div className="text-center mb-12 sm:mb-15">
+              <div className="flex items-center justify-center gap-5 mb-7">
+                <img src="/common/comunity.svg" alt="Community" className="w-10 h-10" />
+                <h2 className="text-2xl font-bold text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
               </div>
-              <p className="text-2xl text-cyan-200/80 animate-fadeInUp animation-delay-200">{t('community.subtitle')}</p>
+              <p className="text-lg text-cyan-200/80 animate-fadeInUp animation-delay-200">{t('community.subtitle')}</p>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
               {communityWorks.map((work, index) => (
                 <div key={work.id} className="relative group animate-fadeInUp" style={{ animationDelay: `${index * 200}ms` }}>
-                  <div className="aspect-square rounded-3xl overflow-hidden shadow-xl border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
+                  <div className="aspect-square rounded-2xl overflow-hidden shadow-xl border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
                     <Image
                       src={work.image}
                       alt={`Community work ${work.id}`}
-                      width={500}
-                      height={500}
+                      width={450}
+                      height={450}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                     />
                   </div>
-                  <div className="absolute inset-0 bg-slate-800/90 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-3xl">
+                  <div className="absolute inset-0 bg-slate-800/90 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl">
                     <div className="absolute inset-0 flex flex-col justify-end p-6">
-                      <p className="text-cyan-100 text-base mb-6 line-clamp-3">{work.prompt}</p>
+                      <p className="text-cyan-100 text-sm mb-6 line-clamp-3">{work.prompt}</p>
                       <button
                         onClick={() => handleGenerateSame(work.prompt)}
-                        className="group w-full py-3 px-6 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-medium hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden"
+                        className="group w-full py-2.5 px-5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-lg font-medium hover:from-cyan-400 hover:to-blue-400 transition-all duration-300 hover:-translate-y-0.5 relative overflow-hidden"
                       >
                         <span className="relative z-10">{t('community.generateSame')}</span>
                         <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -323,10 +299,10 @@ export default function HomeClient() {
             </div>
 
             {/* 添加优雅的描述文本 */}
-            <div className="mt-12 text-center">
+            <div className="mt-10 text-center">
               <Link 
                 href="/#site-stats" 
-                className="inline-block text-cyan-200/60 hover:text-cyan-200/90 text-lg transition-colors duration-300 cursor-pointer group"
+                className="inline-block text-cyan-200/60 hover:text-cyan-200/90 text-base transition-colors duration-300 cursor-pointer group"
                 onClick={(e) => {
                   e.preventDefault();
                   document.getElementById('site-stats')?.scrollIntoView({ behavior: 'smooth' });
@@ -334,7 +310,7 @@ export default function HomeClient() {
               >
                 <span className="relative">
                   想分享你的绘画作品和创意提示词？
-                  <span className="block text-cyan-200/50 group-hover:text-cyan-200/70 text-base mt-1">
+                  <span className="block text-cyan-200/50 group-hover:text-cyan-200/70 text-sm mt-1.5">
                     欢迎通过QQ联系我们，让更多人看到你的灵感！
                   </span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400/30 group-hover:w-full transition-all duration-300"></span>
@@ -345,13 +321,13 @@ export default function HomeClient() {
         </section>
 
         {/* FAQ Section - 改进响应式设计 */}
-        <section id="faq-section" className="py-12 sm:py-24 bg-slate-700/80 backdrop-blur-xl relative">
+        <section id="faq-section" className="py-14 sm:py-24 px-48 sm:px-7 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+          <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-5 items-center gap-8 lg:gap-0">
               {/* 左侧图片 - 改进移动端显示 */}
               <div className="relative lg:col-span-2">
-                <div className="aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
+                <div className="aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500" style={{maxWidth:'90%',maxHeight:'90%'}}>
                   <Image
                     src="/images/demo-12.png"
                     alt="FAQ illustration"
@@ -359,7 +335,7 @@ export default function HomeClient() {
                     className="object-cover"
                   />
                 </div>
-                <div className="absolute -top-8 -left-8 w-72 h-72 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-3xl opacity-20 blur-3xl"></div>
+                <div className="absolute -top-7 -left-7 w-64 h-64 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-3xl opacity-20 blur-3xl"></div>
               </div>
 
               {/* 间距列 */}
@@ -367,9 +343,9 @@ export default function HomeClient() {
 
               {/* 右侧FAQ内容 - 改进移动端间距 */}
               <div className="flex flex-col justify-center lg:col-span-2">
-                <div className="flex items-center gap-4 mb-12">
-                  <img src="/common/faq.svg" alt="FAQ" className="w-12 h-12" />
-                  <h2 className="text-4xl font-bold text-cyan-100 animate-fadeInUp">
+                <div className="flex items-center gap-5 mb-10">
+                  <img src="/common/faq.svg" alt="FAQ" className="w-10 h-10" />
+                  <h2 className="text-2xl font-bold text-cyan-100 animate-fadeInUp">
                     {t('faq.title')}
                   </h2>
                 </div>
@@ -380,8 +356,8 @@ export default function HomeClient() {
                       className="bg-slate-600/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-cyan-400/30 animate-fadeInUp"
                       style={{ animationDelay: `${index * 200}ms` }}
                     >
-                      <h3 className="text-xl font-semibold mb-4 text-cyan-100">Q{index + 1}: {qa.q}</h3>
-                      <p className="text-cyan-200/80 pl-6 border-l-2 border-cyan-400">{qa.a}</p>
+                      <h3 className="text-base font-semibold mb-4 text-cyan-100">Q{index + 1}: {qa.q}</h3>
+                      <p className="text-cyan-200/80 pl-4 border-l-2 border-cyan-400">{qa.a}</p>
                     </div>
                   ))}
                 </div>
@@ -391,36 +367,36 @@ export default function HomeClient() {
         </section>
 
         {/* Footer Section - 改进响应式设计 */}
-        <section className="py-12 sm:py-20 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
+        <section className="py-12 sm:py-18 px-48 sm:px-7 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
-          <div className="w-full max-w-[1400px] mx-auto relative px-4 sm:px-6">
+          <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="text-center">
-              <p className="text-cyan-200/80 text-base mb-6 animate-fadeInUp">
+              <p className="text-cyan-200/80 text-sm mb-6 animate-fadeInUp">
                 {t('suanleme.title')}
               </p>
-              <div className="flex justify-center items-center gap-12 animate-fadeInUp animation-delay-200">
+              <div className="flex justify-center items-center gap-10 animate-fadeInUp animation-delay-200">
                 <Link
                   href="https://gongjiyun.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-110 duration-300"
+                  className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 duration-300"
                 >
                   <img
                     src="https://gongjiyun.com/logo-dark.png"
                     alt={t('suanleme.gongji')}
-                    className="h-12"
+                    className="h-10"
                   />
                 </Link>
                 <Link
                   href="https://suanleme.cn"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-110 duration-300"
+                  className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 duration-300"
                 >
                   <img
                     src="https://suanleme.cn/logo.svg"
                     alt={t('suanleme.suanleme')}
-                    className="h-12"
+                    className="h-10"
                   />
                 </Link>
               </div>
