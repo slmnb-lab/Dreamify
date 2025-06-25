@@ -50,7 +50,7 @@ export default async function LocaleLayout({
           src={umamiSrc}
         />
         <meta name="google-site-verification" content="F_mzKY9JDvflHFEEsBGIiItkpIhVwc0sBPqo_UI5VtQ" />
-        <meta name="baidu-site-verification" content="codeva-7g9ndRCNKo" />
+        <meta name="baidu-site-verification" content="codeva-KBWW4lhtr9" />
       </head>
       <body className={inter.className}>
         <NextIntlClientProvider locale={locale} messages={messages}>
