@@ -144,9 +144,14 @@ export default function HomeClient() {
                       className="rounded-2xl shadow-xl border border-cyan-400/30 relative z-10"
                     />
                   </div>
-                  <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
-                    Dreamify
-                  </h2>
+                  <div className="flex flex-col">
+                    <h2 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                      Dreamify
+                    </h2>
+                    <p className="text-sm text-cyan-100/80 mt-1">
+                      {t('hero.description')}
+                    </p>
+                  </div>
                 </div>
                 <h1 className="mb-7 sm:mb-9">
                   <span className="block text-xl sm:text-2xl lg:text-4xl font-medium text-cyan-100 mb-3 sm:mb-4 animate-fadeInUp">
