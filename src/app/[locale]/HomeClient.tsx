@@ -121,7 +121,7 @@ export default function HomeClient() {
 
       {/* 主要内容区域 - 使用 Tailwind CSS 控制布局 */}
       <main 
-        className="transition-all duration-300 mx-auto pt-12 lg:pt-0 pl-20"
+        className="transition-all duration-300 mx-auto pt-12 lg:pt-0 lg:pl-20"
       >
         {/* Hero Section - 改进响应式设计 */}
         <section className="relative min-h-screen flex items-center justify-center py-14 sm:py-20 px-5 sm:px-72 overflow-hidden">
