@@ -158,7 +158,11 @@
     "community": {
       "title": "Community",
       "subtitle": "Explore amazing works created by other users and get inspired",
-      "generateSame": "Generate Same Style"
+      "generateSame": "Generate Same Style",
+      "sharePrompt": {
+        "title": "Want to share your artwork and creative prompts?",
+        "description": "Welcome to fill out our survey and let more people see your inspiration!"
+      }
     },
     "suanleme": {
       "title": "This project is powered by the following platforms",

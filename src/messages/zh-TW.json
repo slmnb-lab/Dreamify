@@ -158,7 +158,11 @@
     "community": {
       "title": "社群",
       "subtitle": "探索其他用戶創作的精彩作品，並從中獲取靈感",
-      "generateSame": "畫同款"
+      "generateSame": "畫同款",
+      "sharePrompt": {
+        "title": "想分享你的繪畫作品和創意提示詞？",
+        "description": "歡迎填寫問卷，讓更多人看到你的靈感！"
+      }
     },
     "suanleme": {
       "title": "本專案由以下平台提供龐大算力支援",

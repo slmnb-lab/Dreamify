@@ -163,7 +163,11 @@
     "community": {
       "title": "社区",
       "subtitle": "探索其他用户创作的精彩作品，并从中获取灵感",
-      "generateSame": "画同款"
+      "generateSame": "画同款",
+      "sharePrompt": {
+        "title": "想分享你的绘画作品和创意提示词？",
+        "description": "欢迎填写问卷，让更多人看到你的灵感！"
+      }
     },
     "suanleme": {
       "title": "本项目由以下平台提供庞大算力支持",

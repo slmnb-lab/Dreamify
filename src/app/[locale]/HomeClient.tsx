@@ -306,17 +306,15 @@ export default function HomeClient() {
             {/* 添加优雅的描述文本 */}
             <div className="mt-10 text-center">
               <Link 
-                href="/#site-stats" 
+                href="https://fizuclq6u3i.feishu.cn/share/base/form/shrcnQsyy6dMkoOSa1RjqeBrOQf"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="inline-block text-cyan-200/60 hover:text-cyan-200/90 text-base transition-colors duration-300 cursor-pointer group"
-                onClick={(e) => {
-                  e.preventDefault();
-                  document.getElementById('site-stats')?.scrollIntoView({ behavior: 'smooth' });
-                }}
               >
                 <span className="relative">
-                  想分享你的绘画作品和创意提示词？
+                  {t('community.sharePrompt.title')}
                   <span className="block text-cyan-200/50 group-hover:text-cyan-200/70 text-sm mt-1.5">
-                    欢迎通过QQ联系我们，让更多人看到你的灵感！
+                    {t('community.sharePrompt.description')}
                   </span>
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-cyan-400/30 group-hover:w-full transition-all duration-300"></span>
                 </span>
