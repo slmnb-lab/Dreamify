@@ -77,7 +77,7 @@ export default function HomeClient() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden scale-90-root">
+    <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden">
       {/* 图片放大模态框 - 改进响应式设计 */}
       {zoomedImage && (
         <div
@@ -121,16 +121,16 @@ export default function HomeClient() {
 
       {/* 主要内容区域 - 使用 Tailwind CSS 控制布局 */}
       <main 
-        className="transition-all duration-300 mx-auto pt-12 lg:pt-0 lg:pl-20"
+        className="transition-all duration-300 mx-auto pt-12 lg:pt-0 lg:pl-40"
       >
         {/* Hero Section - 改进响应式设计 */}
-        <section className="relative min-h-screen flex items-center justify-center py-14 sm:py-20 px-5 sm:px-72 overflow-hidden">
+        <section className="relative min-h-screen flex items-center justify-center py-14 sm:py-20 px-5 sm:px-8 lg:px-40 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800"></div>
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-10"></div>
 
           <div className="w-full max-w-[1400px] mx-auto relative px-6 sm:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-6 xl:gap-8 items-center">
               {/* 左侧文字内容 - 改进移动端间距 */}
               <div className="text-left">
                 <div className="flex items-center gap-5 mb-8 sm:mb-12 animate-fadeInUp">
@@ -207,41 +207,44 @@ export default function HomeClient() {
                 </div>
               </div>
 
-              {/* 右侧图片展示 - 改进移动端显示 */}
-              <div className="relative">
-                <div className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500" style={{maxWidth:'90%',maxHeight:'90%'}}>
-                  {images.map((src, index) => (
-                    <div
-                      key={src}
-                      className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${currentImageIndex === index
-                          ? 'opacity-100 scale-100'
-                          : 'opacity-0 scale-105'
-                        }`}
-                    >
-                      <Image
-                        src={src}
-                        alt={`AI生成的图像示例 ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        priority={index === 0}
-                        sizes="(max-width: 1536px) 100vw, 1536px"
-                      />
-                    </div>
-                  ))}
-                </div>
-                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
-                  <div className="flex gap-5 bg-slate-700/80 backdrop-blur-xl px-9 py-3 rounded-2xl shadow-xl border border-cyan-400/30 transform hover:scale-105 transition-transform duration-300">
-                    {images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => handleImageChange(index)}
-                        className={`w-3 h-3 rounded-full transition-all duration-300 transform hover:scale-125 ${currentImageIndex === index
-                            ? 'bg-cyan-400 scale-125'
-                            : 'bg-cyan-400/20 hover:bg-cyan-400/40'
+              {/* 右侧图片展示 - 改进响应式显示和尺寸控制 */}
+              <div className="relative flex justify-end">
+                <div className="relative w-full max-w-[350px] lg:max-w-[400px] xl:max-w-[450px]">
+                  <div className="aspect-square rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-700/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500">
+                    {images.map((src, index) => (
+                      <div
+                        key={src}
+                        className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${currentImageIndex === index
+                            ? 'opacity-100 scale-100'
+                            : 'opacity-0 scale-105'
                           }`}
-                        aria-label={`切换到图片 ${index + 1}`}
-                      />
+                      >
+                        <Image
+                          src={src}
+                          alt={`AI生成的图像示例 ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          priority={index === 0}
+                          sizes="(max-width: 768px) 350px, (max-width: 1024px) 400px, 450px"
+                        />
+                      </div>
                     ))}
+                  </div>
+                  {/* 轮播图控件 - 进一步缩小尺寸 */}
+                  <div className="absolute -bottom-4 sm:-bottom-5 left-1/2 transform -translate-x-1/2">
+                    <div className="flex gap-2 sm:gap-2.5 lg:gap-3 bg-slate-700/80 backdrop-blur-xl px-3.5 sm:px-4 lg:px-5 py-1.5 sm:py-2 rounded-lg shadow-xl border border-cyan-400/30 transform hover:scale-105 transition-transform duration-300">
+                      {images.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => handleImageChange(index)}
+                          className={`w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full transition-all duration-300 transform hover:scale-125 ${currentImageIndex === index
+                              ? 'bg-cyan-400 scale-125'
+                              : 'bg-cyan-400/20 hover:bg-cyan-400/40'
+                            }`}
+                          aria-label={`切换到图片 ${index + 1}`}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -250,7 +253,7 @@ export default function HomeClient() {
         </section>
 
         {/* Stats Section - 改进响应式设计 */}
-        <section id="site-stats" className="py-8 sm:py-12 px-48 sm:px-48 bg-slate-700/80 backdrop-blur-xl relative">
+        <section id="site-stats" className="py-8 sm:py-12 px-5 sm:px-8 lg:px-40 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <SiteStats />
@@ -264,7 +267,7 @@ export default function HomeClient() {
         />
 
         {/* Community Showcase Section - 改进响应式设计 */}
-        <section id="community-showcase" className="py-14 sm:py-20 px-48 sm:px-7 bg-slate-800/90 backdrop-blur-xl relative">
+        <section id="community-showcase" className="py-14 sm:py-20 px-5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 bg-slate-800/90 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-15">
@@ -324,13 +327,13 @@ export default function HomeClient() {
         </section>
 
         {/* FAQ Section - 改进响应式设计 */}
-        <section id="faq-section" className="py-14 sm:py-24 px-48 sm:px-7 bg-slate-700/80 backdrop-blur-xl relative">
+        <section id="faq-section" className="py-14 sm:py-24 px-5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 bg-slate-700/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-5 items-center gap-8 lg:gap-0">
               {/* 左侧图片 - 改进移动端显示 */}
               <div className="relative lg:col-span-2">
-                <div className="aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500" style={{maxWidth:'90%',maxHeight:'90%'}}>
+                <div className="aspect-[4/5] rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl sm:shadow-2xl bg-slate-600/50 border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-500 max-w-[400px] lg:max-w-none mx-auto lg:mx-0">
                   <Image
                     src="/images/demo-12.png"
                     alt="FAQ illustration"
@@ -370,7 +373,7 @@ export default function HomeClient() {
         </section>
 
         {/* Footer Section - 改进响应式设计 */}
-        <section className="py-12 sm:py-18 px-48 sm:px-7 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
+        <section className="py-12 sm:py-18 px-5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 bg-gradient-to-br from-slate-800/80 via-slate-700/80 to-slate-800/80 backdrop-blur-xl relative">
           <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
           <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="text-center">
