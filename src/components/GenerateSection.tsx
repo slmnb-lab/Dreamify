@@ -17,7 +17,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const [width, setWidth] = useState(1024);
   const [height, setHeight] = useState(1024);
   const [steps, setSteps] = useState(30);
-  const [batch_size, setBatchSize] = useState(4);
+  const [batch_size, setBatchSize] = useState(1);
   const [model, setModel] = useState('HiDream-full-fp8');
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [denoising_strength, setDenoisingStrength] = useState(0.7);
@@ -184,7 +184,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
         </div>
 
         {/* Form and Preview Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
           {/* 左侧表单区域 */}
           <div className="order-1 lg:order-1 lg:col-span-2 animate-fadeInUp">
             <GenerateForm

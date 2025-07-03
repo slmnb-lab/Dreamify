@@ -50,7 +50,8 @@
           "descriptions": {
             "HiDream-full-fp16": "HiDream-I1是目前AI绘画领域最为出色且先进的模型之一，由北京智象未来科技有限公司开发。",
             "HiDream-full-fp8": "HiDream-I1是目前AI绘画领域最为出色且先进的模型之一，由北京智象未来科技有限公司开发。",
-            "Flux-Dev": "FLUX.1-Dev模型是由Black Forest Labs开发的开源AI绘画模型，具备强大的视觉创作能力和优秀的文本理解表现。"
+            "Flux-Dev": "FLUX.1-Dev模型是由Black Forest Labs开发的开源AI绘画模型，具备强大的视觉创作能力和优秀的文本理解表现。",
+            "Flux-Kontext": "Flux Kontext[Dev]是由Black Forest Labs开发的120亿参数图像编辑模型，支持文本和图像输入进行精确编辑。"
           }
         },
         "steps": {

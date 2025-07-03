@@ -50,7 +50,8 @@
           "descriptions": {
             "HiDream-full-fp16": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
             "HiDream-full-fp8": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
-            "Flux-Dev": "FLUX.1-Dev is an open-source AI art model developed by Black Forest Labs, featuring powerful visual creation capabilities and excellent text understanding performance."
+            "Flux-Dev": "FLUX.1-Dev is an open-source AI art model developed by Black Forest Labs, featuring powerful visual creation capabilities and excellent text understanding performance.",
+            "Flux-Kontext": "Flux Kontext[Dev] is a 12B parameter image editing model developed by Black Forest Labs, supporting precise editing with both text and image input."
           }
         },
         "steps": {

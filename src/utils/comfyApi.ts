@@ -1,15 +1,13 @@
-import { hidreamFp8T2IWorkflow, hidreamFp16T2IWorkflow, fluxDevT2IWorkflow } from "./t2iworkflow";
-import { fluxI2IWorkflow, hidreamFp16I2IWorkflow, hidreamFp8I2IWorkflow } from "./i2iworkflow";
+import { hidreamFp8T2IWorkflow,  fluxDevT2IWorkflow } from "./t2iworkflow";
+import { fluxI2IWorkflow, fluxKontextI2IWorkflow } from "./i2iworkflow";
 const T2IModelMap = {
   "HiDream-full-fp8": hidreamFp8T2IWorkflow,
-  "HiDream-full-fp16": hidreamFp16T2IWorkflow,
   "Flux-Dev": fluxDevT2IWorkflow,
 }
 
 const I2IModelMap = {
   "Flux-Dev": fluxI2IWorkflow,
-  "HiDream-full-fp8": hidreamFp8I2IWorkflow,
-  "HiDream-full-fp16": hidreamFp16I2IWorkflow,
+  "Flux-Kontext": fluxKontextI2IWorkflow
 }
 
 interface ComfyUIResponse {
@@ -46,26 +44,18 @@ export async function generateImage(params: GenerateParams): Promise<string> {
   if(params.model === 'HiDream-full-fp8') {
     // Randomly choose between IDC and DockerWeb URLs
     baseUrl = urls[Math.floor(Math.random() * urls.length)];
-    console.log("baseUrl", baseUrl);
-    console.log("workflow", workflow);
-    if(params.image){
-      setHiDreamI2IorkflowParams(workflow, params);
-    }else{
-      setHiDreamWT2IorkflowParams(workflow, params);
-    }
-  } else if(params.model === 'HiDream-full-fp16') {
-    baseUrl = process.env.HiDream_Fp16_IDC_API_URL || ''
-    if(params.image){
-      setHiDreamI2IorkflowParams(workflow, params);
-    }else{
-      setHiDreamWT2IorkflowParams(workflow, params);
-    }
+    setHiDreamWT2IorkflowParams(workflow, params);
   }else if(params.model === 'Flux-Dev') {
     baseUrl = process.env.Flux_Dev_DOCKERWEB_API_URL || ''
     if(params.image){
       setFluxDevI2IorkflowParams(workflow, params);
     }else{
       setFluxDevWT2IorkflowParams(workflow, params);
+    }
+  }else if(params.model === 'Flux-Kontext') {
+    baseUrl = process.env.Kontext_fp8_URL || ''
+    if(params.image){
+      setFluxKontxtI2IorkflowParams(workflow, params);
     }
   }
 
@@ -89,7 +79,6 @@ export async function generateImage(params: GenerateParams): Promise<string> {
       throw new Error(`Invalid JSON response: ${text}`);
     }
 
-    console.log("response.type", response.type);
     return base64Image;
   } catch (error) {
     console.error('Error generating image:', error);
@@ -135,17 +124,27 @@ function setFluxDevI2IorkflowParams(workflow: any, params: GenerateParams) {
   workflow["43"].inputs.text = params.prompt;
 }
 
-function setHiDreamI2IorkflowParams(workflow: any, params: GenerateParams) {
-  // 更新工作流参数
-  workflow["74"].inputs.image = params.image;
-  workflow["76"].inputs.width = params.width;
-  workflow["76"].inputs.height = params.height;
-  workflow["16"].inputs.text = params.prompt;
-  workflow["3"].inputs.steps = params.steps;
+// function setHiDreamI2IorkflowParams(workflow: any, params: GenerateParams) {
+//   // 更新工作流参数
+//   workflow["74"].inputs.image = params.image;
+//   workflow["76"].inputs.width = params.width;
+//   workflow["76"].inputs.height = params.height;
+//   workflow["16"].inputs.text = params.prompt;
+//   workflow["3"].inputs.steps = params.steps;
+//   if (params.seed) {
+//     workflow["3"].inputs.seed = params.seed;
+//   }
+//   if (params.denoise) {
+//     workflow["3"].inputs.denoise = params.denoise;
+//   }
+// }
+
+function setFluxKontxtI2IorkflowParams(workflow: any, params: GenerateParams) {
+  workflow["142"].inputs.image = params.image;
+  workflow["6"].inputs.text = params.prompt;
+  workflow["31"].inputs.steps = params.steps;
   if (params.seed) {
-    workflow["3"].inputs.seed = params.seed;
+    workflow["31"].inputs.seed = params.seed;
   }
-  if (params.denoise) {
-    workflow["3"].inputs.denoise = params.denoise;
-  }
+  //denoise = 1
 }

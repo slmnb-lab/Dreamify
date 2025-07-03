@@ -46,9 +46,26 @@ export default function GeneratePreview({
           </button>
         )}
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-8 flex-grow">
+      <div
+        className={
+          batch_size === 1
+            ? 'grid grid-cols-1 grid-rows-1 flex-grow'
+            : batch_size === 2
+            ? 'grid grid-cols-1 grid-rows-2 gap-4 sm:gap-8 flex-grow'
+            : 'grid grid-cols-2 grid-rows-2 gap-4 sm:gap-8 flex-grow'
+        }
+      >
         {Array.from({ length: batch_size }).map((_, index) => (
-          <div key={index} className="aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
+          <div
+            key={index}
+            className={
+              batch_size === 1
+                ? 'aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1'
+                : batch_size === 2
+                ? 'aspect-[1/0.5] relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1'
+                : 'aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300'
+            }
+          >
             {generatedImages[index] && (
               <img
                 src={generatedImages[index]}

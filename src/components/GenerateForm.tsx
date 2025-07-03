@@ -68,7 +68,8 @@ export default function GenerateForm({
       const modelTimeFactors = {
         'HiDream-full-fp16': 2.0,    // 两倍于 fp8
         'HiDream-full-fp8': 1.0,     // 基准
-        'Flux-Dev': 0.67            // 40s/60s
+        'Flux-Dev': 0.67,            // 40s/60s
+        'Flux-Kontext': 0.67         // 40s/60s
       };
       
       const currentPixels = width * height;
@@ -260,21 +261,39 @@ export default function GenerateForm({
 
   const models = [
     {
-      id: "HiDream-full-fp16",
-      name: "HiDream-full-fp16",
-      image: "/models/HiDream-full.jpg"
-    },
-    {
       id: "HiDream-full-fp8",
       name: "HiDream-full-fp8",
-      image: "/models/HiDream-full.jpg"
+      image: "/models/HiDream-full.jpg",
+      use_i2i: false,
+      use_t2i: true
+    },{
+      id: "Flux-Kontext",
+      name: "Flux-Kontext",
+      image: "/models/Flux-Kontext.png",
+      use_i2i: true,
+      use_t2i: false
     },
     {
       id: "Flux-Dev",
       name: "Flux-Dev",
-      image: "/models/Flux-Dev.jpg"
+      image: "/models/Flux-Dev.jpg",
+      use_i2i: true,
+      use_t2i: true
     }
   ]
+
+  // 根据是否有参考图片过滤模型
+  const filteredModels = previewImage
+    ? models.filter(m => m.use_i2i)
+    : models.filter(m => m.use_t2i)
+
+  // 如果当前选中的模型不在可选模型中，自动切换到第一个可用模型
+  useEffect(() => {
+    if (filteredModels.length > 0 && !filteredModels.some(m => m.id === model)) {
+      setModel(filteredModels[0].id)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [previewImage])
 
   return (
     <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">
@@ -459,7 +478,7 @@ export default function GenerateForm({
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-6 rounded overflow-hidden flex-shrink-0">
                           <img 
-                            src={models.find(m => m.id === model)?.image} 
+                            src={filteredModels.find(m => m.id === model)?.image} 
                             alt={model} 
                             className="w-full h-full object-cover"
                           />
@@ -478,7 +497,7 @@ export default function GenerateForm({
                     
                     {isModelDropdownOpen && (
                       <div className="absolute z-10 w-full mt-2 bg-slate-800/95 backdrop-blur-xl rounded-xl border border-cyan-400/30 shadow-xl overflow-hidden">
-                        {models.map((modelOption) => (
+                        {filteredModels.map((modelOption) => (
                           <button
                             key={modelOption.id}
                             type="button"
