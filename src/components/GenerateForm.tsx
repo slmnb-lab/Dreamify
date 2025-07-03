@@ -24,6 +24,13 @@ interface GenerateFormProps {
   setUploadedImage: (value: string | null) => void;
   denoising_strength: number;
   setDenoisingStrength: (value: number) => void;
+  stepsError?: string | null;
+  batchSizeError?: string | null;
+  sizeError?: string | null;
+  stepsRef?: React.RefObject<HTMLInputElement | null>;
+  batchSizeRef?: React.RefObject<HTMLInputElement | null>;
+  widthRef?: React.RefObject<HTMLInputElement | null>;
+  heightRef?: React.RefObject<HTMLInputElement | null>;
 }
 
 export default function GenerateForm({
@@ -44,7 +51,14 @@ export default function GenerateForm({
   isGenerating,
   setUploadedImage,
   denoising_strength,
-  setDenoisingStrength
+  setDenoisingStrength,
+  stepsError,
+  batchSizeError,
+  sizeError,
+  stepsRef,
+  batchSizeRef,
+  widthRef,
+  heightRef
 }: GenerateFormProps) {
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
@@ -392,6 +406,7 @@ export default function GenerateForm({
                         max="1920"
                         step="8"
                         disabled={status === 'loading'}
+                        ref={widthRef}
                       />
                       <div className="flex items-center border-l border-cyan-400/30">
                         <button
@@ -417,6 +432,9 @@ export default function GenerateForm({
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-cyan-200/80">{t('form.width.hint')}</p>
+                    {sizeError && (
+                      <p className="mt-1 text-sm text-red-400">{sizeError}</p>
+                    )}
                   </div>
 
                   <div>
@@ -435,6 +453,7 @@ export default function GenerateForm({
                         max="1920"
                         step="8"
                         disabled={status === 'loading'}
+                        ref={heightRef}
                       />
                       <div className="flex items-center border-l border-cyan-400/30">
                         <button
@@ -460,6 +479,9 @@ export default function GenerateForm({
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-cyan-200/80">{t('form.height.hint')}</p>
+                    {sizeError && (
+                      <p className="mt-1 text-sm text-red-400">{sizeError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -543,16 +565,17 @@ export default function GenerateForm({
                         value={steps}
                         onChange={(e) => setSteps(Number(e.target.value))}
                         className="w-full bg-transparent text-center text-cyan-50 border-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-                        min="25"
+                        min="5"
                         max="45"
                         disabled={status === 'loading'}
+                        ref={stepsRef}
                       />
                       <div className="flex items-center border-l border-cyan-400/30">
                         <button
                           type="button"
                           onClick={() => setSteps(Math.max(15, steps - 1))}
                           className="px-3 text-cyan-200 hover:text-cyan-50 disabled:opacity-50 h-full flex items-center justify-center transition-colors"
-                          disabled={status === 'loading' || steps <= 15}
+                          disabled={status === 'loading' || steps <= 5}
                         >
                           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -571,6 +594,9 @@ export default function GenerateForm({
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-cyan-200/80">{t('form.steps.hint')}</p>
+                    {stepsError && (
+                      <p className="mt-1 text-sm text-red-400">{stepsError}</p>
+                    )}
                   </div>
 
                   <div>
@@ -588,6 +614,7 @@ export default function GenerateForm({
                         min="1"
                         max="4"
                         disabled={status === 'loading'}
+                        ref={batchSizeRef}
                       />
                       <div className="flex items-center border-l border-cyan-400/30">
                         <button
@@ -613,6 +640,9 @@ export default function GenerateForm({
                       </div>
                     </div>
                     <p className="mt-2 text-sm text-cyan-200/80">{t('form.batch_size.hint')}</p>
+                    {batchSizeError && (
+                      <p className="mt-1 text-sm text-red-400">{batchSizeError}</p>
+                    )}
                   </div>
                 </div>
 
@@ -678,13 +708,7 @@ export default function GenerateForm({
         </div>
 
         <div className="flex justify-between items-center mt-auto">
-          <button
-            type="submit"
-            className="px-8 py-3 text-lg rounded-xl bg-gradient-to-r from-cyan-400 to-blue-400 text-white hover:from-cyan-300 hover:to-blue-300 transition-all duration-300 shadow-lg shadow-cyan-400/20 hover:shadow-xl hover:shadow-cyan-400/30 hover:-translate-y-0.5"
-            disabled={status === 'loading' || isGenerating}
-          >
-            {isGenerating ? t('form.generateButton.loading') : t('form.generateButton.default')}
-          </button>
+          {/* Generate button removed for external placement */}
         </div>
 
         {isGenerating && (

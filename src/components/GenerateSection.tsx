@@ -33,6 +33,13 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const promptRef = useRef<HTMLTextAreaElement>(null);
   const generateSectionRef = useRef<HTMLDivElement>(null);
+  const [stepsError, setStepsError] = useState<string | null>(null);
+  const [batchSizeError, setBatchSizeError] = useState<string | null>(null);
+  const [sizeError, setSizeError] = useState<string | null>(null);
+  const stepsRef = useRef<HTMLInputElement>(null);
+  const batchSizeRef = useRef<HTMLInputElement>(null);
+  const widthRef = useRef<HTMLInputElement>(null);
+  const heightRef = useRef<HTMLInputElement>(null);
 
   // 处理画同款功能
   const handleGenerateSame = (promptText: string) => {
@@ -48,6 +55,26 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   }));
 
   const handleGenerate = async () => {
+    let hasError = false;
+    setStepsError(null);
+    setBatchSizeError(null);
+    setSizeError(null);
+    if (steps < 5 || steps > 45) {
+      setStepsError('步数必须在5到45之间');
+      stepsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      hasError = true;
+    }
+    if (batch_size < 1 || batch_size > 4) {
+      setBatchSizeError('生成数量必须在1到4之间');
+      batchSizeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      hasError = true;
+    }
+    if (width < 64 || width > 1920 || height < 64 || height > 1920) {
+      setSizeError('宽高必须在64到1920之间');
+      widthRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      hasError = true;
+    }
+    if (hasError) return;
     setIsGenerating(true)
     setGeneratedImages([])
     setImageStatuses(Array(batch_size).fill({ status: 'pending', message: t('preview.generating') }))
@@ -161,22 +188,32 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
                 <img src="/form/prompt.svg" alt="Prompt" className="w-4 h-4 mr-1.5 text-cyan-50 [&>path]:fill-current" />
                 {t('form.prompt.label')}
               </label>
-              <div className="flex gap-3">
-                <textarea
-                  id="prompt"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  className="flex-grow h-28 px-4 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                  placeholder={t('form.prompt.placeholder')}
-                  ref={promptRef}
-                />
+              <div className="flex flex-col gap-4">
+                <div className="flex gap-3">
+                  <textarea
+                    id="prompt"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    className="flex-grow h-28 px-4 py-3 bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-2xl focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 resize-none shadow-inner transition-all duration-300 text-cyan-50 placeholder-cyan-700 text-sm [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    placeholder={t('form.prompt.placeholder')}
+                    ref={promptRef}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleRandomPrompt}
+                    className="px-5 py-2.5 h-28 text-base rounded-xl border border-cyan-400/50 text-cyan-200 hover:bg-cyan-400/10 transition-all duration-300 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20 whitespace-nowrap"
+                    disabled={isGenerating}
+                  >
+                    {t('form.randomPrompt')}
+                  </button>
+                </div>
                 <button
                   type="button"
-                  onClick={handleRandomPrompt}
-                  className="px-5 py-2.5 h-28 text-base rounded-xl border border-cyan-400/50 text-cyan-200 hover:bg-cyan-400/10 transition-all duration-300 shadow-lg shadow-cyan-400/10 hover:shadow-cyan-400/20 whitespace-nowrap"
+                  onClick={handleGenerate}
+                  className="px-8 py-3 text-lg rounded-xl bg-gradient-to-r from-cyan-400 to-blue-400 text-white hover:from-cyan-300 hover:to-blue-300 transition-all duration-300 shadow-lg shadow-cyan-400/20 hover:shadow-xl hover:shadow-cyan-400/30 hover:-translate-y-0.5"
                   disabled={isGenerating}
                 >
-                  {t('form.randomPrompt')}
+                  {isGenerating ? t('form.generateButton.loading') : t('form.generateButton.default')}
                 </button>
               </div>
             </div>
@@ -210,6 +247,13 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               setUploadedImage={setUploadedImage}
               denoising_strength={denoising_strength}
               setDenoisingStrength={setDenoisingStrength}
+              stepsError={stepsError}
+              batchSizeError={batchSizeError}
+              sizeError={sizeError}
+              stepsRef={stepsRef}
+              batchSizeRef={batchSizeRef}
+              widthRef={widthRef}
+              heightRef={heightRef}
             />
           </div>
 
