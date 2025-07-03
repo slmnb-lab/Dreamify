@@ -56,7 +56,7 @@
         },
         "steps": {
           "label": "Steps",
-          "hint": "Higher values mean more detail (25-65)"
+          "hint": "Increasing the value within a certain range can optimize details (5-45)"
         },
         "batch_size": {
           "label": "Batch Size",
