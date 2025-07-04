@@ -398,204 +398,204 @@ const hidreamFp8I2IWorkflow =
 
 export const fluxKontextI2IWorkflow = {
     "6": {
-        "inputs": {
-            "text": "Convert girl's hair to white.",
-            "clip": [
-                "38",
-                0
-            ]
-        },
-        "class_type": "CLIPTextEncode",
-        "_meta": {
-            "title": "CLIP Text Encode (Positive Prompt)"
-        }
+      "inputs": {
+        "text": "convert the image to realistic style",
+        "clip": [
+          "38",
+          0
+        ]
+      },
+      "class_type": "CLIPTextEncode",
+      "_meta": {
+        "title": "CLIP Text Encode (Positive Prompt)"
+      }
     },
     "8": {
-        "inputs": {
-            "samples": [
-                "31",
-                0
-            ],
-            "vae": [
-                "39",
-                0
-            ]
-        },
-        "class_type": "VAEDecode",
-        "_meta": {
-            "title": "VAE解码"
-        }
+      "inputs": {
+        "samples": [
+          "31",
+          0
+        ],
+        "vae": [
+          "39",
+          0
+        ]
+      },
+      "class_type": "VAEDecode",
+      "_meta": {
+        "title": "VAE解码"
+      }
     },
     "31": {
-        "inputs": {
-            "seed": 324383943253870,
-            "steps": 20,
-            "cfg": 1,
-            "sampler_name": "euler",
-            "scheduler": "simple",
-            "denoise": 1,
-            "model": [
-                "37",
-                0
-            ],
-            "positive": [
-                "35",
-                0
-            ],
-            "negative": [
-                "135",
-                0
-            ],
-            "latent_image": [
-                "124",
-                0
-            ]
-        },
-        "class_type": "KSampler",
-        "_meta": {
-            "title": "K采样器"
-        }
+      "inputs": {
+        "seed": 631182276828015,
+        "steps": 20,
+        "cfg": 1,
+        "sampler_name": "euler",
+        "scheduler": "simple",
+        "denoise": 1,
+        "model": [
+          "37",
+          0
+        ],
+        "positive": [
+          "35",
+          0
+        ],
+        "negative": [
+          "135",
+          0
+        ],
+        "latent_image": [
+          "124",
+          0
+        ]
+      },
+      "class_type": "KSampler",
+      "_meta": {
+        "title": "K采样器"
+      }
     },
     "35": {
-        "inputs": {
-            "guidance": 2.5,
-            "conditioning": [
-                "177",
-                0
-            ]
-        },
-        "class_type": "FluxGuidance",
-        "_meta": {
-            "title": "Flux引导"
-        }
+      "inputs": {
+        "guidance": 2.5,
+        "conditioning": [
+          "177",
+          0
+        ]
+      },
+      "class_type": "FluxGuidance",
+      "_meta": {
+        "title": "Flux引导"
+      }
     },
     "37": {
-        "inputs": {
-            "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
-            "weight_dtype": "default"
-        },
-        "class_type": "UNETLoader",
-        "_meta": {
-            "title": "UNet加载器"
-        }
+      "inputs": {
+        "unet_name": "flux1-dev-kontext_fp8_scaled.safetensors",
+        "weight_dtype": "default"
+      },
+      "class_type": "UNETLoader",
+      "_meta": {
+        "title": "UNet加载器"
+      }
     },
     "38": {
-        "inputs": {
-            "clip_name1": "clip_l.safetensors",
-            "clip_name2": "t5xxl_fp8_e4m3fn_scaled.safetensors",
-            "type": "flux",
-            "device": "default"
-        },
-        "class_type": "DualCLIPLoader",
-        "_meta": {
-            "title": "双CLIP加载器"
-        }
+      "inputs": {
+        "clip_name1": "clip_l.safetensors",
+        "clip_name2": "t5xxl_fp8_e4m3fn_scaled.safetensors",
+        "type": "flux",
+        "device": "default"
+      },
+      "class_type": "DualCLIPLoader",
+      "_meta": {
+        "title": "双CLIP加载器"
+      }
     },
     "39": {
-        "inputs": {
-            "vae_name": "ae.safetensors"
-        },
-        "class_type": "VAELoader",
-        "_meta": {
-            "title": "加载VAE"
-        }
-    },
-    "42": {
-        "inputs": {
-            "image": [
-                "146",
-                0
-            ]
-        },
-        "class_type": "FluxKontextImageScale",
-        "_meta": {
-            "title": "FluxKontextImageScale"
-        }
+      "inputs": {
+        "vae_name": "ae.safetensors"
+      },
+      "class_type": "VAELoader",
+      "_meta": {
+        "title": "加载VAE"
+      }
     },
     "124": {
-        "inputs": {
-            "pixels": [
-                "42",
-                0
-            ],
-            "vae": [
-                "39",
-                0
-            ]
-        },
-        "class_type": "VAEEncode",
-        "_meta": {
-            "title": "VAE编码"
-        }
+      "inputs": {
+        "pixels": [
+          "189",
+          0
+        ],
+        "vae": [
+          "39",
+          0
+        ]
+      },
+      "class_type": "VAEEncode",
+      "_meta": {
+        "title": "VAE编码"
+      }
     },
     "135": {
-        "inputs": {
-            "conditioning": [
-                "6",
-                0
-            ]
-        },
-        "class_type": "ConditioningZeroOut",
-        "_meta": {
-            "title": "条件零化"
-        }
+      "inputs": {
+        "conditioning": [
+          "6",
+          0
+        ]
+      },
+      "class_type": "ConditioningZeroOut",
+      "_meta": {
+        "title": "条件零化"
+      }
     },
     "136": {
-        "inputs": {
-            "filename_prefix": "ComfyUI",
-            "images": [
-                "8",
-                0
-            ]
-        },
-        "class_type": "SaveImage",
-        "_meta": {
-            "title": "保存图像"
-        }
+      "inputs": {
+        "filename_prefix": "ComfyUI",
+        "images": [
+          "8",
+          0
+        ]
+      },
+      "class_type": "SaveImage",
+      "_meta": {
+        "title": "保存图像"
+      }
     },
     "142": {
-        "inputs": {
-            "image": "ComfyUI_00008_.png [output]",
-            "upload": "image"
-        },
-        "class_type": "LoadImage",
-        "_meta": {
-            "title": "加载图像"
-        }
+      "inputs": {
+        "image": "1_WH_1200x900px.jpg",
+        "upload": "image"
+      },
+      "class_type": "LoadImage",
+      "_meta": {
+        "title": "加载图像）"
+      }
     },
-    "146": {
-        "inputs": {
-            "direction": "right",
-            "match_image_size": true,
-            "spacing_width": 0,
-            "spacing_color": "white",
-            "image1": [
-                "142",
-                0
-            ]
-        },
-        "class_type": "ImageStitch",
-        "_meta": {
-            "title": "Image Stitch"
-        }
+    "173": {
+      "inputs": {
+        "images": [
+          "189",
+          0
+        ]
+      },
+      "class_type": "PreviewImage",
+      "_meta": {
+        "title": "预览图像"
+      }
     },
     "177": {
-        "inputs": {
-            "conditioning": [
-                "6",
-                0
-            ],
-            "latent": [
-                "124",
-                0
-            ]
-        },
-        "class_type": "ReferenceLatent",
-        "_meta": {
-            "title": "ReferenceLatent"
-        }
+      "inputs": {
+        "conditioning": [
+          "6",
+          0
+        ],
+        "latent": [
+          "124",
+          0
+        ]
+      },
+      "class_type": "ReferenceLatent",
+      "_meta": {
+        "title": "ReferenceLatent"
+      }
+    },
+    "189": {
+      "inputs": {
+        "target_width": 512,
+        "target_height": 512,
+        "padding_color": "white",
+        "interpolation": "bilinear",
+        "image": [
+          "142",
+          0
+        ]
+      },
+      "class_type": "ResizeAndPadImage",
+      "_meta": {
+        "title": "ResizeAndPadImage"
+      }
     }
-}
+  }
 
 export { hidreamFp8I2IWorkflow };
 

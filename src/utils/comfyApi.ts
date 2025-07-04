@@ -147,6 +147,8 @@ function setFluxKontxtI2IorkflowParams(workflow: any, params: GenerateParams) {
   workflow["142"].inputs.image = params.image;
   workflow["6"].inputs.text = params.prompt;
   workflow["31"].inputs.steps = params.steps;
+  workflow["189"].inputs.target_width = params.width;
+  workflow["189"].inputs.target_height = params.height;
   if (params.seed) {
     workflow["31"].inputs.seed = params.seed;
   }

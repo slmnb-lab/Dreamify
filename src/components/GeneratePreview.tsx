@@ -9,6 +9,8 @@ interface GeneratePreviewProps {
   batch_size: number;
   isGenerating: boolean;
   setZoomedImage: (image: string) => void;
+  onSetAsReference?: (image: string) => void;
+  onDownloadImage?: (image: string, index: number) => void;
 }
 
 export default function GeneratePreview({
@@ -16,9 +18,31 @@ export default function GeneratePreview({
   imageStatuses,
   batch_size,
   isGenerating,
-  setZoomedImage
+  setZoomedImage,
+  onSetAsReference,
+  onDownloadImage
 }: GeneratePreviewProps) {
   const t = useTranslations('home.generate')
+
+  const handleDownloadImage = (image: string, index: number) => {
+    if (onDownloadImage) {
+      onDownloadImage(image, index);
+    } else {
+      // 默认下载行为
+      const link = document.createElement('a');
+      link.href = image;
+      link.download = `generated-image-${index + 1}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
+
+  const handleSetAsReference = (image: string) => {
+    if (onSetAsReference) {
+      onSetAsReference(image);
+    }
+  };
 
   return (
     <div className="bg-slate-700/80 backdrop-blur-xl rounded-2xl sm:rounded-3xl shadow-xl sm:shadow-2xl p-4 sm:p-8 border border-cyan-400/30 h-full flex flex-col">
@@ -60,44 +84,91 @@ export default function GeneratePreview({
             key={index}
             className={
               batch_size === 1
-                ? 'aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1'
+                ? 'aspect-square relative rounded-2xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1 group'
                 : batch_size === 2
-                ? 'aspect-[1/0.5] relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1'
-                : 'aspect-square relative rounded-2xl overflow-hidden bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300'
+                ? 'aspect-[1/0.5] relative rounded-2xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 col-span-1 row-span-1 group'
+                : 'aspect-square relative rounded-2xl bg-slate-600/50 backdrop-blur-sm border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300 group'
             }
           >
-            {generatedImages[index] && (
-              <img
-                src={generatedImages[index]}
-                alt={`Generated ${index + 1}`}
-                className="w-full h-full object-contain cursor-zoom-in hover:opacity-90 transition-opacity"
-                onClick={() => setZoomedImage(generatedImages[index])}
-              />
-            )}
-            <div className={`absolute bottom-0 left-0 right-0 p-4 text-center text-sm backdrop-blur-md ${imageStatuses[index]?.status === 'error'
-                ? 'bg-red-500/20 text-red-300'
-                : imageStatuses[index]?.status === 'success'
-                  ? 'bg-green-500/20 text-green-300'
-                  : 'bg-blue-500/20 text-blue-300'
-              }`}>
-              <div className="flex items-center justify-center gap-2">
-                {imageStatuses[index]?.status === 'pending' && (
-                  <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
-                )}
-                <span className="font-medium [text-shadow:_0_1px_2px_rgb(0_0_0_/_40%)]">
-                  {imageStatuses[index]?.message}
-                </span>
+            <div className="absolute inset-0 rounded-2xl overflow-hidden">
+              {generatedImages[index] && (
+                <img
+                  src={generatedImages[index]}
+                  alt={`Generated ${index + 1}`}
+                  className="w-full h-full object-contain cursor-zoom-in hover:opacity-90 transition-opacity"
+                  onClick={() => setZoomedImage(generatedImages[index])}
+                />
+              )}
+              <div className={`absolute bottom-0 left-0 right-0 p-4 text-center text-sm backdrop-blur-md ${imageStatuses[index]?.status === 'error'
+                  ? 'bg-red-500/20 text-red-300'
+                  : imageStatuses[index]?.status === 'success'
+                    ? 'bg-green-500/20 text-green-300'
+                    : 'bg-blue-500/20 text-blue-300'
+                }`}>
+                <div className="flex items-center justify-center gap-2">
+                  {imageStatuses[index]?.status === 'pending' && (
+                    <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin"></div>
+                  )}
+                  <span className="font-medium [text-shadow:_0_1px_2px_rgb(0_0_0_/_40%)]">
+                    {imageStatuses[index]?.message}
+                  </span>
+                </div>
               </div>
+              {isGenerating && !imageStatuses[index]?.status && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
+                  <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-400 border-t-transparent"></div>
+                </div>
+              )}
+              {!isGenerating && !imageStatuses[index]?.status && !generatedImages[index] && (
+                <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
+                  <div className="text-center">
+                    <div className="text-cyan-300/50">{t('preview.placeholder')}</div>
+                  </div>
+                </div>
+              )}
             </div>
-            {isGenerating && !imageStatuses[index]?.status && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
-                <div className="animate-spin rounded-full h-16 w-16 border-4 border-cyan-400 border-t-transparent"></div>
-              </div>
-            )}
-            {!isGenerating && !imageStatuses[index]?.status && !generatedImages[index] && (
-              <div className="absolute inset-0 flex items-center justify-center bg-slate-700/50 backdrop-blur-sm">
-                <div className="text-center">
-                  <div className="text-cyan-300/50">{t('preview.placeholder')}</div>
+            
+            {/* Hover Menu - 在 overflow-hidden 容器外部 */}
+            {generatedImages[index] && (
+              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
+                <div className="bg-slate-800/90 backdrop-blur-md rounded-xl border border-cyan-400/30 shadow-xl p-3 flex gap-2">
+                  {/* Set as Reference Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleSetAsReference(generatedImages[index]);
+                    }}
+                    className="relative p-2.5 bg-slate-700/80 hover:bg-slate-600/80 rounded-lg transition-colors duration-200 group/btn"
+                    title="设置为参考图片"
+                  >
+                    <svg className="w-4 h-4 text-cyan-300 group-hover/btn:text-cyan-100 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900/95 text-cyan-100 text-xs rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-20">
+                      设置为参考图片
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900/95"></div>
+                    </div>
+                  </button>
+                  
+                  {/* Download Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleDownloadImage(generatedImages[index], index);
+                    }}
+                    className="relative p-2.5 bg-slate-700/80 hover:bg-slate-600/80 rounded-lg transition-colors duration-200 group/btn"
+                    title="下载图片"
+                  >
+                    <svg className="w-4 h-4 text-cyan-300 group-hover/btn:text-cyan-100 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    {/* Tooltip */}
+                    <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-slate-900/95 text-cyan-100 text-xs rounded-lg opacity-0 group-hover/btn:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-20">
+                      下载图片
+                      <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-slate-900/95"></div>
+                    </div>
+                  </button>
                 </div>
               </div>
             )}

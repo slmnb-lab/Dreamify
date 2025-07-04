@@ -31,6 +31,7 @@ interface GenerateFormProps {
   batchSizeRef?: React.RefObject<HTMLInputElement | null>;
   widthRef?: React.RefObject<HTMLInputElement | null>;
   heightRef?: React.RefObject<HTMLInputElement | null>;
+  generatedImageToSetAsReference?: string | null;
 }
 
 export default function GenerateForm({
@@ -58,7 +59,8 @@ export default function GenerateForm({
   stepsRef,
   batchSizeRef,
   widthRef,
-  heightRef
+  heightRef,
+  generatedImageToSetAsReference
 }: GenerateFormProps) {
   const t = useTranslations('home.generate')
   const [progress, setProgress] = useState(0)
@@ -189,6 +191,7 @@ export default function GenerateForm({
           img.onload = () => {
             // 设置预览图片（使用带前缀的 base64 用于预览）
             setPreviewImage(event.target?.result as string)
+            console.log('GenerateForm: Successfully set previewImage')
             
             // 计算合适的尺寸（保持8的倍数）
             const newWidth = Math.round(img.width / 8) * 8
@@ -267,6 +270,8 @@ export default function GenerateForm({
           setWidth(finalWidth)
           setHeight(finalHeight)
           setUploadedImage(base64String)
+          console.log('GenerateForm: Successfully set uploadedImage to new base64 string')
+          console.log('GenerateForm: New image dimensions:', finalWidth, 'x', finalHeight)
         }
         img.src = event.target.result as string
       }
@@ -284,7 +289,7 @@ export default function GenerateForm({
     },{
       id: "Flux-Kontext",
       name: "Flux-Kontext",
-      image: "/models/Flux-Kontext.png",
+      image: "/models/Flux-Kontext.jpg",
       use_i2i: true,
       use_t2i: false
     },
@@ -316,6 +321,73 @@ export default function GenerateForm({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewImage])
+
+  // 处理从 URL 设置参考图片
+  useEffect(() => {
+    if (generatedImageToSetAsReference) {
+      const setImageFromUrl = async () => {
+        try {
+          let blob;
+          
+          // 检查是否是 data URL
+          if (generatedImageToSetAsReference.startsWith('data:')) {
+            // 直接使用 data URL
+            const response = await fetch(generatedImageToSetAsReference);
+            blob = await response.blob();
+          } else {
+            // 普通 URL
+            const response = await fetch(generatedImageToSetAsReference);
+            blob = await response.blob();
+          }
+          
+          return new Promise<void>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+              if (event.target?.result) {
+                const base64String = event.target.result.toString().split(',')[1];
+                
+                // 创建图片对象以获取尺寸
+                const img = new window.Image();
+                img.onload = () => {
+                  // 设置预览图片（使用带前缀的 base64 用于预览）
+                  setPreviewImage(event.target?.result as string);
+                  
+                  // 计算合适的尺寸（保持8的倍数）
+                  const newWidth = Math.round(img.width / 8) * 8;
+                  const newHeight = Math.round(img.height / 8) * 8;
+                  
+                  // 确保尺寸在允许范围内
+                  const finalWidth = Math.min(Math.max(newWidth, 64), 1920);
+                  const finalHeight = Math.min(Math.max(newHeight, 64), 1920);
+                  
+                  // 更新宽高状态
+                  setWidth(finalWidth);
+                  setHeight(finalHeight);
+
+                  // 更新父组件中的图片数据（使用无前缀的 base64）
+                  setUploadedImage(base64String);
+                  
+                  // 添加小延迟确保状态更新完成
+                  setTimeout(() => {
+                    resolve();
+                  }, 100);
+                };
+                img.src = event.target.result as string;
+              } else {
+                reject(new Error('Failed to read image'));
+              }
+            };
+            reader.onerror = () => reject(new Error('Failed to read image'));
+            reader.readAsDataURL(blob);
+          });
+        } catch (error) {
+          console.error('Error setting image from URL:', error);
+        }
+      };
+
+      setImageFromUrl();
+    }
+  }, [generatedImageToSetAsReference, setWidth, setHeight, setUploadedImage]);
 
   return (
     <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">

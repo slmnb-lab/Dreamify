@@ -1,4 +1,4 @@
-import { useState, useRef, forwardRef, useImperativeHandle } from 'react'
+import { useState, useRef, forwardRef, useImperativeHandle, useEffect } from 'react'
 import { useTranslations } from 'next-intl'
 import GenerateForm from './GenerateForm'
 import GeneratePreview from './GeneratePreview'
@@ -40,6 +40,9 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const batchSizeRef = useRef<HTMLInputElement>(null);
   const widthRef = useRef<HTMLInputElement>(null);
   const heightRef = useRef<HTMLInputElement>(null);
+  
+  // 要设置为参考图片的生成图片 URL
+  const [generatedImageToSetAsReference, setGeneratedImageToSetAsReference] = useState<string | null>(null);
 
   // 处理画同款功能
   const handleGenerateSame = (promptText: string) => {
@@ -53,6 +56,22 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   useImperativeHandle(ref, () => ({
     handleGenerateSame
   }));
+
+  // 处理设置生成的图片为参考图片
+  const handleSetGeneratedImageAsReference = async (imageUrl: string) => {
+    setGeneratedImageToSetAsReference(imageUrl);
+  };
+
+  // 清除 generatedImageToSetAsReference 状态，避免重复设置
+  useEffect(() => {
+    if (generatedImageToSetAsReference) {
+      // 延迟清除，确保 GenerateForm 组件有时间处理
+      const timer = setTimeout(() => {
+        setGeneratedImageToSetAsReference(null);
+      }, 100);
+      return () => clearTimeout(timer);
+    }
+  }, [generatedImageToSetAsReference]);
 
   const handleGenerate = async () => {
     let hasError = false;
@@ -75,6 +94,10 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
       hasError = true;
     }
     if (hasError) return;
+    
+    // 记录生成前的参考图片状态
+    const hadReferenceImage = !!uploadedImage;
+    
     setIsGenerating(true)
     setGeneratedImages([])
     setImageStatuses(Array(batch_size).fill({ status: 'pending', message: t('preview.generating') }))
@@ -126,6 +149,13 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
                 });
                 return newStatuses;
               });
+              
+              // 如果用户之前上传了参考图片（说明用户希望使用图生图），
+              // 并且这是第一张生成的图片，则自动设置为新的参考图片
+              if (hadReferenceImage && index === 0) {
+                handleSetGeneratedImageAsReference(data.imageUrl);
+              }
+              
               resolve();
             };
             img.src = data.imageUrl;
@@ -254,6 +284,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               batchSizeRef={batchSizeRef}
               widthRef={widthRef}
               heightRef={heightRef}
+              generatedImageToSetAsReference={generatedImageToSetAsReference}
             />
           </div>
 
@@ -265,6 +296,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               batch_size={batch_size}
               isGenerating={isGenerating}
               setZoomedImage={setZoomedImage}
+              onSetAsReference={handleSetGeneratedImageAsReference}
             />
           </div>
         </div>
