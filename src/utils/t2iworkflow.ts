@@ -334,6 +334,148 @@ const fluxWorkflowTemplate = {
   }
 }
 
+const stableDiffusion3WorkflowTemplate = {
+  "3": {
+    "inputs": {
+      "seed": 996048915053053,
+      "steps": 30,
+      "cfg": 5.45,
+      "sampler_name": "euler",
+      "scheduler": "sgm_uniform",
+      "denoise": 1,
+      "model": [
+        "4",
+        0
+      ],
+      "positive": [
+        "16",
+        0
+      ],
+      "negative": [
+        "40",
+        0
+      ],
+      "latent_image": [
+        "53",
+        0
+      ]
+    },
+    "class_type": "KSampler",
+    "_meta": {
+      "title": "K采样器"
+    }
+  },
+  "4": {
+    "inputs": {
+      "ckpt_name": "sd3.5_large.safetensors"
+    },
+    "class_type": "CheckpointLoaderSimple",
+    "_meta": {
+      "title": "Checkpoint加载器（简易）"
+    }
+  },
+  "8": {
+    "inputs": {
+      "samples": [
+        "3",
+        0
+      ],
+      "vae": [
+        "4",
+        2
+      ]
+    },
+    "class_type": "VAEDecode",
+    "_meta": {
+      "title": "VAE解码"
+    }
+  },
+  "9": {
+    "inputs": {
+      "filename_prefix": "ComfyUI",
+      "images": [
+        "8",
+        0
+      ]
+    },
+    "class_type": "SaveImage",
+    "_meta": {
+      "title": "保存图像"
+    }
+  },
+  "16": {
+    "inputs": {
+      "text": "A dark-mode-friendly logo with glowing neon blue outlines forming a cloud and binary code particles, evoking 'always online' reliability.",
+      "clip": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Positive Prompt"
+    }
+  },
+  "40": {
+    "inputs": {
+      "text": "multi finger",
+      "clip": [
+        "43",
+        0
+      ]
+    },
+    "class_type": "CLIPTextEncode",
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+  "41": {
+    "inputs": {
+      "clip_name": "t5xxl_fp8_e4m3fn.safetensors",
+      "type": "sd3",
+      "device": "default"
+    },
+    "class_type": "CLIPLoader",
+    "_meta": {
+      "title": "加载CLIP"
+    }
+  },
+  "42": {
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "clip_g.safetensors",
+      "type": "sd3",
+      "device": "default"
+    },
+    "class_type": "DualCLIPLoader",
+    "_meta": {
+      "title": "双CLIP加载器"
+    }
+  },
+  "43": {
+    "inputs": {
+      "clip_name1": "clip_l.safetensors",
+      "clip_name2": "clip_g.safetensors",
+      "clip_name3": "t5xxl_fp8_e4m3fn.safetensors"
+    },
+    "class_type": "TripleCLIPLoader",
+    "_meta": {
+      "title": "三重CLIP加载器"
+    }
+  },
+  "53": {
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "EmptySD3LatentImage",
+    "_meta": {
+      "title": "空Latent图像（SD3）"
+    }
+  }
+}
+
 const model1 = JSON.parse(JSON.stringify(hidreamWorkflowTemplate));
 model1["69"].inputs.unet_name = "hidream_i1_full_fp8.safetensors";
 export const hidreamFp8T2IWorkflow = model1 as object;
@@ -342,5 +484,7 @@ const model2 = JSON.parse(JSON.stringify(hidreamWorkflowTemplate));
 model2["69"].inputs.unet_name = "hidream_i1_full_fp16.safetensors";
 export const hidreamFp16T2IWorkflow = model2 as object;
 
-const model3 = JSON.parse(JSON.stringify(fluxWorkflowTemplate));
+const model3 = JSON.parse(JSON.stringify(fluxWorkflowTemplate))
 export const fluxDevT2IWorkflow = model3 as object;
+
+export const stableDiffusion3T2IWorkflow = stableDiffusion3WorkflowTemplate

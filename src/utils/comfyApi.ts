@@ -1,8 +1,9 @@
-import { hidreamFp8T2IWorkflow,  fluxDevT2IWorkflow } from "./t2iworkflow";
+import { hidreamFp8T2IWorkflow,  fluxDevT2IWorkflow, stableDiffusion3T2IWorkflow } from "./t2iworkflow";
 import { fluxI2IWorkflow, fluxKontextI2IWorkflow } from "./i2iworkflow";
 const T2IModelMap = {
   "HiDream-full-fp8": hidreamFp8T2IWorkflow,
   "Flux-Dev": fluxDevT2IWorkflow,
+  "Stable-Diffusion-3.5": stableDiffusion3T2IWorkflow
 }
 
 const I2IModelMap = {
@@ -57,6 +58,9 @@ export async function generateImage(params: GenerateParams): Promise<string> {
     if(params.image){
       setFluxKontxtI2IorkflowParams(workflow, params);
     }
+  }else if(params.model === 'Stable-Diffusion-3.5') {
+    baseUrl = process.env.Stable_Diffusion_3_5_URL || ''
+    setStableDiffusion3T2IorkflowParams(workflow, params);
   }
 
   try {
@@ -147,4 +151,14 @@ function setFluxKontxtI2IorkflowParams(workflow: any, params: GenerateParams) {
     workflow["31"].inputs.seed = params.seed;
   }
   //denoise = 1
+}
+
+function setStableDiffusion3T2IorkflowParams(workflow: any, params: GenerateParams) {
+  workflow["53"].inputs.width = params.width;
+  workflow["53"].inputs.height = params.height;
+  workflow["16"].inputs.text = params.prompt;
+  workflow["3"].inputs.steps = params.steps;
+  if (params.seed) {
+    workflow["3"].inputs.seed = params.seed;
+  }
 }

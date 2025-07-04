@@ -51,7 +51,8 @@
             "HiDream-full-fp16": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",
             "HiDream-full-fp8": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",
             "Flux-Dev": "FLUX.1-Dev模型是由Black Forest Labs開發的開源AI繪畫模型，具備強大的視覺創作能力和優秀的文本理解表現。",
-            "Flux-Kontext": "Flux Kontext[Dev]是由Black Forest Labs開發的120億參數圖像編輯模型，支援文本和圖像輸入進行精確編輯。"
+            "Flux-Kontext": "Flux Kontext[Dev]是由Black Forest Labs開發的120億參數圖像編輯模型，支援文本和圖像輸入進行精確編輯。",
+            "Stable-Diffusion-35": "Stable Diffusion 3.5是Stability AI推出的升級版文生圖模型，採用改進的擴散架構，支援更高解析度，優化了提示詞理解與細節生成，可生成更逼真、連貫的圖像。"
           }
         },
         "steps": {
@@ -132,7 +133,7 @@
       "questions": [
         {
           "q": "什麼是Dreamify？",
-          "a": "Dreamify是一個完全免費、基於多種AI繪畫模型的線上文生圖（text to image）服務網站，請在此自由地發揮你的創意！"
+          "a": "Dreamify是一個完全免費、基於多種AI繪畫模型的線上文生圖（text to image）、圖生圖（image to image）服務網站，優秀的AI設計繪圖工具，支援現實、動漫、插畫、3D等多風格的作品，請在此自由地發揮你的創意！"
         },
         {
           "q": "Dreamify是完全免費的嗎？",

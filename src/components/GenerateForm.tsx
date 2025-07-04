@@ -83,7 +83,8 @@ export default function GenerateForm({
         'HiDream-full-fp16': 2.0,    // 两倍于 fp8
         'HiDream-full-fp8': 1.0,     // 基准
         'Flux-Dev': 0.67,            // 40s/60s
-        'Flux-Kontext': 0.67         // 40s/60s
+        'Flux-Kontext': 0.67,         // 40s/60s
+        'Stable-Diffusion-3.5': 0.67  // 40s/60s
       };
       
       const currentPixels = width * height;
@@ -292,6 +293,13 @@ export default function GenerateForm({
       name: "Flux-Dev",
       image: "/models/Flux-Dev.jpg",
       use_i2i: true,
+      use_t2i: true
+    },
+    {
+      id: "Stable-Diffusion-3.5",
+      name: "Stable-Diffusion-3.5",
+      image: "/models/StableDiffusion-3.5.jpg",
+      use_i2i: false,
       use_t2i: true
     }
   ]
@@ -541,7 +549,7 @@ export default function GenerateForm({
                             <div className="flex-1 min-w-0">
                               <div className="text-cyan-50 font-medium">{modelOption.name}</div>
                               <div className="text-sm text-cyan-200/80 mt-1 line-clamp-2">
-                                {t(`form.model.descriptions.${modelOption.id}`)}
+                                {t(`form.model.descriptions.${modelOption.id.replace(/\./g, '')}`)}
                               </div>
                             </div>
                           </button>
