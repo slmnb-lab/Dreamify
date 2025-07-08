@@ -47,6 +47,10 @@
         "model": {
           "label": "模型",
           "hint": "選擇要使用的AI模型",
+          "tags": {
+            "textToImage": "文生圖",
+            "imageToImage": "圖生圖"
+          },
           "descriptions": {
             "HiDream-full-fp16": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",
             "HiDream-full-fp8": "HiDream-I1是目前AI繪畫領域最為出色且先進的模型之一，由北京智象未來科技有限公司開發。",

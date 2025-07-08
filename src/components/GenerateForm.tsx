@@ -592,7 +592,21 @@ export default function GenerateForm({
                             className="w-full h-full object-cover"
                           />
                         </div>
-                        <span>{model}</span>
+                        <div className="flex flex-col">
+                          <span>{model}</span>
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {availableModels.find(m => m.id === model)?.use_t2i && (
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                                {t('form.model.tags.textToImage')}
+                              </span>
+                            )}
+                            {availableModels.find(m => m.id === model)?.use_i2i && (
+                              <span className="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-pink-300 border border-pink-400/30">
+                                {t('form.model.tags.imageToImage')}
+                              </span>
+                            )}
+                          </div>
+                        </div>
                       </div>
                       <svg
                         className={`w-4 h-4 text-cyan-200 transform transition-transform duration-300 ${isModelDropdownOpen ? 'rotate-180' : ''}`}
@@ -617,7 +631,7 @@ export default function GenerateForm({
                               }
                             }}
                             disabled={!modelOption.isAvailable}
-                            className={`w-full px-4 py-3 text-left transition-colors duration-200 flex items-start space-x-3 ${
+                            className={`w-full px-4 py-4 text-left transition-colors duration-200 flex flex-col space-y-3 ${
                               model === modelOption.id ? 'bg-slate-700/50' : ''
                             } ${
                               modelOption.isAvailable 
@@ -625,24 +639,38 @@ export default function GenerateForm({
                                 : 'opacity-50 cursor-not-allowed'
                             }`}
                           >
-                            <div className="w-24 h-12 rounded overflow-hidden flex-shrink-0">
-                              <img 
-                                src={modelOption.image} 
-                                alt={modelOption.name} 
-                                className="w-full h-full object-cover"
-                              />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="text-cyan-50 font-medium">{modelOption.name}</div>
-                              <div className="text-sm text-cyan-200/80 mt-1 line-clamp-2">
-                                {t(`form.model.descriptions.${modelOption.id.replace(/\./g, '')}`)}
+                            <div className="flex items-start space-x-3">
+                              <div className="w-24 h-12 rounded overflow-hidden flex-shrink-0">
+                                <img 
+                                  src={modelOption.image} 
+                                  alt={modelOption.name} 
+                                  className="w-full h-full object-cover"
+                                />
                               </div>
-                              {!modelOption.isAvailable && (
-                                <div className="text-sm text-red-400 mt-1">
-                                  {previewImage ? '不支持图片到图片生成' : '需要上传参考图片'}
+                              <div className="flex-1 min-w-0">
+                                <div className="text-cyan-50 font-medium">{modelOption.name}</div>
+                                <div className="flex flex-wrap gap-1 mt-2">
+                                  {modelOption.use_t2i && (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-cyan-300 border border-cyan-400/30">
+                                      {t('form.model.tags.textToImage')}
+                                    </span>
+                                  )}
+                                  {modelOption.use_i2i && (
+                                    <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-500/20 to-pink-500/20 text-pink-300 border border-pink-400/30">
+                                      {t('form.model.tags.imageToImage')}
+                                    </span>
+                                  )}
                                 </div>
-                              )}
+                              </div>
                             </div>
+                            <div className="text-sm text-cyan-200/80 line-clamp-2 pl-27">
+                              {t(`form.model.descriptions.${modelOption.id.replace(/\./g, '')}`)}
+                            </div>
+                            {!modelOption.isAvailable && (
+                              <div className="text-sm text-red-400 pl-27">
+                                {previewImage ? '不支持图片到图片生成' : '需要上传参考图片'}
+                              </div>
+                            )}
                           </button>
                         ))}
                       </div>

@@ -47,6 +47,10 @@
         "model": {
           "label": "Model",
           "hint": "Select the AI model to use",
+          "tags": {
+            "textToImage": "Text to Image",
+            "imageToImage": "Image to Image"
+          },
           "descriptions": {
             "HiDream-full-fp16": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
             "HiDream-full-fp8": "HiDream-I1 is one of the most outstanding and advanced models in the AI art field, developed by Beijing Zhixiang Future Technology Co., Ltd.",
