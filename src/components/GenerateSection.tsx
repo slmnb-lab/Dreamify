@@ -253,7 +253,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
         {/* Form and Preview Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12 items-start">
           {/* 左侧表单区域 */}
-          <div className="order-1 lg:order-1 lg:col-span-2 animate-fadeInUp">
+          <div className="order-1 lg:order-1 lg:col-span-2 animate-fadeInUp h-fit z-10">
             <GenerateForm
               
               width={width}

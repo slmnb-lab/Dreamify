@@ -309,15 +309,20 @@ export default function GenerateForm({
     }
   ]
 
-  // 根据是否有参考图片过滤模型
-  const filteredModels = previewImage
-    ? models.filter(m => m.use_i2i)
-    : models.filter(m => m.use_t2i)
+  // 显示所有模型，但标记哪些可用
+  const availableModels = models.map(m => ({
+    ...m,
+    isAvailable: previewImage ? m.use_i2i : m.use_t2i
+  }))
 
-  // 如果当前选中的模型不在可选模型中，自动切换到第一个可用模型
+  // 如果当前选中的模型不可用，自动切换到第一个可用模型
   useEffect(() => {
-    if (filteredModels.length > 0 && !filteredModels.some(m => m.id === model)) {
-      setModel(filteredModels[0].id)
+    const currentModel = availableModels.find(m => m.id === model)
+    if (currentModel && !currentModel.isAvailable) {
+      const firstAvailable = availableModels.find(m => m.isAvailable)
+      if (firstAvailable) {
+        setModel(firstAvailable.id)
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [previewImage])
@@ -390,12 +395,12 @@ export default function GenerateForm({
   }, [generatedImageToSetAsReference, setWidth, setHeight, setUploadedImage]);
 
   return (
-    <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 h-full flex flex-col">
+    <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 flex flex-col">
       <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-blue-400/10 rounded-3xl"></div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
-      <form onSubmit={handleSubmit} className="space-y-8 relative flex-grow flex flex-col">
-        <div className="space-y-8 flex-grow">
-          <div className="flex-grow">
+      <form onSubmit={handleSubmit} className="space-y-8 relative flex flex-col">
+        <div className="space-y-8">
+          <div>
             <label className="flex items-center text-sm font-medium text-cyan-50 mb-3">
               <img src="/form/upload.svg" alt="Upload" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
               {t('form.upload.label')}
@@ -574,13 +579,15 @@ export default function GenerateForm({
                     <button
                       type="button"
                       onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                      className="w-full bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl px-4 py-3 text-left text-cyan-50 focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 shadow-inner transition-all duration-300 flex items-center justify-between"
+                      className={`w-full bg-slate-700/50 backdrop-blur-sm border border-cyan-400/30 rounded-xl px-4 py-3 text-left text-cyan-50 focus:ring-2 focus:ring-cyan-400/50 focus:border-cyan-400/50 shadow-inner transition-all duration-300 flex items-center justify-between ${
+                        !availableModels.find(m => m.id === model)?.isAvailable ? 'opacity-50' : ''
+                      }`}
                       disabled={status === 'loading'}
                     >
                       <div className="flex items-center space-x-3">
                         <div className="w-12 h-6 rounded overflow-hidden flex-shrink-0">
                           <img 
-                            src={filteredModels.find(m => m.id === model)?.image} 
+                            src={availableModels.find(m => m.id === model)?.image} 
                             alt={model} 
                             className="w-full h-full object-cover"
                           />
@@ -598,17 +605,24 @@ export default function GenerateForm({
                     </button>
                     
                     {isModelDropdownOpen && (
-                      <div className="absolute z-10 w-full mt-2 bg-slate-800/95 backdrop-blur-xl rounded-xl border border-cyan-400/30 shadow-xl overflow-hidden">
-                        {filteredModels.map((modelOption) => (
+                      <div className="absolute z-10 w-full mt-2 bg-slate-800/95 backdrop-blur-xl rounded-xl border border-cyan-400/30 shadow-xl">
+                        {availableModels.map((modelOption) => (
                           <button
                             key={modelOption.id}
                             type="button"
                             onClick={() => {
-                              setModel(modelOption.id)
-                              setIsModelDropdownOpen(false)
+                              if (modelOption.isAvailable) {
+                                setModel(modelOption.id)
+                                setIsModelDropdownOpen(false)
+                              }
                             }}
-                            className={`w-full px-4 py-3 text-left transition-colors duration-200 flex items-start space-x-3 hover:bg-slate-700/50 ${
+                            disabled={!modelOption.isAvailable}
+                            className={`w-full px-4 py-3 text-left transition-colors duration-200 flex items-start space-x-3 ${
                               model === modelOption.id ? 'bg-slate-700/50' : ''
+                            } ${
+                              modelOption.isAvailable 
+                                ? 'hover:bg-slate-700/50' 
+                                : 'opacity-50 cursor-not-allowed'
                             }`}
                           >
                             <div className="w-24 h-12 rounded overflow-hidden flex-shrink-0">
@@ -623,6 +637,11 @@ export default function GenerateForm({
                               <div className="text-sm text-cyan-200/80 mt-1 line-clamp-2">
                                 {t(`form.model.descriptions.${modelOption.id.replace(/\./g, '')}`)}
                               </div>
+                              {!modelOption.isAvailable && (
+                                <div className="text-sm text-red-400 mt-1">
+                                  {previewImage ? '不支持图片到图片生成' : '需要上传参考图片'}
+                                </div>
+                              )}
                             </div>
                           </button>
                         ))}
@@ -787,7 +806,7 @@ export default function GenerateForm({
           </div>
         </div>
 
-        <div className="flex justify-between items-center mt-auto">
+        <div className="flex justify-between items-center">
           {/* Generate button removed for external placement */}
         </div>
 

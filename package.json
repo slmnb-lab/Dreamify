@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.1",
+    "@tailwindcss/line-clamp": "^0.4.4",
     "@types/uuid": "^10.0.0",
     "autoprefixer": "^10.4.17",
     "axios": "^1.6.7",
