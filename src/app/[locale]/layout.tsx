@@ -29,6 +29,26 @@ export async function generateMetadata({params}: { params: Promise<{ locale: str
   return {
     title: t('title'),
     description: t('description'),
+    openGraph: {
+      title: 'Dreamify - 免费AI绘画工具 | AI画图网站在线生成',
+      description: 'Dreamify 是无需注册的AI生图网站，支持动漫、插画、3D风格，提供智能AI绘画服务，让创作更简单。',
+      images: [
+        {
+          url: '/images/dreamify-logo.jpg',
+          width: 1200,
+          height: 630,
+          alt: 'Dreamify Logo',
+        },
+      ],
+      type: 'website',
+      locale: locale,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Dreamify - 免费AI绘画工具 | AI画图网站在线生成',
+      description: 'Dreamify 是无需注册的AI生图网站，支持动漫、插画、3D风格，提供智能AI绘画服务，让创作更简单。',
+      images: ['/images/dreamify-logo.jpg'],
+    },
   }
 }
 
