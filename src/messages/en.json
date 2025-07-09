@@ -24,6 +24,15 @@
         "chineseSupport": "Chinese Support"
       }
     },
+    "banner": {
+      "title": "Latest AI Image Editing Model",
+      "highlight": "Flux Kontext",
+      "description": "is now live! Upload any reference image to experience it!",
+      "closeButton": "Close banner"
+    },
+    "preview": {
+      "closeHint": "Click outside the image or close button to exit preview"
+    },
     "generate": {
       "title": "AI Image Generation",
       "description": "Transform your ideas into beautiful images using our advanced HiDream-I1 model",

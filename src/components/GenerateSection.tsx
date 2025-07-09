@@ -13,6 +13,7 @@ export interface GenerateSectionRef {
 
 const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ communityWorks }, ref) => {
   const t = useTranslations('home.generate')
+  const tHome = useTranslations('home')
   const [prompt, setPrompt] = useState('');
   const [width, setWidth] = useState(1024);
   const [height, setHeight] = useState(1024);
@@ -316,7 +317,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
                 e.stopPropagation();
                 setZoomedImage(null);
               }}
-              aria-label="Close preview"
+              aria-label={tHome('banner.closeButton')}
             >
               <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -338,7 +339,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
 
           {/* 底部提示 */}
           <div className="w-full max-w-[1400px] mt-4 text-center text-sm text-cyan-200/60">
-            <p>点击图片外部区域或关闭按钮退出预览</p>
+            <p>{tHome('preview.closeHint')}</p>
           </div>
         </div>
       )}

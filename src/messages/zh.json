@@ -24,6 +24,15 @@
         "chineseSupport": "支持中文"
       }
     },
+    "banner": {
+      "title": "最新AI绘画图片编辑模型",
+      "highlight": "Flux Kontext",
+      "description": "已经上线，上传任意参考图片即可体验！",
+      "closeButton": "关闭横幅"
+    },
+    "preview": {
+      "closeHint": "点击图片外部区域或关闭按钮退出预览"
+    },
     "generate": {
       "title": "AI 图像生成",
       "description": "使用先进的 HiDream-I1 模型，将您的创意转化为精美的图像",

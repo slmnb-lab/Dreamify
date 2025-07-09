@@ -83,14 +83,14 @@ export default function HomeClient() {
       {showBanner && (
         <div className="fixed top-16 lg:top-0 left-0 w-full z-30 py-3 px-4 flex justify-center items-center bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 animate-fadeIn shadow-lg">
           <span className="text-lg sm:text-xl font-extrabold bg-gradient-to-r from-yellow-200 via-white to-cyan-200 bg-clip-text text-transparent drop-shadow-lg tracking-wide">
-            最新AI绘画图片编辑模型
-            <span className="mx-2 px-2 py-0.5 rounded-lg bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 text-white shadow-md text-xl sm:text-2xl font-black tracking-widest animate-pulse">Flux Kontext</span>
-            已经上线，上传任意参考图片即可体验！
+            {t('banner.title')}
+            <span className="mx-2 px-2 py-0.5 rounded-lg bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 text-white shadow-md text-xl sm:text-2xl font-black tracking-widest animate-pulse">{t('banner.highlight')}</span>
+            {t('banner.description')}
           </span>
           <button
             className="ml-4 p-2 rounded-full hover:bg-white/20 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
             onClick={() => setShowBanner(false)}
-            aria-label="关闭横幅"
+            aria-label={t('banner.closeButton')}
             style={{ lineHeight: 0 }}
           >
             <svg className="w-6 h-6 text-white drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -114,7 +114,7 @@ export default function HomeClient() {
                 e.stopPropagation();
                 setZoomedImage(null);
               }}
-              aria-label="Close preview"
+              aria-label={t('banner.closeButton')}
             >
               <svg className="w-6 h-6 sm:w-8 sm:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -136,7 +136,7 @@ export default function HomeClient() {
 
           {/* 底部提示 */}
           <div className="w-full max-w-[1400px] mt-4 text-center text-sm text-cyan-200/60">
-            <p>点击图片外部区域或关闭按钮退出预览</p>
+            <p>{t('preview.closeHint')}</p>
           </div>
         </div>
       )}
