@@ -1,5 +1,5 @@
 import { hidreamFp8T2IWorkflow,  fluxDevT2IWorkflow, stableDiffusion3T2IWorkflow } from "./t2iworkflow";
-import { fluxI2IWorkflow, fluxKontextI2IWorkflow } from "./i2iworkflow";
+import { fluxI2IWorkflow, fluxKontextI2IMultiImageWorkflow, fluxKontextI2IWorkflow } from "./i2iworkflow";
 const T2IModelMap = {
   "HiDream-full-fp8": hidreamFp8T2IWorkflow,
   "Flux-Dev": fluxDevT2IWorkflow,
@@ -23,7 +23,7 @@ interface GenerateParams {
   seed?: number;
   batch_size: number;
   model: string;
-  image?: string;
+  images?: string[];
   denoise?: number;
 }
 
@@ -35,8 +35,12 @@ const urls = [
 export async function generateImage(params: GenerateParams): Promise<string> {
   // 1. 准备工作流数据
   let workflow = {};
-  if(params.image){
-    workflow = I2IModelMap[params.model as keyof typeof I2IModelMap];
+  if(params.images){
+    if(params.images.length > 1){
+      workflow = fluxKontextI2IMultiImageWorkflow
+    }else{
+      workflow = I2IModelMap[params.model as keyof typeof I2IModelMap];
+    }
   }else{
     workflow = T2IModelMap[params.model as keyof typeof T2IModelMap];
   }
@@ -48,14 +52,14 @@ export async function generateImage(params: GenerateParams): Promise<string> {
     setHiDreamWT2IorkflowParams(workflow, params);
   }else if(params.model === 'Flux-Dev') {
     baseUrl = process.env.Flux_Dev_DOCKERWEB_API_URL || ''
-    if(params.image){
+    if(params.images && params.images.length > 0){
       setFluxDevI2IorkflowParams(workflow, params);
     }else{
       setFluxDevWT2IorkflowParams(workflow, params);
     }
   }else if(params.model === 'Flux-Kontext') {
     baseUrl = process.env.Kontext_fp8_URL || ''
-    if(params.image){
+    if(params.images && params.images.length > 0){
       setFluxKontxtI2IorkflowParams(workflow, params);
     }
   }else if(params.model === 'Stable-Diffusion-3.5') {
@@ -114,7 +118,7 @@ function setFluxDevWT2IorkflowParams(workflow: any, params: GenerateParams) {
 }
 
 function setFluxDevI2IorkflowParams(workflow: any, params: GenerateParams) {
-  workflow["50"].inputs.image = params.image;
+  workflow["50"].inputs.image = params.images?.[0];
   workflow["52"].inputs.width = params.width;
   workflow["52"].inputs.height = params.height;
   workflow["46"].inputs.width = params.width;
@@ -144,11 +148,18 @@ function setFluxDevI2IorkflowParams(workflow: any, params: GenerateParams) {
 // }
 
 function setFluxKontxtI2IorkflowParams(workflow: any, params: GenerateParams) {
-  workflow["142"].inputs.image = params.image;
+  if(params.images && params?.images.length > 1){
+    workflow["192"].inputs.image = params.images?.[0];
+    workflow["193"].inputs.image = params.images?.[1];
+    workflow["188"].inputs.width = params.width;
+    workflow["188"].inputs.height = params.height;
+  }else{
+    workflow["142"].inputs.image = params.images?.[0];
+    workflow["189"].inputs.target_width = params.width;
+    workflow["189"].inputs.target_height = params.height;
+  }
   workflow["6"].inputs.text = params.prompt;
   workflow["31"].inputs.steps = params.steps;
-  workflow["189"].inputs.target_width = params.width;
-  workflow["189"].inputs.target_height = params.height;
   if (params.seed) {
     workflow["31"].inputs.seed = params.seed;
   }

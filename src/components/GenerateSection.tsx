@@ -20,7 +20,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const [steps, setSteps] = useState(30);
   const [batch_size, setBatchSize] = useState(1);
   const [model, setModel] = useState('HiDream-full-fp8');
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<string[]>([]);
   const [denoising_strength, setDenoisingStrength] = useState(0.7);
   const [generatedImages, setGeneratedImages] = useState<string[]>([]);
   const [imageStatuses, setImageStatuses] = useState<Array<{
@@ -37,6 +37,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
   const [stepsError, setStepsError] = useState<string | null>(null);
   const [batchSizeError, setBatchSizeError] = useState<string | null>(null);
   const [sizeError, setSizeError] = useState<string | null>(null);
+  const [imageCountError, setImageCountError] = useState<string | null>(null);
   const stepsRef = useRef<HTMLInputElement>(null);
   const batchSizeRef = useRef<HTMLInputElement>(null);
   const widthRef = useRef<HTMLInputElement>(null);
@@ -79,6 +80,35 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
     setStepsError(null);
     setBatchSizeError(null);
     setSizeError(null);
+    setImageCountError(null);
+    
+    // 验证参考图片数量
+    const models = [
+      {
+        id: "HiDream-full-fp8",
+        maxImages: 1
+      },{
+        id: "Flux-Kontext",
+        maxImages: 2
+      },
+      {
+        id: "Flux-Dev",
+        maxImages: 1
+      },
+      {
+        id: "Stable-Diffusion-3.5",
+        maxImages: 1
+      }
+    ];
+    
+    const currentModel = models.find(m => m.id === model);
+    const maxImages = currentModel?.maxImages || 1;
+    
+    if (uploadedImages.length > maxImages) {
+      setImageCountError(`当前模型 ${model} 最多支持 ${maxImages} 张参考图片，请删除多余的图片`);
+      hasError = true;
+    }
+    
     if (steps < 5 || steps > 45) {
       setStepsError('步数必须在5到45之间');
       stepsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -97,7 +127,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
     if (hasError) return;
     
     // 记录生成前的参考图片状态
-    const hadReferenceImage = !!uploadedImage;
+    const hadReferenceImage = uploadedImages.length > 0;
     
     setIsGenerating(true)
     setGeneratedImages([])
@@ -122,8 +152,8 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               seed: Math.floor(Math.random() * 100000000),
               batch_size,
               model,
-              image: uploadedImage, // 直接使用 base64 字符串
-              denoise: uploadedImage ? denoising_strength : undefined, // 只在有参考图片时发送降噪参数
+              images: uploadedImages, // 使用图片数组
+              denoise: uploadedImages.length > 0 ? denoising_strength : undefined, // 只在有参考图片时发送降噪参数
             }),
           });
 
@@ -274,13 +304,13 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
               promptRef={promptRef}
               communityWorks={communityWorks}
               isGenerating={isGenerating}
-              uploadedImage={uploadedImage}
-              setUploadedImage={setUploadedImage}
+              setUploadedImages={setUploadedImages}
               denoising_strength={denoising_strength}
               setDenoisingStrength={setDenoisingStrength}
               stepsError={stepsError}
               batchSizeError={batchSizeError}
               sizeError={sizeError}
+              imageCountError={imageCountError}
               stepsRef={stepsRef}
               batchSizeRef={batchSizeRef}
               widthRef={widthRef}

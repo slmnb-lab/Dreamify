@@ -31,7 +31,7 @@ export default function SiteStats() {
     };
 
     fetchStats();
-    const interval = setInterval(fetchStats, 60000); // 每分钟更新一次
+    const interval = setInterval(fetchStats, 120000); // 每两分钟更新一次
 
     return () => clearInterval(interval);
   }, []);

@@ -20,13 +20,13 @@ interface GenerateFormProps {
   promptRef: React.RefObject<HTMLTextAreaElement | null>;
   communityWorks: { prompt: string }[];
   isGenerating: boolean;
-  uploadedImage: string | null;
-  setUploadedImage: (value: string | null) => void;
+  setUploadedImages: (value: string[] | ((prev: string[]) => string[])) => void;
   denoising_strength: number;
   setDenoisingStrength: (value: number) => void;
   stepsError?: string | null;
   batchSizeError?: string | null;
   sizeError?: string | null;
+  imageCountError?: string | null;
   stepsRef?: React.RefObject<HTMLInputElement | null>;
   batchSizeRef?: React.RefObject<HTMLInputElement | null>;
   widthRef?: React.RefObject<HTMLInputElement | null>;
@@ -50,12 +50,13 @@ export default function GenerateForm({
   isAdvancedOpen,
   setIsAdvancedOpen,
   isGenerating,
-  setUploadedImage,
+  setUploadedImages,
   denoising_strength,
   setDenoisingStrength,
   stepsError,
   batchSizeError,
   sizeError,
+  imageCountError,
   stepsRef,
   batchSizeRef,
   widthRef,
@@ -68,8 +69,59 @@ export default function GenerateForm({
   const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false)
   const modelDropdownRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previewImage, setPreviewImage] = useState<string | null>(null)
+  const [previewImages, setPreviewImages] = useState<string[]>([])
   const [isDragging, setIsDragging] = useState(false)
+  const dragTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  // 防抖的拖拽状态更新
+  const setDraggingWithDebounce = (value: boolean) => {
+    if (dragTimeoutRef.current) {
+      clearTimeout(dragTimeoutRef.current)
+    }
+    
+    if (value) {
+      setIsDragging(true)
+    } else {
+      dragTimeoutRef.current = setTimeout(() => {
+        setIsDragging(false)
+      }, 100) // 100ms 防抖延迟
+    }
+  }
+
+  // 提前声明模型配置
+  const models = [
+    {
+      id: "HiDream-full-fp8",
+      name: "HiDream-full-fp8",
+      image: "/models/HiDream-full.jpg",
+      use_i2i: false,
+      use_t2i: true,
+      maxImages: 1
+    },{
+      id: "Flux-Kontext",
+      name: "Flux-Kontext",
+      image: "/models/Flux-Kontext.jpg",
+      use_i2i: true,
+      use_t2i: false,
+      maxImages: 2
+    },
+    {
+      id: "Flux-Dev",
+      name: "Flux-Dev",
+      image: "/models/Flux-Dev.jpg",
+      use_i2i: true,
+      use_t2i: true,
+      maxImages: 1
+    },
+    {
+      id: "Stable-Diffusion-3.5",
+      name: "Stable-Diffusion-3.5",
+      image: "/models/StableDiffusion-3.5.jpg",
+      use_i2i: false,
+      use_t2i: true,
+      maxImages: 1
+    }
+  ];
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -154,6 +206,15 @@ export default function GenerateForm({
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
+  // 清理防抖定时器
+  useEffect(() => {
+    return () => {
+      if (dragTimeoutRef.current) {
+        clearTimeout(dragTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (isGenerating) return
@@ -162,9 +223,119 @@ export default function GenerateForm({
     onGenerate()
   }
 
+  // 获取当前模型信息
+  const currentModel = models.find(m => m.id === model);
+  const maxImages = currentModel?.maxImages || 1;
+  const canUploadMore = previewImages.length < maxImages;
+
+  // 上传图片区域，始终显示
+  const renderImageUploadSection = () => {
+    return (
+      <div>
+        <label className="flex items-center text-sm font-medium text-cyan-50 mb-4">
+          <img src="/form/upload.svg" alt="Upload" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
+          {t('form.upload.label')}
+        </label>
+        <div className="relative">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {previewImages.map((image, index) => (
+              <div key={index} className="group relative aspect-[4/3] rounded-2xl overflow-hidden border border-cyan-400/30 bg-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-300 hover:border-cyan-400/50">
+                <Image
+                  src={image}
+                  alt={`Uploaded reference ${index + 1}`}
+                  fill
+                  className="object-contain"
+                />
+                {/* 图片标记 */}
+                <div className="absolute bottom-3 left-3 px-3 py-1.5 bg-slate-900/90 backdrop-blur-sm rounded-full text-xs font-semibold text-cyan-200 border border-cyan-400/30 shadow-lg">
+                  Image{index + 1}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleRemoveImage(index)}
+                  className="absolute top-3 right-3 p-2 bg-slate-900/90 backdrop-blur-sm rounded-full text-cyan-200 hover:text-red-400 hover:bg-red-500/20 transition-all duration-300 shadow-lg border border-slate-700/50 hover:border-red-400/50 opacity-0 group-hover:opacity-100"
+                  aria-label="Remove image"
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            ))}
+            {/* 添加图片卡片 - 根据模型限制控制可用性 */}
+            <div
+              onClick={canUploadMore ? () => fileInputRef.current?.click() : undefined}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
+              className={`group relative aspect-[4/3] rounded-2xl border-2 border-dashed flex flex-col items-center justify-center transition-all duration-300 p-4 ${
+                canUploadMore 
+                  ? (isDragging 
+                      ? 'border-cyan-400 bg-gradient-to-br from-cyan-400/20 to-blue-400/20 shadow-lg shadow-cyan-400/20' 
+                      : 'border-cyan-400/40 bg-gradient-to-br from-slate-700/50 to-slate-600/50 hover:border-cyan-400/60 hover:bg-gradient-to-br hover:from-slate-600/50 hover:to-slate-500/50 cursor-pointer hover:shadow-lg hover:shadow-cyan-400/10')
+                  : 'border-slate-600/30 bg-gradient-to-br from-slate-800/30 to-slate-700/30 cursor-not-allowed opacity-60'
+              }`}
+            >
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+                disabled={!canUploadMore}
+              />
+              <div className={`flex flex-col items-center justify-center h-full space-y-2 ${canUploadMore ? 'group-hover:scale-105 transition-transform duration-300' : ''}`}>
+                <div className={`relative ${canUploadMore ? 'group-hover:animate-pulse' : ''}`}>
+                  <svg className={`w-6 h-6 ${canUploadMore ? 'text-cyan-400/70 group-hover:text-cyan-300' : 'text-slate-500/50'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  {canUploadMore && (
+                    <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/20 to-blue-400/20 rounded-full blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  )}
+                </div>
+                <div className="text-center">
+                  {canUploadMore ? (
+                    <div className="space-y-1">
+                      <p className="text-cyan-200/90 font-medium text-sm group-hover:text-cyan-100 transition-colors leading-tight">
+                        点击或拖拽上传
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="space-y-1">
+                      <p className="text-slate-400/80 font-medium text-sm leading-tight">
+                        已达上限
+                      </p>
+                      <p className="text-slate-500/60 text-xs leading-tight">
+                        最多 {maxImages} 张图片
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              {/* 拖拽时的视觉反馈 */}
+              {isDragging && canUploadMore && (
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-400/30 rounded-2xl flex items-center justify-center">
+                  <div className="text-cyan-200 font-semibold text-lg">释放以上传</div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+        {imageCountError && (
+          <p className="mt-2 text-sm text-red-400">{imageCountError}</p>
+        )}
+      </div>
+    );
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
+
+    if (previewImages.length >= maxImages) {
+      alert(`最多只能上传${maxImages}张图片`)
+      return
+    }
 
     // 验证文件类型
     if (!file.type.startsWith('image/')) {
@@ -190,7 +361,7 @@ export default function GenerateForm({
           const img = new window.Image()
           img.onload = () => {
             // 设置预览图片（使用带前缀的 base64 用于预览）
-            setPreviewImage(event.target?.result as string)
+            setPreviewImages((prev: string[]) => [...prev, event.target?.result as string])
             console.log('GenerateForm: Successfully set previewImage')
             
             // 计算合适的尺寸（保持8的倍数）
@@ -206,7 +377,7 @@ export default function GenerateForm({
             setHeight(finalHeight)
 
             // 更新父组件中的图片数据（使用无前缀的 base64）
-            setUploadedImage(base64String)
+            setUploadedImages((prev: string[]) => [...prev, base64String])
           }
           img.src = event.target.result as string
         }
@@ -218,9 +389,9 @@ export default function GenerateForm({
     }
   }
 
-  const handleRemoveImage = () => {
-    setUploadedImage(null)
-    setPreviewImage(null)
+  const handleRemoveImage = (index: number) => {
+    setPreviewImages((prev: string[]) => prev.filter((_: string, i: number) => i !== index))
+    setUploadedImages((prev: string[]) => prev.filter((_: string, i: number) => i !== index))
     if (fileInputRef.current) {
       fileInputRef.current.value = ''
     }
@@ -228,17 +399,27 @@ export default function GenerateForm({
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault()
-    setIsDragging(true)
+    e.stopPropagation()
+    if (canUploadMore) {
+      setDraggingWithDebounce(true)
+    }
   }
 
   const handleDragLeave = (e: React.DragEvent) => {
     e.preventDefault()
-    setIsDragging(false)
+    e.stopPropagation()
+    setDraggingWithDebounce(false)
   }
 
   const handleDrop = (e: React.DragEvent) => {
     e.preventDefault()
-    setIsDragging(false)
+    e.stopPropagation()
+    setDraggingWithDebounce(false)
+    
+    if (!canUploadMore) {
+      alert(`最多只能上传${maxImages}张图片`)
+      return
+    }
     
     const file = e.dataTransfer.files?.[0]
     if (!file) return
@@ -262,14 +443,14 @@ export default function GenerateForm({
         const base64String = event.target.result.toString().split(',')[1]
         const img = new window.Image()
         img.onload = () => {
-          setPreviewImage(event.target?.result as string)
+          setPreviewImages((prev: string[]) => [...prev, event.target?.result as string])
           const newWidth = Math.round(img.width / 8) * 8
           const newHeight = Math.round(img.height / 8) * 8
           const finalWidth = Math.min(Math.max(newWidth, 64), 1920)
           const finalHeight = Math.min(Math.max(newHeight, 64), 1920)
           setWidth(finalWidth)
           setHeight(finalHeight)
-          setUploadedImage(base64String)
+          setUploadedImages((prev: string[]) => [...prev, base64String])
           console.log('GenerateForm: Successfully set uploadedImage to new base64 string')
           console.log('GenerateForm: New image dimensions:', finalWidth, 'x', finalHeight)
         }
@@ -279,40 +460,12 @@ export default function GenerateForm({
     reader.readAsDataURL(file)
   }
 
-  const models = [
-    {
-      id: "HiDream-full-fp8",
-      name: "HiDream-full-fp8",
-      image: "/models/HiDream-full.jpg",
-      use_i2i: false,
-      use_t2i: true
-    },{
-      id: "Flux-Kontext",
-      name: "Flux-Kontext",
-      image: "/models/Flux-Kontext.jpg",
-      use_i2i: true,
-      use_t2i: false
-    },
-    {
-      id: "Flux-Dev",
-      name: "Flux-Dev",
-      image: "/models/Flux-Dev.jpg",
-      use_i2i: true,
-      use_t2i: true
-    },
-    {
-      id: "Stable-Diffusion-3.5",
-      name: "Stable-Diffusion-3.5",
-      image: "/models/StableDiffusion-3.5.jpg",
-      use_i2i: false,
-      use_t2i: true
-    }
-  ]
-
   // 显示所有模型，但标记哪些可用
   const availableModels = models.map(m => ({
     ...m,
-    isAvailable: previewImage ? m.use_i2i : m.use_t2i
+    isAvailable: previewImages.length > 0 ? 
+      (m.use_i2i && previewImages.length <= (m.maxImages || 1)) : 
+      (m.use_t2i || m.use_i2i) // 如果没有上传图片，支持文生图或图生图的模型都可用
   }))
 
   // 如果当前选中的模型不可用，自动切换到第一个可用模型
@@ -325,7 +478,7 @@ export default function GenerateForm({
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [previewImage])
+  }, [previewImages.length])
 
   // 处理从 URL 设置参考图片
   useEffect(() => {
@@ -355,7 +508,7 @@ export default function GenerateForm({
                 const img = new window.Image();
                 img.onload = () => {
                   // 设置预览图片（使用带前缀的 base64 用于预览）
-                  setPreviewImage(event.target?.result as string);
+                  setPreviewImages((prev: string[]) => [...prev, event.target?.result as string]);
                   
                   // 计算合适的尺寸（保持8的倍数）
                   const newWidth = Math.round(img.width / 8) * 8;
@@ -370,7 +523,7 @@ export default function GenerateForm({
                   setHeight(finalHeight);
 
                   // 更新父组件中的图片数据（使用无前缀的 base64）
-                  setUploadedImage(base64String);
+                  setUploadedImages((prev: string[]) => [...prev, base64String]);
                   
                   // 添加小延迟确保状态更新完成
                   setTimeout(() => {
@@ -392,7 +545,7 @@ export default function GenerateForm({
 
       setImageFromUrl();
     }
-  }, [generatedImageToSetAsReference, setWidth, setHeight, setUploadedImage]);
+  }, [generatedImageToSetAsReference, setWidth, setHeight, setUploadedImages]);
 
   return (
     <div className="relative bg-gradient-to-br from-slate-800/95 to-slate-700/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 border border-cyan-400/30 flex flex-col">
@@ -400,60 +553,8 @@ export default function GenerateForm({
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.2),rgba(255,255,255,0))]"></div>
       <form onSubmit={handleSubmit} className="space-y-8 relative flex flex-col">
         <div className="space-y-8">
-          <div>
-            <label className="flex items-center text-sm font-medium text-cyan-50 mb-3">
-              <img src="/form/upload.svg" alt="Upload" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
-              {t('form.upload.label')}
-            </label>
-            <div className="relative">
-              {previewImage ? (
-                <div className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-cyan-400/30 bg-slate-700/50">
-                  <Image
-                    src={previewImage}
-                    alt="Uploaded reference"
-                    fill
-                    className="object-contain"
-                  />
-                  <button
-                    type="button"
-                    onClick={handleRemoveImage}
-                    className="absolute top-2 right-2 p-2 bg-slate-800/80 rounded-full text-cyan-200 hover:text-cyan-50 transition-colors"
-                    aria-label="Remove image"
-                  >
-                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                  </button>
-                </div>
-              ) : (
-                <div
-                  onClick={() => fileInputRef.current?.click()}
-                  onDragOver={handleDragOver}
-                  onDragLeave={handleDragLeave}
-                  onDrop={handleDrop}
-                  className={`aspect-[4/3] rounded-2xl border-2 border-dashed ${
-                    isDragging ? 'border-cyan-400 bg-slate-600/50' : 'border-cyan-400/30 bg-slate-700/50'
-                  } flex flex-col items-center justify-center cursor-pointer hover:bg-slate-600/50 transition-colors`}
-                >
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="hidden"
-                  />
-                  <svg className="w-12 h-12 text-cyan-400/50 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
-                  <p className="text-cyan-200/80 text-center px-4">
-                    点击或拖拽图片到此处上传
-                    <br />
-                    <span className="text-sm text-cyan-200/60">支持 JPG、PNG 格式，最大 10MB</span>
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
+          {/* 上传图片区域（仅支持图生图模型时显示） */}
+          {renderImageUploadSection()}
 
           <div className="border-t border-cyan-400/30 pt-8">
             <button
@@ -668,7 +769,13 @@ export default function GenerateForm({
                             </div>
                             {!modelOption.isAvailable && (
                               <div className="text-sm text-red-400 pl-27">
-                                {previewImage ? '不支持图片到图片生成' : '需要上传参考图片'}
+                                {previewImages.length > 0 ? 
+                                  (modelOption.use_i2i ? 
+                                    `最多支持 ${modelOption.maxImages || 1} 张参考图片` : 
+                                    '不支持图片到图片生成'
+                                  ) : 
+                                  '需要上传参考图片'
+                                }
                               </div>
                             )}
                           </button>
@@ -773,7 +880,7 @@ export default function GenerateForm({
                   </div>
                 </div>
 
-                {previewImage && (
+                {previewImages.length > 0 && (
                   <div>
                     <label htmlFor="denoising_strength" className="flex items-center text-sm font-medium text-cyan-50 mb-3">
                       <img src="/form/denoise.svg" alt="Denoising Strength" className="w-5 h-5 mr-2 text-cyan-50 [&>path]:fill-current" />
