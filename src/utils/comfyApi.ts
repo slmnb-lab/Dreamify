@@ -35,7 +35,7 @@ const urls = [
 export async function generateImage(params: GenerateParams): Promise<string> {
   // 1. 准备工作流数据
   let workflow = {};
-  if(params.images){
+  if(params.images && params.images.length > 0){
     if(params.images.length > 1){
       workflow = fluxKontextI2IMultiImageWorkflow
     }else{
