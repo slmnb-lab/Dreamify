@@ -42,7 +42,11 @@
           "placeholder": "Describe what you want to see (English recommended, Chinese only supported by HiDream model)..."
         },
         "upload": {
-          "label": "Upload Reference Image (Optional)"
+          "label": "Upload Reference Image (Optional)",
+          "clickOrDrag": "Click or drag to upload",
+          "dropToUpload": "Drop to upload",
+          "limitReached": "Limit reached",
+          "maxImages": "Max {maxImages} images"
         },
         "randomPrompt": "Random Prompt",
         "width": {
@@ -119,7 +123,21 @@
       "error": {
         "general": "Error generating image, please try again",
         "invalidSize": "Image size must be between 64x64 and 1920x1080",
-        "invalidSteps": "Steps must be between 1 and 100"
+        "invalidSteps": "Steps must be between 1 and 100",
+        "validation": {
+          "stepsRange": "Steps must be between 5 and 45",
+          "batchSizeRange": "Batch size must be between 1 and 4",
+          "sizeRange": "Width and height must be between 64 and 1920",
+          "imageCountLimit": "Current model {model} supports at most {maxImages} reference images, please remove excess images",
+          "fileType": "Please upload an image file",
+          "fileSize": "Image size cannot exceed 10MB",
+          "imageProcessing": "Failed to process image, please try again",
+          "modelNotAvailable": {
+            "needReference": "Reference image required",
+            "notSupportI2I": "Image-to-image generation not supported",
+            "maxImagesExceeded": "Supports at most {maxImages} reference images"
+          }
+        }
       }
     },
     "features": {

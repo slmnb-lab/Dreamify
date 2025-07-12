@@ -297,16 +297,16 @@ export default function GenerateForm({
                   {canUploadMore ? (
                     <div className="space-y-1">
                       <p className="text-cyan-200/90 font-medium text-sm group-hover:text-cyan-100 transition-colors leading-tight">
-                        点击或拖拽上传
+                        {t('form.upload.clickOrDrag')}
                       </p>
                     </div>
                   ) : (
                     <div className="space-y-1">
                       <p className="text-slate-400/80 font-medium text-sm leading-tight">
-                        已达上限
+                        {t('form.upload.limitReached')}
                       </p>
                       <p className="text-slate-500/60 text-xs leading-tight">
-                        最多 {maxImages} 张图片
+                        {t('form.upload.maxImages', { maxImages })}
                       </p>
                     </div>
                   )}
@@ -315,7 +315,7 @@ export default function GenerateForm({
               {/* 拖拽时的视觉反馈 */}
               {isDragging && canUploadMore && (
                 <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/30 to-blue-400/30 rounded-2xl flex items-center justify-center">
-                  <div className="text-cyan-200 font-semibold text-lg">释放以上传</div>
+                  <div className="text-cyan-200 font-semibold text-lg">{t('form.upload.dropToUpload')}</div>
                 </div>
               )}
             </div>
@@ -333,19 +333,19 @@ export default function GenerateForm({
     if (!file) return
 
     if (previewImages.length >= maxImages) {
-      alert(`最多只能上传${maxImages}张图片`)
+      alert(t('error.validation.imageCountLimit', { model: currentModel?.name || model, maxImages }))
       return
     }
 
     // 验证文件类型
     if (!file.type.startsWith('image/')) {
-      alert('请上传图片文件')
+      alert(t('error.validation.fileType'))
       return
     }
 
     // 验证文件大小（最大 10MB）
     if (file.size > 10 * 1024 * 1024) {
-      alert('图片大小不能超过 10MB')
+      alert(t('error.validation.fileSize'))
       return
     }
 
@@ -385,7 +385,7 @@ export default function GenerateForm({
       reader.readAsDataURL(file)
     } catch (error) {
       console.error('Error processing image:', error)
-      alert('处理图片失败，请重试')
+      alert(t('error.validation.imageProcessing'))
     }
   }
 
@@ -417,7 +417,7 @@ export default function GenerateForm({
     setDraggingWithDebounce(false)
     
     if (!canUploadMore) {
-      alert(`最多只能上传${maxImages}张图片`)
+      alert(t('error.validation.imageCountLimit', { model: currentModel?.name || model, maxImages }))
       return
     }
     
@@ -426,13 +426,13 @@ export default function GenerateForm({
 
     // 验证文件类型
     if (!file.type.startsWith('image/')) {
-      alert('请上传图片文件')
+      alert(t('error.validation.fileType'))
       return
     }
 
     // 验证文件大小（最大 10MB）
     if (file.size > 10 * 1024 * 1024) {
-      alert('图片大小不能超过 10MB')
+      alert(t('error.validation.fileSize'))
       return
     }
 
@@ -465,7 +465,7 @@ export default function GenerateForm({
     ...m,
     isAvailable: previewImages.length > 0 ? 
       (m.use_i2i && previewImages.length <= (m.maxImages || 1)) : 
-      (m.use_t2i || m.use_i2i) // 如果没有上传图片，支持文生图或图生图的模型都可用
+      m.use_t2i // 如果没有上传图片，只有支持文生图的模型可用
   }))
 
   // 如果当前选中的模型不可用，自动切换到第一个可用模型
@@ -771,10 +771,10 @@ export default function GenerateForm({
                               <div className="text-sm text-red-400 pl-27">
                                 {previewImages.length > 0 ? 
                                   (modelOption.use_i2i ? 
-                                    `最多支持 ${modelOption.maxImages || 1} 张参考图片` : 
-                                    '不支持图片到图片生成'
+                                    t('error.validation.modelNotAvailable.maxImagesExceeded', { maxImages: modelOption.maxImages || 1 }) : 
+                                    t('error.validation.modelNotAvailable.notSupportI2I')
                                   ) : 
-                                  '需要上传参考图片'
+                                  t('error.validation.modelNotAvailable.needReference')
                                 }
                               </div>
                             )}

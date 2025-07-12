@@ -42,7 +42,11 @@
           "placeholder": "描述你想看到的內容（推薦英語，僅HiDream模型支援中文）..."
         },
         "upload": {
-          "label": "上傳參考圖片（可選）"
+          "label": "上傳參考圖片（可選）",
+          "clickOrDrag": "點擊或拖拽上傳",
+          "dropToUpload": "釋放以上傳",
+          "limitReached": "已達上限",
+          "maxImages": "最多 {maxImages} 張圖片"
         },
         "randomPrompt": "隨機提示詞",
         "width": {
@@ -119,7 +123,21 @@
       "error": {
         "general": "生成圖像時出錯，請重試",
         "invalidSize": "圖像尺寸必須在 64x64 到 1920x1080 之間",
-        "invalidSteps": "步數必須在 1 到 100 之間"
+        "invalidSteps": "步數必須在 1 到 100 之間",
+        "validation": {
+          "stepsRange": "步數必須在5到45之間",
+          "batchSizeRange": "生成數量必須在1到4之間",
+          "sizeRange": "寬高必須在64到1920之間",
+          "imageCountLimit": "當前模型 {model} 最多支援 {maxImages} 張參考圖片，請刪除多餘的圖片",
+          "fileType": "請上傳圖片檔案",
+          "fileSize": "圖片大小不能超過 10MB",
+          "imageProcessing": "處理圖片失敗，請重試",
+          "modelNotAvailable": {
+            "needReference": "需要上傳參考圖片",
+            "notSupportI2I": "不支援圖片到圖片生成",
+            "maxImagesExceeded": "最多支援 {maxImages} 張參考圖片"
+          }
+        }
       }
     },
     "features": {

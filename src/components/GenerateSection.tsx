@@ -86,7 +86,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
     const models = [
       {
         id: "HiDream-full-fp8",
-        maxImages: 1
+        maxImages: 0
       },{
         id: "Flux-Kontext",
         maxImages: 2
@@ -97,7 +97,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
       },
       {
         id: "Stable-Diffusion-3.5",
-        maxImages: 1
+        maxImages: 0
       }
     ];
     
@@ -105,22 +105,22 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
     const maxImages = currentModel?.maxImages || 1;
     
     if (uploadedImages.length > maxImages) {
-      setImageCountError(`当前模型 ${model} 最多支持 ${maxImages} 张参考图片，请删除多余的图片`);
+      setImageCountError(t('error.validation.imageCountLimit', { model, maxImages }));
       hasError = true;
     }
     
     if (steps < 5 || steps > 45) {
-      setStepsError('步数必须在5到45之间');
+      setStepsError(t('error.validation.stepsRange'));
       stepsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       hasError = true;
     }
     if (batch_size < 1 || batch_size > 4) {
-      setBatchSizeError('生成数量必须在1到4之间');
+      setBatchSizeError(t('error.validation.batchSizeRange'));
       batchSizeRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       hasError = true;
     }
     if (width < 64 || width > 1920 || height < 64 || height > 1920) {
-      setSizeError('宽高必须在64到1920之间');
+      setSizeError(t('error.validation.sizeRange'));
       widthRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       hasError = true;
     }
