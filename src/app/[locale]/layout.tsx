@@ -26,7 +26,7 @@ export async function generateMetadata({params}: { params: Promise<{ locale: str
   const {locale} = await params;
   const t = await getTranslations({locale, namespace: 'site'})
   // 获取当前域名
-  const siteUrl = process.env.SITE_URL || 'https://dreamify.slmnb.cn ';
+  const siteUrl = process.env.SITE_URL || 'https://dreamify.slmnb.cn';
 
   return {
     title: t('title'),
