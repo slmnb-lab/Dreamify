@@ -21,6 +21,7 @@ export default function HomeClient() {
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
   const [showBanner, setShowBanner] = useState(true);
 
+
   // 示例图片数组
   const images = [
     '/images/demo-6.png',
@@ -54,6 +55,7 @@ export default function HomeClient() {
 
   // 手动切换图片时重置计时器
   const handleImageChange = (index: number) => {
+    
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
@@ -125,11 +127,14 @@ export default function HomeClient() {
           {/* 图片容器 */}
           <div className="relative w-full h-full flex items-center justify-center">
             <div className="relative w-full max-w-[1400px] max-h-[calc(100vh-8rem)] flex items-center justify-center">
-              <img
+              <Image
                 src={zoomedImage}
                 alt="Zoomed preview"
+                width={1400}
+                height={800}
                 className="max-w-full max-h-[calc(100vh-8rem)] w-auto h-auto object-contain rounded-lg shadow-2xl border border-cyan-400/30 animate-scaleIn"
                 onClick={(e) => e.stopPropagation()}
+                priority={false}
               />
             </div>
           </div>
@@ -143,7 +148,7 @@ export default function HomeClient() {
 
       {/* 主要内容区域 - 使用 Tailwind CSS 控制布局 */}
       <main 
-        className={`transition-all duration-300 mx-auto ${showBanner ? 'pt-32 lg:pt-16' : 'pt-16 lg:pt-0'} lg:pl-40`}
+        className="transition-all duration-300 mx-auto lg:pl-40 pt-16 lg:pt-0"
       >
         {/* Hero Section - 改进响应式设计 */}
         <section className="relative min-h-screen flex items-center justify-center py-14 sm:py-20 px-5 sm:px-8 lg:px-40 overflow-hidden">
@@ -164,6 +169,7 @@ export default function HomeClient() {
                       width={58}
                       height={58}
                       className="rounded-2xl shadow-xl border border-cyan-400/30 relative z-10"
+                      priority={true}
                     />
                   </div>
                   <div className="flex flex-col">
@@ -236,10 +242,11 @@ export default function HomeClient() {
                     {images.map((src, index) => (
                       <div
                         key={src}
-                        className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${currentImageIndex === index
+                        className={`absolute inset-0 transition-all duration-1000 ease-in-out transform ${
+                          currentImageIndex === index
                             ? 'opacity-100 scale-100'
                             : 'opacity-0 scale-105'
-                          }`}
+                        }`}
                       >
                         <Image
                           src={src}
@@ -259,10 +266,11 @@ export default function HomeClient() {
                         <button
                           key={index}
                           onClick={() => handleImageChange(index)}
-                          className={`w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full transition-all duration-300 transform hover:scale-125 ${currentImageIndex === index
+                          className={`w-1 h-1 sm:w-1.5 sm:h-1.5 lg:w-2 lg:h-2 rounded-full transition-all duration-300 transform hover:scale-125 ${
+                            currentImageIndex === index
                               ? 'bg-cyan-400 scale-125'
                               : 'bg-cyan-400/20 hover:bg-cyan-400/40'
-                            }`}
+                          }`}
                           aria-label={`切换到图片 ${index + 1}`}
                         />
                       ))}
@@ -294,7 +302,14 @@ export default function HomeClient() {
           <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
             <div className="text-center mb-12 sm:mb-15">
               <div className="flex items-center justify-center gap-5 mb-7">
-                <img src="/common/comunity.svg" alt="Community" className="w-10 h-10" />
+                <Image 
+                  src="/common/comunity.svg" 
+                  alt="Community" 
+                  width={40}
+                  height={40}
+                  className="w-10 h-10"
+                  priority={false}
+                />
                 <h2 className="text-2xl font-bold text-cyan-100 animate-fadeInUp">{t('community.title')}</h2>
               </div>
               <p className="text-lg text-cyan-200/80 animate-fadeInUp animation-delay-200">{t('community.subtitle')}</p>
@@ -302,7 +317,11 @@ export default function HomeClient() {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8">
               {communityWorks.map((work, index) => (
-                <div key={work.id} className="relative group animate-fadeInUp" style={{ animationDelay: `${index * 200}ms` }}>
+                <div 
+                  key={work.id} 
+                  className="relative group animate-fadeInUp" 
+                  style={{ animationDelay: `${index * 200}ms` }}
+                >
                   <div className="aspect-square rounded-2xl overflow-hidden shadow-xl border border-cyan-400/30 transform hover:scale-[1.02] transition-transform duration-300">
                     <Image
                       src={work.image}
@@ -310,6 +329,8 @@ export default function HomeClient() {
                       width={450}
                       height={450}
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      priority={index < 3}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     />
                   </div>
                   <div className="absolute inset-0 bg-slate-800/90 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl">
@@ -361,6 +382,7 @@ export default function HomeClient() {
                     alt="FAQ illustration"
                     fill
                     className="object-cover"
+                    priority={false}
                   />
                 </div>
                 <div className="absolute -top-7 -left-7 w-64 h-64 bg-gradient-to-br from-cyan-400 to-blue-400 rounded-3xl opacity-20 blur-3xl"></div>
@@ -372,7 +394,14 @@ export default function HomeClient() {
               {/* 右侧FAQ内容 - 改进移动端间距 */}
               <div className="flex flex-col justify-center lg:col-span-2">
                 <div className="flex items-center gap-5 mb-10">
-                  <img src="/common/faq.svg" alt="FAQ" className="w-10 h-10" />
+                  <Image 
+                    src="/common/faq.svg" 
+                    alt="FAQ" 
+                    width={40}
+                    height={40}
+                    className="w-10 h-10"
+                    priority={false}
+                  />
                   <h2 className="text-2xl font-bold text-cyan-100 animate-fadeInUp">
                     {t('faq.title')}
                   </h2>
@@ -409,10 +438,13 @@ export default function HomeClient() {
                   rel="noopener noreferrer"
                   className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 duration-300"
                 >
-                  <img
+                  <Image
                     src="https://gongjiyun.com/logo-dark.png"
                     alt={t('suanleme.gongji')}
+                    width={120}
+                    height={40}
                     className="h-10"
+                    priority={false}
                   />
                 </Link>
                 <Link
@@ -421,10 +453,13 @@ export default function HomeClient() {
                   rel="noopener noreferrer"
                   className="opacity-70 hover:opacity-100 transition-opacity transform hover:scale-105 duration-300"
                 >
-                  <img
+                  <Image
                     src="https://suanleme.cn/logo.svg"
                     alt={t('suanleme.suanleme')}
+                    width={120}
+                    height={40}
                     className="h-10"
+                    priority={false}
                   />
                 </Link>
               </div>
