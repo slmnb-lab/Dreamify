@@ -126,9 +126,6 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
     }
     if (hasError) return;
     
-    // 记录生成前的参考图片状态
-    const hadReferenceImage = uploadedImages.length > 0;
-    
     setIsGenerating(true)
     setGeneratedImages([])
     setImageStatuses(Array(batch_size).fill({ status: 'pending', message: t('preview.generating') }))
