@@ -181,12 +181,6 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
                 return newStatuses;
               });
               
-              // 如果用户之前上传了参考图片（说明用户希望使用图生图），
-              // 并且这是第一张生成的图片，则自动设置为新的参考图片
-              if (hadReferenceImage && index === 0) {
-                handleSetGeneratedImageAsReference(data.imageUrl);
-              }
-              
               resolve();
             };
             img.src = data.imageUrl;
