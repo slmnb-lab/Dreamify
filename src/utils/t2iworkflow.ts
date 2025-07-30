@@ -339,7 +339,7 @@ const stableDiffusion3WorkflowTemplate = {
     "inputs": {
       "seed": 996048915053053,
       "steps": 30,
-      "cfg": 5.45,
+      "cfg": 4.5,
       "sampler_name": "euler",
       "scheduler": "sgm_uniform",
       "denoise": 1,
@@ -418,7 +418,7 @@ const stableDiffusion3WorkflowTemplate = {
   },
   "40": {
     "inputs": {
-      "text": "Vibrant tones, overexposed, static, details unclear, subtitles, style, work, painting, image, still, overall greyish, worst quality, low quality, JPEG compression artifacts, ugly, flawed, excessive fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fingers merging, motionless image, cluttered background, three legs, many people in the background, walking backwards",
+      "text": "Vibrant tones, overexposed, static, details unclear,  worst quality, low quality, ugly, flawed, excessive fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fingers merging, motionless image, cluttered background, three legs",
       "clip": [
         "43",
         0
