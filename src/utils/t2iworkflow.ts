@@ -418,7 +418,7 @@ const stableDiffusion3WorkflowTemplate = {
   },
   "40": {
     "inputs": {
-      "text": "multi finger",
+      "text": "Vibrant tones, overexposed, static, details unclear, subtitles, style, work, painting, image, still, overall greyish, worst quality, low quality, JPEG compression artifacts, ugly, flawed, excessive fingers, poorly drawn hands, poorly drawn faces, deformed, disfigured, misshapen limbs, fingers merging, motionless image, cluttered background, three legs, many people in the background, walking backwards",
       "clip": [
         "43",
         0
