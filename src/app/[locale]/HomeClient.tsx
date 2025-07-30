@@ -19,7 +19,6 @@ export default function HomeClient() {
   const t = useTranslations('home')
   const generateSectionRef = useRef<GenerateSectionRef>(null);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
-  const [showBanner, setShowBanner] = useState(true);
 
 
   // 示例图片数组
@@ -81,26 +80,6 @@ export default function HomeClient() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-800 via-slate-700 to-slate-800 overflow-x-hidden">
-      {/* 炫彩渐变横幅（fixed 顶部，可关闭） */}
-      {showBanner && (
-        <div className="fixed top-16 lg:top-0 left-0 w-full z-30 py-3 px-4 flex justify-center items-center bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400 animate-fadeIn shadow-lg">
-          <span className="text-lg sm:text-xl font-extrabold bg-gradient-to-r from-yellow-200 via-white to-cyan-200 bg-clip-text text-transparent drop-shadow-lg tracking-wide">
-            {t('banner.title')}
-            <span className="mx-2 px-2 py-0.5 rounded-lg bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 text-white shadow-md text-xl sm:text-2xl font-black tracking-widest animate-pulse">{t('banner.highlight')}</span>
-            {t('banner.description')}
-          </span>
-          <button
-            className="ml-4 p-2 rounded-full hover:bg-white/20 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-white/50"
-            onClick={() => setShowBanner(false)}
-            aria-label={t('banner.closeButton')}
-            style={{ lineHeight: 0 }}
-          >
-            <svg className="w-6 h-6 text-white drop-shadow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-      )}
 
       {/* 图片放大模态框 - 改进响应式设计 */}
       {zoomedImage && (
