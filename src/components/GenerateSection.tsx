@@ -327,7 +327,7 @@ const GenerateSection = forwardRef<GenerateSectionRef, GenerateSectionProps>(({ 
       {/* 图片放大模态框 */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeIn"
+                      className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeInUp"
           onClick={() => setZoomedImage(null)}
         >
           {/* 顶部控制栏 */}

@@ -17,6 +17,7 @@ export default function HomeClient() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const timerRef = useRef<NodeJS.Timeout | null>(null)
   const t = useTranslations('home')
+  const tFriends = useTranslations('friends')
   const generateSectionRef = useRef<GenerateSectionRef>(null);
   const [zoomedImage, setZoomedImage] = useState<string | null>(null);
 
@@ -84,7 +85,7 @@ export default function HomeClient() {
       {/* 图片放大模态框 - 改进响应式设计 */}
       {zoomedImage && (
         <div
-          className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 bg-black/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-4 animate-fadeInUp"
           onClick={() => setZoomedImage(null)}
         >
           {/* 顶部控制栏 */}
@@ -170,7 +171,7 @@ export default function HomeClient() {
                 </h1>
                 <div className="flex flex-wrap gap-2 sm:gap-4 mb-7 sm:mb-9 animate-fadeInUp animation-delay-300">
                   <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
-                    {t('hero.tags.fast')}
+                    {t('hero.tags.fastGeneration')}
                   </span>
                   <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg">
                     {t('hero.tags.multipleModels')}
@@ -398,6 +399,101 @@ export default function HomeClient() {
                   ))}
                 </div>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Friends Section - 友链区域 */}
+        <section id="friends-section" className="py-14 sm:py-20 px-5 sm:px-8 lg:px-12 xl:px-16 2xl:px-20 bg-slate-800/90 backdrop-blur-xl relative">
+          <div className="absolute inset-0 bg-[url('/images/grid.svg')] opacity-5"></div>
+          <div className="w-full max-w-[1260px] mx-auto relative px-4 sm:px-6">
+            <div className="text-center mb-12 sm:mb-15">
+                             <div className="flex items-center justify-center gap-5 mb-7">
+                 <svg className="w-10 h-10 text-cyan-300" fill="currentColor" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+                   <path d="M546.9184 665.4976a187.9552 187.9552 0 0 1-133.3248-55.1424 25.6 25.6 0 0 1 36.1984-36.1984 137.472 137.472 0 0 0 194.2016 0l186.1632-186.1632c53.5552-53.5552 53.5552-140.6464 0-194.2016s-140.6464-53.5552-194.2016 0L478.8736 350.8736a25.6 25.6 0 0 1-36.1984-36.1984l157.0816-157.0816c73.5232-73.5232 193.1264-73.5232 266.5984 0s73.5232 193.1264 0 266.5984l-186.1632 186.1632a187.9552 187.9552 0 0 1-133.3248 55.1424z" />
+                   <path d="M239.7184 972.6976a187.9552 187.9552 0 0 1-133.3248-55.1424 188.672 188.672 0 0 1 0-266.5984l186.1632-186.1632a188.672 188.672 0 0 1 266.5984 0 25.6 25.6 0 0 1-36.1984 36.1984 137.472 137.472 0 0 0-194.2016 0l-186.1632 186.1632c-53.5552 53.5552-53.5552 140.6464 0 194.2016s140.6464 53.5552 194.2016 0l157.0816-157.0816a25.6 25.6 0 0 1 36.1984 36.1984l-157.0816 157.0816a187.9552 187.9552 0 0 1-133.3248 55.1424z" />
+                 </svg>
+                 <h2 className="text-2xl font-bold text-cyan-100 animate-fadeInUp">{tFriends('title')}</h2>
+               </div>
+               <p className="text-lg text-cyan-200/80 animate-fadeInUp animation-delay-200">{tFriends('subtitle')}</p>
+               <p className="text-base text-cyan-200/60 mt-4 animate-fadeInUp animation-delay-300">{tFriends('description')}</p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+              {/* AnyComfy 友链 */}
+              <div className="group animate-fadeInUp animation-delay-400">
+                <Link
+                  href="https://anycomfy.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block bg-slate-700/50 backdrop-blur-sm p-6 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 border border-cyan-400/30 hover:border-cyan-400/50"
+                >
+                                     <div className="flex items-center gap-4 mb-4">
+                     <div className="w-12 h-12 rounded-xl flex items-center justify-center overflow-hidden">
+                       <Image
+                         src="/images/anycomfy.png"
+                         alt="AnyComfy Logo"
+                         width={48}
+                         height={48}
+                         className="w-full h-full object-cover"
+                         priority={false}
+                       />
+                     </div>
+                    <div>
+                                             <h3 className="text-lg font-semibold text-cyan-100 group-hover:text-cyan-50 transition-colors">{tFriends('anycomfy.name')}</h3>
+                       <p className="text-sm text-cyan-200/70">{tFriends('anycomfy.url')}</p>
+                     </div>
+                   </div>
+                   <p className="text-cyan-200/80 text-sm leading-relaxed">
+                     {tFriends('anycomfy.description')}
+                   </p>
+                   <div className="mt-4 flex items-center text-cyan-300 text-sm group-hover:text-cyan-200 transition-colors">
+                     <span>{tFriends('visitSite')}</span>
+                    <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                    </svg>
+                  </div>
+                </Link>
+              </div>
+
+                             {/* 预留位置，为未来友链扩展 */}
+               <div className="group animate-fadeInUp animation-delay-500 opacity-60">
+                 <div className="block bg-slate-700/30 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-cyan-400/20 border-dashed">
+                   <div className="flex items-center gap-4 mb-4">
+                     <div className="w-12 h-12 bg-slate-600/50 rounded-xl flex items-center justify-center">
+                       <svg className="w-6 h-6 text-cyan-300/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                       </svg>
+                     </div>
+                     <div>
+                       <h3 className="text-lg font-semibold text-cyan-100/50">{tFriends('comingSoon.title')}</h3>
+                       <p className="text-sm text-cyan-200/40">{tFriends('comingSoon.subtitle')}</p>
+                     </div>
+                   </div>
+                   <p className="text-cyan-200/40 text-sm leading-relaxed">
+                     {tFriends('comingSoon.description')}
+                   </p>
+                 </div>
+               </div>
+
+                             <div className="group animate-fadeInUp animation-delay-600 opacity-60">
+                 <div className="block bg-slate-700/30 backdrop-blur-sm p-6 rounded-2xl shadow-xl border border-cyan-400/20 border-dashed">
+                   <div className="flex items-center gap-4 mb-4">
+                     <div className="w-12 h-12 bg-slate-600/50 rounded-xl flex items-center justify-center">
+                       <svg className="w-6 h-6 text-cyan-300/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                       </svg>
+                     </div>
+                     <div>
+                       <h3 className="text-lg font-semibold text-cyan-100/50">{tFriends('comingSoon.title')}</h3>
+                       <p className="text-sm text-cyan-200/40">{tFriends('comingSoon.subtitle')}</p>
+                     </div>
+                   </div>
+                   <p className="text-cyan-200/40 text-sm leading-relaxed">
+                     {tFriends('comingSoon.description')}
+                   </p>
+                 </div>
+               </div>
             </div>
           </div>
         </section>

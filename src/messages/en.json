@@ -264,7 +264,24 @@
     "community": "Community",
     "quickGenerate": "Quick Generate",
     "siteName": "Dreamify",
-    "switchLanguage": "Switch Language"
+    "switchLanguage": "Switch Language",
+    "friends": "Friends"
+  },
+  "friends": {
+    "title": "Friends",
+    "subtitle": "Discover amazing AI art platforms and tools",
+    "description": "We collaborate with excellent AI art platforms to provide you with more creative possibilities",
+    "anycomfy": {
+      "name": "AnyComfy",
+      "url": "anycomfy.com",
+      "description": "A free unlimited online ComfyUI platform for easily running any AI art workflow"
+    },
+    "visitSite": "Visit Site",
+    "comingSoon": {
+      "title": "Coming Soon",
+      "subtitle": "More friends",
+      "description": "More amazing AI art platforms will be added here soon"
+    }
   },
   "footer": {
     "copyright": "Dreamify. All rights reserved."

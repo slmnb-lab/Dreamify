@@ -127,6 +127,16 @@ export default function Navbar() {
               </svg>
               <span className="text-sm text-cyan-100 group-hover:text-cyan-50">{t('faq')}</span>
             </button>
+                   <button
+         onClick={() => handleNavItemClick('friends-section')}
+         className="group w-full flex items-center gap-3 p-3 rounded-2xl bg-slate-700/50 hover:bg-slate-600/50 transition-all duration-300"
+       >
+         <svg className="w-6 h-6 text-cyan-300 group-hover:text-cyan-100 flex-shrink-0" fill="currentColor" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+           <path d="M546.9184 665.4976a187.9552 187.9552 0 0 1-133.3248-55.1424 25.6 25.6 0 0 1 36.1984-36.1984 137.472 137.472 0 0 0 194.2016 0l186.1632-186.1632c53.5552-53.5552 53.5552-140.6464 0-194.2016s-140.6464-53.5552-194.2016 0L478.8736 350.8736a25.6 25.6 0 0 1-36.1984-36.1984l157.0816-157.0816c73.5232-73.5232 193.1264-73.5232 266.5984 0s73.5232 193.1264 0 266.5984l-186.1632 186.1632a187.9552 187.9552 0 0 1-133.3248 55.1424z" />
+           <path d="M239.7184 972.6976a187.9552 187.9552 0 0 1-133.3248-55.1424 188.672 188.672 0 0 1 0-266.5984l186.1632-186.1632a188.672 188.672 0 0 1 266.5984 0 25.6 25.6 0 0 1-36.1984 36.1984 137.472 137.472 0 0 0-194.2016 0l-186.1632 186.1632c-53.5552 53.5552-53.5552 140.6464 0 194.2016s140.6464 53.5552 194.2016 0l157.0816-157.0816a25.6 25.6 0 0 1 36.1984 36.1984l-157.0816 157.0816a187.9552 187.9552 0 0 1-133.3248 55.1424z" />
+         </svg>
+         <span className="text-sm text-cyan-100 group-hover:text-cyan-50">{t('friends')}</span>
+       </button>
           </nav>
 
           {/* 语言切换 */}

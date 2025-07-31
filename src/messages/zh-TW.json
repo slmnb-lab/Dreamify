@@ -264,9 +264,26 @@
     "community": "社群",
     "quickGenerate": "快速生成",
     "siteName": "Dreamify",
-    "switchLanguage": "切換語言"
+    "switchLanguage": "切換語言",
+    "friends": "友鏈"
   },
   "footer": {
     "copyright": "Dreamify 版權所有。"
+  },
+  "friends": {
+    "title": "友鏈",
+    "subtitle": "發現精彩的AI繪畫平台和工具",
+    "description": "我們與優秀的AI繪畫平台合作，為您提供更多創作可能",
+    "anycomfy": {
+      "name": "AnyComfy",
+      "url": "anycomfy.com",
+      "description": "一個免費無限制的線上ComfyUI平台，輕鬆運行任何AI繪畫工作流"
+    },
+    "visitSite": "訪問網站",
+    "comingSoon": {
+      "title": "即將推出",
+      "subtitle": "更多友鏈",
+      "description": "更多精彩的AI繪畫平台即將加入"
+    }
   }
 } 
