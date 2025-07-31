@@ -137,7 +137,7 @@ export default function GenerateForm({
         'HiDream-full-fp16': 2.0,    // 两倍于 fp8
         'HiDream-full-fp8': 1.0,     // 基准
         'Flux-Dev': 0.67,            // 40s/60s
-        'Flux-Kontext': 0.67,         // 40s/60s
+        'Flux-Kontext': 0.9,         // 40s/60s
         'Stable-Diffusion-3.5': 0.67  // 40s/60s
       };
       

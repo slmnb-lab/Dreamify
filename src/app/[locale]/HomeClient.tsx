@@ -170,7 +170,7 @@ export default function HomeClient() {
                 </h1>
                 <div className="flex flex-wrap gap-2 sm:gap-4 mb-7 sm:mb-9 animate-fadeInUp animation-delay-300">
                   <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-cyan-400 to-blue-400 text-white shadow-lg">
-                    {t('hero.tags.fastGeneration')}
+                    {t('hero.tags.fast')}
                   </span>
                   <span className="px-3 py-1.5 rounded-full text-xs font-medium bg-gradient-to-r from-purple-400 to-pink-400 text-white shadow-lg">
                     {t('hero.tags.multipleModels')}
